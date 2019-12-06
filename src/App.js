@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logic from './logic.js';
+import logic from './logic';
 import './main.css';
 
 class App extends Component {
@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     return (
       <h2 className="title">
-Welcome to React -
+        {'Welcome to React - '}
         {this.state.message}
       </h2>
     );

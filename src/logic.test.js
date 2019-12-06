@@ -1,4 +1,4 @@
-import logic from './logic.js';
+import logic from './logic';
 
 describe('logic should', () => {
   test('return Hello', () => {
