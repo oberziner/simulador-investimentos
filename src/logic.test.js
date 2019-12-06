@@ -1,7 +1,8 @@
 import logic from './logic';
 
 describe('logic should', () => {
-  test('return Hello', () => {
+  it('return Hello', () => {
+    expect.assertions(1);
     expect(logic.getHelloMessage()).toBe('Hello');
   });
 });

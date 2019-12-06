@@ -6,6 +6,7 @@
     },
     "extends": [
         "plugin:react/recommended",
+        "plugin:jest/all",
         "airbnb"
     ],
     "globals": {
@@ -20,7 +21,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "jest"
     ],
     "rules": {
     }
