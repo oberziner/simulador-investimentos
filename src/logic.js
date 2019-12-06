@@ -1,7 +1,4 @@
 export default {
 
-  getHelloMessage: () => {
-    return "Hello" 
-  }
-}
-
+  getHelloMessage: () => 'Hello',
+};
