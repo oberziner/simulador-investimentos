@@ -12,6 +12,9 @@ const Investment = ({ investment }) => (
     <p>
       {`Data fim: ${f.formatDate(investment.endDate)}`}
     </p>
+    <p>
+      {`Valor inicial: ${f.formatMoney(investment.initialValue)}`}
+    </p>
   </div>
 );
 

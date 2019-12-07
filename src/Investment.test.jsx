@@ -11,6 +11,7 @@ describe('investment component', () => {
       title: 'LCI',
       startDate: new Date('2019-04-01'),
       endDate: new Date('2019-12-01'),
+      initialValue: 10000,
     };
 
     const { container } = render(<Investment investment={investment} />);
@@ -18,5 +19,6 @@ describe('investment component', () => {
     expect(div.children[0]).toHaveTextContent('LCI');
     expect(div.children[1]).toHaveTextContent('Data inicio: 2019-04-01');
     expect(div.children[2]).toHaveTextContent('Data fim: 2019-12-01');
+    expect(div.children[3]).toHaveTextContent('Valor inicial: R$ 10.000,00', { normalizeWhitespace: true });
   });
 });

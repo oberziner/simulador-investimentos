@@ -11,6 +11,7 @@ class App extends Component {
         title: 'LCI',
         startDate: new Date('2019-04-01'),
         endDate: new Date('2019-12-01'),
+        initialValue: 9999,
       },
     };
   }
