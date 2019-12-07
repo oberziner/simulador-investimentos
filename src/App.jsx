@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logic from './logic';
+import Investment from './Investment';
 import './main.css';
 
 class App extends Component {
@@ -7,16 +7,17 @@ class App extends Component {
     super(props);
 
     this.state = {
-      message: logic.getHelloMessage(),
-    };
+      investment: {
+        title: 'LCI',
+        startDate: new Date('2019-04-01'),
+        endDate: new Date('2019-12-01'),
+      }
+    }
   }
 
   render() {
     return (
-      <h2 className="title">
-        {'Welcome to React - '}
-        {this.state.message}
-      </h2>
+      <Investment investment={this.state.investment}/>
     );
   }
 }
