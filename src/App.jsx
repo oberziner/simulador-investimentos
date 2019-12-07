@@ -11,13 +11,14 @@ class App extends Component {
         title: 'LCI',
         startDate: new Date('2019-04-01'),
         endDate: new Date('2019-12-01'),
-      }
-    }
+      },
+    };
   }
 
   render() {
+    const { investment } = this.state;
     return (
-      <Investment investment={this.state.investment}/>
+      <Investment investment={investment} />
     );
   }
 }

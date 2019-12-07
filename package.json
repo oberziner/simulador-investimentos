@@ -6,8 +6,9 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack-dev-server --open --mode development",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
+    "lint": "eslint --ext .js,.jsx .",
+    "watch:lint": "nodemon -e js,jsx -x npm run lint",
+    "lint:fix": "eslint --ext .js,.jsx --fix .",
     "test": "jest"
   },
   "repository": {
