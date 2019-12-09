@@ -25,6 +25,8 @@
         "jest"
     ],
     "rules": {
-      "react/prop-types": [0]
+      "react/prop-types": [0],
+      "import/prefer-default-export": "off",
+      "jest/prefer-expect-assertions": "off"
     }
 }
