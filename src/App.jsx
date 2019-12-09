@@ -12,6 +12,9 @@ class App extends Component {
         startDate: new Date('2019-04-01'),
         endDate: new Date('2019-12-01'),
         initialValue: 9999,
+        steps: [
+          { date: new Date('2019-04-01'), value: 10000 },
+        ],
       },
     };
   }

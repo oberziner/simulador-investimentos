@@ -15,6 +15,20 @@ const Investment = ({ investment }) => (
     <p>
       {`Valor inicial: ${f.formatMoney(investment.initialValue)}`}
     </p>
+    <table>
+      <tbody>
+        {investment.steps.reverse().map((obj, i) => (
+          <tr key={obj.date}>
+            <td>
+              {`${i + 1} - ${f.formatDate(obj.date)}`}
+            </td>
+            <td>
+              {f.formatMoney(obj.value)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 );
 
