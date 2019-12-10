@@ -22,7 +22,7 @@ describe('rate object', () => {
       expect(newRate(0.01, 'day').monthlyRate()).toBeCloseTo(0.347849, 6);
     });
     it('should convert daily rate to yearly rate', () => {
-      expect(newRate(0.01, 'day').yearlyRate()).toBeCloseTo(34.949641, 6);
+      expect(newRate(0.01, 'day').yearlyRate()).toBeCloseTo(11.274002, 6);
     });
   });
 
@@ -40,7 +40,7 @@ describe('rate object', () => {
 
   describe('created with yearly rate', () => {
     it('should convert yearly rate to dailyRate rate', () => {
-      expect(newRate(0.01, 'year').dailyRate()).toBeCloseTo(0.0000276, 7);
+      expect(newRate(0.01, 'year').dailyRate()).toBeCloseTo(0.0000395, 7);
     });
     it('should convert yearly rate to monthly rate', () => {
       expect(newRate(0.01, 'year').monthlyRate()).toBeCloseTo(0.0008295, 7);

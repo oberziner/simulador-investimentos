@@ -11,7 +11,7 @@ export const newRate = (rate, period) => {
       switch (period) {
         case 'day': return rate;
         case 'month': return ((1 + rate) ** (1 / 30)) - 1;
-        case 'year': return ((1 + rate) ** (1 / 360)) - 1;
+        case 'year': return ((1 + rate) ** (1 / 252)) - 1;
         default: throw new Error('Invalid period');
       }
     },
@@ -27,7 +27,7 @@ export const newRate = (rate, period) => {
 
     yearlyRate: () => {
       switch (period) {
-        case 'day': return ((1 + rate) ** 360) - 1;
+        case 'day': return ((1 + rate) ** 252) - 1;
         case 'month': return ((1 + rate) ** 12) - 1;
         case 'year': return rate;
         default: throw new Error('Invalid period');
