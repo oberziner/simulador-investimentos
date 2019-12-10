@@ -1,10 +1,10 @@
 import f from './sequence-factory';
-import dates from './dates';
+import { getNextDay } from './dates';
 
 export const newLCISeq = (initialDate, initialValue, rate) => f.newSequence(
   { date: initialDate, value: initialValue },
   (prev) => ({
-    date: dates.getNextDay(prev.date),
+    date: getNextDay(prev.date),
     value: prev.value * (1 + rate.dailyRate()),
   }),
 );
