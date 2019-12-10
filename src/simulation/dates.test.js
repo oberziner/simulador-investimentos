@@ -12,7 +12,7 @@ describe('getNextDay', () => {
 
 describe('isBusinessDay', () => {
   it('should return true for business days', () => {
-    expect(isBusinessDay(new Date('2020-02-25'))).toBe(true);
+    expect(isBusinessDay(new Date('2020-02-26'))).toBe(true);
   });
   it('should return false for weekends', () => {
     expect(isBusinessDay(new Date('2020-02-23'))).toBe(false);
