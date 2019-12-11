@@ -28,6 +28,39 @@ describe('lci sequence', () => {
     expect(date).toStrictEqual(new Date('2019-07-05'));
     expect(value).toBeCloseTo(1000.77, 2);
   });
+
+  it('should generate dividends only on business days', () => {
+    const lci = newLCISeq(new Date('2019-02-28'), 1000, newRate(0.05, 'year'));
+    lci.next(); // jump first
+
+    let { date, value } = lci.next();
+    expect(date).toStrictEqual(new Date('2019-03-01'));
+    expect(value).toBeCloseTo(1000.19, 2);
+
+    ({ date, value } = lci.next());
+    expect(date).toStrictEqual(new Date('2019-03-02')); // Saturday
+    expect(value).toBeCloseTo(1000.19, 2);
+
+    ({ date, value } = lci.next());
+    expect(date).toStrictEqual(new Date('2019-03-03')); // Sunday
+    expect(value).toBeCloseTo(1000.19, 2);
+
+    ({ date, value } = lci.next());
+    expect(date).toStrictEqual(new Date('2019-03-04')); // Carnival holiday
+    expect(value).toBeCloseTo(1000.19, 2);
+
+    ({ date, value } = lci.next());
+    expect(date).toStrictEqual(new Date('2019-03-05')); // Carnival holiday
+    expect(value).toBeCloseTo(1000.19, 2);
+
+    ({ date, value } = lci.next());
+    expect(date).toStrictEqual(new Date('2019-03-06'));
+    expect(value).toBeCloseTo(1000.39, 2);
+
+    ({ date, value } = lci.next());
+    expect(date).toStrictEqual(new Date('2019-03-07'));
+    expect(value).toBeCloseTo(1000.58, 2);
+  });
 });
 
 describe('lci object', () => {

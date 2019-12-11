@@ -1,12 +1,21 @@
 import f from './sequence-factory';
-import { getNextDay } from './dates';
+import { getNextDay, isBusinessDay } from './dates';
 
 export const newLCISeq = (initialDate, initialValue, rate) => f.newSequence(
   { date: initialDate, value: initialValue },
-  (prev) => ({
-    date: getNextDay(prev.date),
-    value: prev.value * (1 + rate.dailyRate()),
-  }),
+  (prev) => {
+    const date = getNextDay(prev.date);
+    let newValue = prev.value;
+
+    if (isBusinessDay(date)) {
+      newValue *= (1 + rate.dailyRate());
+    }
+
+    return {
+      date,
+      value: newValue,
+    };
+  },
 );
 
 export const newLCI = (startDate, initialValue, rate, endDate) => {

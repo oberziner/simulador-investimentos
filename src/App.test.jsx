@@ -11,7 +11,7 @@ describe('app', () => {
 
     expect(container).toHaveTextContent(/^LCIData inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$|u00A09.999,00$/);
 
-    expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.385,442/,
+    expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.268,122/,
       { normalizeWhitespace: true });
     expect(getByRole('table')).toHaveTextContent(/244 - 2019-04-01R\$ 10.000,00$/,
       { normalizeWhitespace: true });
