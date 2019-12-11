@@ -15,12 +15,14 @@ describe('isBusinessDay', () => {
     expect(isBusinessDay(new Date('2020-02-26'))).toBe(true);
   });
   it('should return false for weekends', () => {
+    expect(isBusinessDay(new Date('2019-03-02'))).toBe(false);
+    expect(isBusinessDay(new Date('2020-02-22'))).toBe(false);
     expect(isBusinessDay(new Date('2020-02-23'))).toBe(false);
-    expect(isBusinessDay(new Date('2020-02-24'))).toBe(false);
   });
   it('should return false for holidays', () => {
     expect(isBusinessDay(new Date('2020-01-01'))).toBe(false);
     expect(isBusinessDay(new Date('2019-03-04'))).toBe(false);
     expect(isBusinessDay(new Date('2019-03-05'))).toBe(false);
+    expect(isBusinessDay(new Date('2020-02-24'))).toBe(false);
   });
 });

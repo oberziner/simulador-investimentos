@@ -6,6 +6,6 @@ export const getNextDay = (date) => {
   return newDate;
 };
 
-export const isBusinessDay = (date) => (date.getDay() !== 0) // sunday
-  && (date.getDay() !== 6) // saturday
+export const isBusinessDay = (date) => (date.getUTCDay() !== 0) // sunday
+  && (date.getUTCDay() !== 6) // saturday
   && (!(date.toISOString().substring(0, 10) in holidays));
