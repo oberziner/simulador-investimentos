@@ -1,36 +1,17 @@
 import { newLCISeq, newLCI } from './lci';
 import { newRate } from './interest-rates';
+import { newInterestCalculator, newDateGenerator } from './investment-rules';
 
 describe('lci sequence', () => {
   it('first .next should return the invested value', () => {
-    expect(newLCISeq(new Date('2019-06-01'), 1000).next()).toStrictEqual({
+    expect(newLCISeq(newDateGenerator(new Date('2019-06-01')), newInterestCalculator(1000)).next()).toStrictEqual({
       date: new Date('2019-06-01'),
       value: 1000,
     });
   });
 
-  it('subsequent .next should return the updated value for each day', () => {
-    const lci = newLCISeq(new Date('2019-07-01'), 1000, newRate(0.05, 'year'));
-    lci.next(); // jump first
-    let { date, value } = lci.next();
-    expect(date).toStrictEqual(new Date('2019-07-02'));
-    expect(value).toBeCloseTo(1000.19, 2);
-
-    ({ date, value } = lci.next());
-    expect(date).toStrictEqual(new Date('2019-07-03'));
-    expect(value).toBeCloseTo(1000.39, 2);
-
-    ({ date, value } = lci.next());
-    expect(date).toStrictEqual(new Date('2019-07-04'));
-    expect(value).toBeCloseTo(1000.58, 2);
-
-    ({ date, value } = lci.next());
-    expect(date).toStrictEqual(new Date('2019-07-05'));
-    expect(value).toBeCloseTo(1000.77, 2);
-  });
-
-  it('should generate dividends only on business days', () => {
-    const lci = newLCISeq(new Date('2019-02-28'), 1000, newRate(0.05, 'year'));
+  it('subsequent .next should return the updated value for each day (changing the value only on business days)', () => {
+    const lci = newLCISeq(newDateGenerator(new Date('2019-02-28')), newInterestCalculator(1000, newRate(0.05, 'year')));
     lci.next(); // jump first
 
     let { date, value } = lci.next();
@@ -64,27 +45,35 @@ describe('lci sequence', () => {
 });
 
 describe('lci object', () => {
-  const lci = newLCI(new Date('2019-07-01'), 1000, newRate(0.05, 'year'), new Date('2019-10-01'));
+  const lci = newLCI(new Date('2019-03-01'), 1000, newRate(0.05, 'year'), new Date('2019-05-03'));
 
   it('should have a title', () => {
     expect(lci.title).toBe('LCI');
   });
   it('should have a startDate', () => {
-    expect(lci.startDate).toStrictEqual(new Date('2019-07-01'));
+    expect(lci.startDate).toStrictEqual(new Date('2019-03-01'));
   });
   it('should have an endDate', () => {
-    expect(lci.endDate).toStrictEqual(new Date('2019-10-01'));
+    expect(lci.endDate).toStrictEqual(new Date('2019-05-03'));
   });
   it('should have an initialValue', () => {
     expect(lci.initialValue).toBe(1000);
   });
   it('should have a list of steps', () => {
-    expect(lci.steps).toHaveLength(92);
+    expect(lci.steps).toHaveLength(63);
   });
-  it('should have a initial date as first step', () => {
-    expect(lci.steps[0].date).toStrictEqual(new Date('2019-07-01'));
+  it('should have initial date and initial value as first step', () => {
+    expect(lci.steps[0]).toStrictEqual({ date: new Date('2019-03-01'), value: 1000 });
   });
-  it('should have the day before the end date as last step', () => {
-    expect(lci.steps[lci.steps.length - 1].date).toStrictEqual(new Date('2019-09-30'));
+  it('should have the day before the end date as last step with the correct value', () => {
+    expect(lci.steps[lci.steps.length - 1].date).toStrictEqual(new Date('2019-05-02'));
+    expect(lci.steps[lci.steps.length - 1].value).toBeCloseTo(1007.77, 2);
+  });
+  it('should have the correct values for the dates', () => {
+    expect(lci.steps[23].date).toStrictEqual(new Date('2019-03-24'));
+    expect(lci.steps[23].value).toBeCloseTo(1002.52, 2);
+
+    expect(lci.steps[49].date).toStrictEqual(new Date('2019-04-19'));
+    expect(lci.steps[49].value).toBeCloseTo(1006.21, 2);
   });
 });

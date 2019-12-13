@@ -1,15 +1,10 @@
 export default {
-  newSequence: (initialValue, nextFunc) => {
+  newSequence: (nextFunc) => {
     let currentValue = null;
 
     return {
-      first: () => initialValue,
       next: () => {
-        if (currentValue === null) {
-          currentValue = initialValue;
-        } else {
-          currentValue = nextFunc(currentValue);
-        }
+        currentValue = nextFunc(currentValue);
         return currentValue;
       },
     };

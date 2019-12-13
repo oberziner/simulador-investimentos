@@ -1,25 +1,17 @@
 import f from './sequence-factory';
-import { getNextDay, isBusinessDay } from './dates';
+import { newDateGenerator, newInterestCalculator } from './investment-rules';
 
-export const newLCISeq = (initialDate, initialValue, rate) => f.newSequence(
-  { date: initialDate, value: initialValue },
+export const newLCISeq = (dateGenerator, interestGenerator) => f.newSequence(
   (prev) => {
-    const date = getNextDay(prev.date);
-    let newValue = prev.value;
+    const nextDayCalculated = dateGenerator(prev);
+    const interestCalculated = interestGenerator(nextDayCalculated);
 
-    if (isBusinessDay(date)) {
-      newValue *= (1 + rate.dailyRate());
-    }
-
-    return {
-      date,
-      value: newValue,
-    };
+    return interestCalculated;
   },
 );
 
 export const newLCI = (startDate, initialValue, rate, endDate) => {
-  const seq = newLCISeq(startDate, initialValue, rate);
+  const seq = newLCISeq(newDateGenerator(startDate), newInterestCalculator(initialValue, rate));
   const steps = [];
 
   for (let i = seq.next(); ((i.date < endDate)); i = seq.next()) {
