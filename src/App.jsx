@@ -12,7 +12,7 @@ class App extends Component {
       investment: newLCI(
         new Date('2019-04-01'),
         10000,
-        newRate(0.04, 'year'),
+        newRate(0.04, 'year252'),
         new Date('2019-12-01'),
       ),
     };

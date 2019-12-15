@@ -1,5 +1,5 @@
 import { newRate } from './interest-rates';
-import { newDateGenerator, newInterestCalculator } from './investment-rules';
+import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator } from './investment-rules';
 
 describe('newDateGenerator', () => {
   it('should return a function', () => {
@@ -51,6 +51,24 @@ describe('newInterestCalculator', () => {
     });
     it('given an object without a value field, returns a clone of that object where the value is equal to defaultValue', () => {
       expect(interestCalculator({ })).toStrictEqual({ value: defaultValue });
+    });
+  });
+});
+
+describe('newCustodyFeeCalculator', () => {
+  it('should return a function', () => {
+    expect(newCustodyFeeCalculator()).toBeInstanceOf(Function);
+  });
+
+  describe('when called with a rate, should return a function that', () => {
+    const custodyFeeCalculator = newCustodyFeeCalculator(newRate(0.0025, 'year364'));
+
+    it('accepts an object with a value field, and returns a clone of that object with a new custodyFee field with a fee of calculated for that day with the given rate', () => {
+      expect(custodyFeeCalculator({ value: 10000 }).custodyFee).toBeCloseTo(0.07, 2);
+      expect(custodyFeeCalculator({ value: 100000 }).custodyFee).toBeCloseTo(0.69, 2);
+    });
+    it('throws an error when it receives an object without a value field', () => {
+      expect(() => custodyFeeCalculator({})).toThrow('custodyFeeCalculator : object does not have a value field');
     });
   });
 });

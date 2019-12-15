@@ -11,7 +11,7 @@ describe('lci sequence', () => {
   });
 
   it('subsequent .next should return the updated value for each day (changing the value only on business days)', () => {
-    const lci = newLCISeq(newDateGenerator(new Date('2019-02-28')), newInterestCalculator(1000, newRate(0.05, 'year')));
+    const lci = newLCISeq(newDateGenerator(new Date('2019-02-28')), newInterestCalculator(1000, newRate(0.05, 'year252')));
     lci.next(); // jump first
 
     let { date, value } = lci.next();
@@ -45,7 +45,7 @@ describe('lci sequence', () => {
 });
 
 describe('lci object', () => {
-  const lci = newLCI(new Date('2019-03-01'), 1000, newRate(0.05, 'year'), new Date('2019-05-03'));
+  const lci = newLCI(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), new Date('2019-05-03'));
 
   it('should have a title', () => {
     expect(lci.title).toBe('LCI');

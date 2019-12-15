@@ -2,7 +2,7 @@ import { newCDB } from './cdb';
 import { newRate } from './interest-rates';
 
 describe('cdb object', () => {
-  const cdb = newCDB(new Date('2019-03-01'), 1000, newRate(0.05, 'year'), new Date('2019-05-03'));
+  const cdb = newCDB(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), new Date('2019-05-03'));
 
   it('should have a title', () => {
     expect(cdb.title).toBe('CDB');
@@ -46,11 +46,11 @@ describe('cdb object', () => {
 
 describe('cdb object taxes', () => {
   it('should be charged not counting the start and end days', () => {
-    let cdb = newCDB(new Date('2019-04-03'), 10000, newRate(0.05, 'year'), new Date('2019-10-01'));
+    let cdb = newCDB(new Date('2019-04-03'), 10000, newRate(0.05, 'year252'), new Date('2019-10-01'));
     expect(cdb.totalDays).toBe(180);
     expect(cdb.totalTaxes).toBeCloseTo(55.12, 2);
 
-    cdb = newCDB(new Date('2019-04-03'), 10000, newRate(0.05, 'year'), new Date('2019-10-02'));
+    cdb = newCDB(new Date('2019-04-03'), 10000, newRate(0.05, 'year252'), new Date('2019-10-02'));
     expect(cdb.totalDays).toBe(181);
     expect(cdb.totalTaxes).toBeCloseTo(49.39, 2);
   });
