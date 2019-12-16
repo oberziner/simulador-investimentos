@@ -35,6 +35,11 @@ describe('tesouro object', () => {
     expect(tesouro.steps[49].date).toStrictEqual(new Date('2019-04-19'));
     expect(tesouro.steps[49].value).toBeCloseTo(1006.21, 2);
   });
+  it('steps[n].elapsedDays should return the number of days elapsed since startDate', () => {
+    expect(tesouro.steps[0].elapsedDays).toBe(0);
+    expect(tesouro.steps[1].elapsedDays).toBe(1);
+    expect(tesouro.steps[30].elapsedDays).toBe(30);
+  });
   it('should have tax field with ammount of taxes to be charged', () => {
     expect(tesouro.totalTaxes).toBeCloseTo(1.75, 2);
   });
@@ -48,6 +53,12 @@ describe('tesouro object', () => {
     const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'));
     expect(tesouroCustodyFee.steps[1].custodyFee).toBeCloseTo(6.86, 2);
     expect(tesouroCustodyFee.steps[2].custodyFee).toBeCloseTo(6.86, 2);
+    expect(tesouroCustodyFee.steps[61].custodyFee).toBeCloseTo(6.91, 2);
+  });
+  it('.totalCustodyFee should aggregate all custody fees on the investment', () => {
+    const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'));
+    console.log(tesouroCustodyFee)
+    expect(tesouroCustodyFee.totalCustodyFee).toBeCloseTo(426.86, 2);
   });
 });
 
