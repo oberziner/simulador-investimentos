@@ -29,6 +29,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
 
   const totalDays = differenceDays(startDate, endDate) - 1;
   const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - steps[0].value, totalDays);
+  const totalCustodyFee = steps.reduce((total, i) => total + i.custodyFee, 0);
 
   return {
     title: 'Tesouro Direto',
@@ -37,6 +38,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
     initialValue,
     totalTaxes,
     totalDays,
+    totalCustodyFee,
     steps,
   };
 };

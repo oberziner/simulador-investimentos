@@ -48,6 +48,11 @@ describe('tesouro object', () => {
     const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'));
     expect(tesouroCustodyFee.steps[1].custodyFee).toBeCloseTo(6.86, 2);
     expect(tesouroCustodyFee.steps[2].custodyFee).toBeCloseTo(6.86, 2);
+    expect(tesouroCustodyFee.steps[61].custodyFee).toBeCloseTo(6.91, 2);
+  });
+  it('.totalCustodyFee should aggregate all custody fees on the investment', () => {
+    const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'));
+    expect(tesouroCustodyFee.totalCustodyFee).toBeCloseTo(433.77, 2);
   });
 });
 

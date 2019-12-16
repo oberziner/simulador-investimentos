@@ -64,11 +64,12 @@ describe('newCustodyFeeCalculator', () => {
     const custodyFeeCalculator = newCustodyFeeCalculator(newRate(0.0025, 'year364'));
 
     it('accepts an object with a value field, and returns a clone of that object with a new custodyFee field with a fee of calculated for that day with the given rate', () => {
+      expect(custodyFeeCalculator({ value: 0 }).custodyFee).toBe(0);
       expect(custodyFeeCalculator({ value: 10000 }).custodyFee).toBeCloseTo(0.07, 2);
       expect(custodyFeeCalculator({ value: 100000 }).custodyFee).toBeCloseTo(0.69, 2);
     });
-    it('throws an error when it receives an object without a value field', () => {
-      expect(() => custodyFeeCalculator({})).toThrow('custodyFeeCalculator : object does not have a value field');
+    it('accepts an object without a value field, and returns a clone of that object with a new custodyFee field with a fee of 0', () => {
+      expect(custodyFeeCalculator({ }).custodyFee).toBe(0);
     });
   });
 });

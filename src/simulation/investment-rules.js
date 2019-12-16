@@ -24,11 +24,11 @@ export const newInterestCalculator = (defaultValue, rate) => (prev) => {
 };
 
 export const newCustodyFeeCalculator = (rate) => (prev) => {
-  if (!prev.value) {
-    throw new Error('custodyFeeCalculator : object does not have a value field');
-  }
-
   const newObject = Object.assign({}, prev);
-  newObject.custodyFee = newObject.value * rate.dailyRate();
+  if ('value' in newObject) {
+    newObject.custodyFee = newObject.value * rate.dailyRate();
+  } else {
+    newObject.custodyFee = 0;
+  }
   return newObject;
 };
