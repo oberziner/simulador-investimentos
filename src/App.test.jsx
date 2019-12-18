@@ -13,6 +13,7 @@ describe('app', () => {
 
     waitForElement(() => getByRole('heading'))
       .then((element) => {
+        expect(element.parentNode.parentNode).toHaveClass('investment-container');
         expect(element.parentNode).toHaveTextContent(/^LCIData inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.267,092/,

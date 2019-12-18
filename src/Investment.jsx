@@ -2,7 +2,7 @@ import React from 'react';
 import f from './format';
 
 const Investment = ({ investment }) => (
-  <div>
+  <div className="investment">
     <h2 className="title">
       {investment.title}
     </h2>

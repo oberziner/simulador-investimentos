@@ -21,6 +21,7 @@ describe('investment component', () => {
 
     const { container } = render(<Investment investment={investment} />);
     const div = container.firstChild;
+    expect(div).toHaveClass('investment');
     expect(div.children[0]).toHaveTextContent('LCI');
     expect(div.children[1]).toHaveTextContent('Data inicio: 2019-04-01');
     expect(div.children[2]).toHaveTextContent('Data fim: 2019-12-01');

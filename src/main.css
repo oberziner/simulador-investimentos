@@ -1,3 +1,19 @@
-.title {
-    color: blue
+body {
+  white-space: nowrap;
 }
+
+.investment-container {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.investment {
+  border: 1px solid black;
+  padding: 0px 10px;
+  border-radius: 10px;
+}
+
+.title {
+  color: blue
+}
+

@@ -59,11 +59,13 @@ class App extends Component {
         <button type="button" onClick={this.addLCI}>LCI</button>
         <button type="button" onClick={this.addCDB}>CDB</button>
         <button type="button" onClick={this.addTesouro}>Tesouro</button>
-        {investments.map((i) => (
-          <div key={Math.random()}>
-            <Investment investment={i} />
-          </div>
-        ))}
+        <div>
+          {investments.map((i) => (
+            <div key={Math.random()} className="investment-container">
+              <Investment investment={i} />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
