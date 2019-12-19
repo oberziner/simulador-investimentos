@@ -1,11 +1,12 @@
-import { render, waitForElement } from '@testing-library/react';
+import { render, waitForElement, fireEvent } from '@testing-library/react';
 import React from 'react';
 import App from './App';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('app', () => {
   it('should have a button to add a new LCI investment', () => new Promise((done) => {
-    const { getByRole, getByText } = render(<App />);
+    const { getByRole, getByText, getByLabelText } = render(<App />);
+    fireEvent.change(getByLabelText('Valor:'), { target: { value: '9999' } });
     const lciButton = getByText((text, element) => (text === 'LCI')
       && (element.tagName === 'BUTTON'));
 
@@ -25,7 +26,8 @@ describe('app', () => {
   }));
 
   it('should add 2 LCIs when LCI button is clicked 2 times', () => new Promise((done) => {
-    const { getAllByRole, getByText } = render(<App />);
+    const { getAllByRole, getByText, getByLabelText } = render(<App />);
+    fireEvent.change(getByLabelText('Valor:'), { target: { value: '9999' } });
     const lciButton = getByText((text, element) => (text === 'LCI')
       && (element.tagName === 'BUTTON'));
 
@@ -45,7 +47,8 @@ describe('app', () => {
   }));
 
   it('should have a button to add a new CDB investment', () => new Promise((done) => {
-    const { getByRole, getByText } = render(<App />);
+    const { getByRole, getByText, getByLabelText } = render(<App />);
+    fireEvent.change(getByLabelText('Valor:'), { target: { value: '8888' } });
     const cdbButton = getByText((text, element) => (text === 'CDB')
       && (element.tagName === 'BUTTON'));
 
@@ -64,7 +67,8 @@ describe('app', () => {
   }));
 
   it('should have a button to add a new Tesouro investment', () => new Promise((done) => {
-    const { getByRole, getByText } = render(<App />);
+    const { getByRole, getByText, getByLabelText } = render(<App />);
+    fireEvent.change(getByLabelText('Valor:'), { target: { value: '5000' } });
     const tesouroButton = getByText((text, element) => (text === 'Tesouro')
       && (element.tagName === 'BUTTON'));
 

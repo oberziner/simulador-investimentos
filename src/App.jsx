@@ -10,6 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.handleOnChange = this.handleOnChange.bind(this);
     this.addLCI = this.addInvestment.bind(this);
     this.addCDB = this.addInvestmentCDB.bind(this);
     this.addTesouro = this.addInvestmentTesouro.bind(this);
@@ -23,7 +24,7 @@ class App extends Component {
     this.setState((state) => ({
       investments: [...state.investments, newLCI(
         new Date('2019-04-01'),
-        9999,
+        state.initialValue,
         newRate(0.04, 'year252'),
         new Date('2019-12-01'),
       )],
@@ -34,7 +35,7 @@ class App extends Component {
     this.setState((state) => ({
       investments: [...state.investments, newCDB(
         new Date('2019-04-01'),
-        8888,
+        state.initialValue,
         newRate(0.04, 'year252'),
         new Date('2019-12-01'),
       )],
@@ -45,17 +46,30 @@ class App extends Component {
     this.setState((state) => ({
       investments: [...state.investments, newTesouro(
         new Date('2019-04-01'),
-        5000,
+        state.initialValue,
         newRate(0.05, 'year252'),
         new Date('2019-12-01'),
       )],
     }));
   }
 
+  handleOnChange(e) {
+    this.setState({ [e.target.id]: e.target.value });
+  }
+
   render() {
     const { investments } = this.state;
     return (
       <div>
+        <label htmlFor="initialValue">
+          Valor:
+          <input
+            type="text"
+            id="initialValue"
+            onChange={this.handleOnChange}
+          />
+        </label>
+
         <button type="button" onClick={this.addLCI}>LCI</button>
         <button type="button" onClick={this.addCDB}>CDB</button>
         <button type="button" onClick={this.addTesouro}>Tesouro</button>
