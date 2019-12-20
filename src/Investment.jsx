@@ -17,7 +17,7 @@ const Investment = ({ investment }) => (
     </p>
     <table>
       <tbody>
-        {investment.steps.reverse().map((obj, i) => (
+        {investment.steps.slice().reverse().map((obj, i) => (
           <tr key={obj.date}>
             <td>
               {`${i + 1} - ${f.formatDate(obj.date)}`}
