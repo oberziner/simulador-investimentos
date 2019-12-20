@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Investment from './Investment';
+import { InputList } from './InputList';
 import './main.css';
 import { newRate } from './simulation/interest-rates';
 import { newLCI } from './simulation/lci';
@@ -20,11 +21,11 @@ class App extends Component {
   }
 
   static parseInputChange(e) {
-    switch (e.target.id) {
+    switch (e.id) {
       case 'startDate':
-      case 'endDate': return new Date(e.target.value);
-      case 'selicValue': return newRate(e.target.value / 100, 'year252');
-      default: return e.target.value;
+      case 'endDate': return new Date(e.value);
+      case 'selicValue': return newRate(e.value / 100, 'year252');
+      default: return e.value;
     }
   }
 
@@ -48,45 +49,22 @@ class App extends Component {
   }
 
   handleOnChange(e) {
-    this.setState({ [e.target.id]: App.parseInputChange(e) });
+    this.setState({ [e.id]: App.parseInputChange(e) });
   }
 
   render() {
     const { investments } = this.state;
     return (
       <div>
-        <label htmlFor="initialValue">
-          Valor:
-          <input
-            type="text"
-            id="initialValue"
-            onChange={this.handleOnChange}
-          />
-        </label>
-        <label htmlFor="startDate">
-          Data Inicial:
-          <input
-            type="date"
-            id="startDate"
-            onChange={this.handleOnChange}
-          />
-        </label>
-        <label htmlFor="endDate">
-          Data Final:
-          <input
-            type="date"
-            id="endDate"
-            onChange={this.handleOnChange}
-          />
-        </label>
-        <label htmlFor="selicValue">
-          SELIC:
-          <input
-            type="text"
-            id="selicValue"
-            onChange={this.handleOnChange}
-          />
-        </label>
+        <InputList
+          onChange={this.handleOnChange}
+          values={{
+            initialValue: 4444,
+            startDate: '2015-01-01',
+            endDate: '2016-01-01',
+            selicValue: '5',
+          }}
+        />
 
         <button type="button" onClick={this.addLCI}>LCI</button>
         <button type="button" onClick={this.addCDB}>CDB</button>
