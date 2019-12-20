@@ -24,7 +24,7 @@ export const newCDB = (startDate, initialValue, rate, endDate) => {
   const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - steps[0].value, totalDays);
 
   return {
-    title: 'CDB',
+    title: `CDB ${rate.toString()}`,
     startDate,
     endDate,
     initialValue,

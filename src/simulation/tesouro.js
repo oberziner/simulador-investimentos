@@ -32,7 +32,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
   const totalCustodyFee = steps.reduce((total, i) => total + i.custodyFee, 0);
 
   return {
-    title: 'Tesouro Direto',
+    title: `Tesouro Direto ${rate.toString()}`,
     startDate,
     endDate,
     initialValue,

@@ -45,5 +45,15 @@ export const newRate = (rate, period) => {
         default: throw new Error('Invalid period');
       }
     },
+    toString: () => {
+      const percent = rate * 100;
+      switch (period) {
+        case 'day': return `${percent}% a.d.`;
+        case 'month': return `${percent}% a.m.`;
+        case 'year252': return `${percent}% a.a.`;
+        case 'year364': return `${percent}% a.a.`;
+        default: throw new Error('Invalid period');
+      }
+    },
   };
 };

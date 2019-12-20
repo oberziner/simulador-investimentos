@@ -4,8 +4,8 @@ import { newRate } from './interest-rates';
 describe('tesouro object', () => {
   const tesouro = newTesouro(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), new Date('2019-05-03'));
 
-  it('should have a title', () => {
-    expect(tesouro.title).toBe('Tesouro Direto');
+  it('should have a title with the rate being used', () => {
+    expect(tesouro.title).toBe('Tesouro Direto 5% a.a.');
   });
   it('should have a startDate', () => {
     expect(tesouro.startDate).toStrictEqual(new Date('2019-03-01'));

@@ -19,7 +19,7 @@ export const newLCI = (startDate, initialValue, rate, endDate) => {
   }
 
   return {
-    title: 'LCI',
+    title: `LCI ${rate.toString()}`,
     startDate,
     endDate,
     initialValue,

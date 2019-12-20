@@ -4,8 +4,8 @@ import { newRate } from './interest-rates';
 describe('cdb object', () => {
   const cdb = newCDB(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), new Date('2019-05-03'));
 
-  it('should have a title', () => {
-    expect(cdb.title).toBe('CDB');
+  it('should have a title with the rate being used', () => {
+    expect(cdb.title).toBe('CDB 5% a.a.');
   });
   it('should have a startDate', () => {
     expect(cdb.startDate).toStrictEqual(new Date('2019-03-01'));

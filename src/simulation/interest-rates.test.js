@@ -73,4 +73,12 @@ describe('rate object', () => {
       expect(() => newRate(0.01, 'year364').yearly252Rate()).toThrow('Cannot convert year364 rate to year252 rate');
     });
   });
+
+  it('.toString should return a text description of the rate', () => {
+    expect(newRate(0.00021, 'day').toString()).toBe('0.021% a.d.');
+    expect(newRate(0.1, 'month').toString()).toBe('10% a.m.');
+    expect(newRate(0.013, 'year252').toString()).toBe('1.3% a.a.');
+    expect(newRate(0.01, 'year364').toString()).toBe('1% a.a.');
+    expect(newRate(0.025, 'year364').toString()).toBe('2.5% a.a.');
+  });
 });

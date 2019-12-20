@@ -17,7 +17,7 @@ describe('app', () => {
     waitForElement(() => getByRole('heading'))
       .then((element) => {
         expect(element.parentNode.parentNode).toHaveClass('investment-container');
-        expect(element.parentNode).toHaveTextContent(/^LCIData inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(element.parentNode).toHaveTextContent(/^LCI 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.267,092/,
           { normalizeWhitespace: true });
@@ -42,9 +42,9 @@ describe('app', () => {
       .then((elements) => {
         expect(elements).toHaveLength(2);
 
-        expect(elements[0].parentNode).toHaveTextContent(/^LCIData inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(elements[0].parentNode).toHaveTextContent(/^LCI 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
-        expect(elements[1].parentNode).toHaveTextContent(/^LCIData inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(elements[1].parentNode).toHaveTextContent(/^LCI 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
         done();
       });
@@ -62,7 +62,7 @@ describe('app', () => {
 
     waitForElement(() => getByRole('heading'))
       .then((element) => {
-        expect(element.parentNode).toHaveTextContent(/^CDBData inicio: 2018-04-01Data fim: 2018-12-01Valor inicial: R\$ 8.888,00/,
+        expect(element.parentNode).toHaveTextContent(/^CDB 4% a.a.Data inicio: 2018-04-01Data fim: 2018-12-01Valor inicial: R\$ 8.888,00/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/^1 - 2018-11-30R\$ 9.124,88/,
           { normalizeWhitespace: true });
@@ -84,7 +84,7 @@ describe('app', () => {
 
     waitForElement(() => getByRole('heading'))
       .then((element) => {
-        expect(element.parentNode).toHaveTextContent(/^Tesouro DiretoData inicio: 2019-05-01Data fim: 2019-12-01Valor inicial: R\$ 5.000,00/,
+        expect(element.parentNode).toHaveTextContent(/^Tesouro Direto 5% a.a.Data inicio: 2019-05-01Data fim: 2019-12-01Valor inicial: R\$ 5.000,00/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 5.147,342/,
           { normalizeWhitespace: true });

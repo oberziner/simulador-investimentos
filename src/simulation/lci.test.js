@@ -47,8 +47,8 @@ describe('lci sequence', () => {
 describe('lci object', () => {
   const lci = newLCI(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), new Date('2019-05-03'));
 
-  it('should have a title', () => {
-    expect(lci.title).toBe('LCI');
+  it('should have a title with the rate being used', () => {
+    expect(lci.title).toBe('LCI 5% a.a.');
   });
   it('should have a startDate', () => {
     expect(lci.startDate).toStrictEqual(new Date('2019-03-01'));
