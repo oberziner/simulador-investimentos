@@ -26,7 +26,7 @@ class App extends Component {
         new Date(state.startDate),
         state.initialValue,
         newRate(0.04, 'year252'),
-        new Date('2019-12-01'),
+        new Date(state.endDate),
       )],
     }));
   }
@@ -37,7 +37,7 @@ class App extends Component {
         new Date(state.startDate),
         state.initialValue,
         newRate(0.04, 'year252'),
-        new Date('2018-12-01'),
+        new Date(state.endDate),
       )],
     }));
   }
@@ -48,7 +48,7 @@ class App extends Component {
         new Date(state.startDate),
         state.initialValue,
         newRate(0.05, 'year252'),
-        new Date('2019-12-01'),
+        new Date(state.endDate),
       )],
     }));
   }
@@ -74,6 +74,14 @@ class App extends Component {
           <input
             type="date"
             id="startDate"
+            onChange={this.handleOnChange}
+          />
+        </label>
+        <label htmlFor="endDate">
+          Data Final:
+          <input
+            type="date"
+            id="endDate"
             onChange={this.handleOnChange}
           />
         </label>
