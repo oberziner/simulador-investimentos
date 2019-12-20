@@ -7,23 +7,23 @@ import { newCDB } from './simulation/cdb';
 import { newTesouro } from './simulation/tesouro';
 
 class App extends Component {
-  static lciFactory({ startDate, initialValue, endDate }) {
-    return newLCI(startDate, initialValue, newRate(0.04, 'year252'), endDate);
+  static lciFactory({ startDate, initialValue, endDate, selicValue }) {
+    return newLCI(startDate, initialValue, selicValue, endDate);
   }
 
-  static cdbFactory({ startDate, initialValue, endDate }) {
-    return newCDB(startDate, initialValue, newRate(0.04, 'year252'), endDate);
+  static cdbFactory({ startDate, initialValue, endDate, selicValue }) {
+    return newCDB(startDate, initialValue, selicValue, endDate);
   }
 
-  static tesouroFactory({ startDate, initialValue, endDate }) {
-    return newTesouro(startDate, initialValue, newRate(0.05, 'year252'), endDate);
+  static tesouroFactory({ startDate, initialValue, endDate, selicValue }) {
+    return newTesouro(startDate, initialValue, selicValue, endDate);
   }
 
   static parseInputChange(e) {
     switch (e.target.id) {
       case 'startDate':
       case 'endDate': return new Date(e.target.value);
-      case 'initialValue': return e.target.value;
+      case 'selicValue': return newRate(e.target.value / 100, 'year252');
       default: return e.target.value;
     }
   }
@@ -76,6 +76,14 @@ class App extends Component {
           <input
             type="date"
             id="endDate"
+            onChange={this.handleOnChange}
+          />
+        </label>
+        <label htmlFor="selicValue">
+          SELIC:
+          <input
+            type="text"
+            id="selicValue"
             onChange={this.handleOnChange}
           />
         </label>

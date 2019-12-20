@@ -9,6 +9,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Valor:'), { target: { value: '9999' } });
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-04-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '6' } });
     const lciButton = getByText((text, element) => (text === 'LCI')
       && (element.tagName === 'BUTTON'));
 
@@ -17,9 +18,9 @@ describe('app', () => {
     waitForElement(() => getByRole('heading'))
       .then((element) => {
         expect(element.parentNode.parentNode).toHaveClass('investment-container');
-        expect(element.parentNode).toHaveTextContent(/^LCI 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(element.parentNode).toHaveTextContent(/^LCI 6% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.267,092/,
+        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.399,87/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/244 - 2019-04-01R\$ 9.999,00$/,
           { normalizeWhitespace: true });
@@ -32,6 +33,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Valor:'), { target: { value: '9999' } });
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-04-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
     const lciButton = getByText((text, element) => (text === 'LCI')
       && (element.tagName === 'BUTTON'));
 
@@ -55,6 +57,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Valor:'), { target: { value: '8888' } });
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2018-04-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2018-12-01' } });
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
     const cdbButton = getByText((text, element) => (text === 'CDB')
       && (element.tagName === 'BUTTON'));
 
@@ -77,6 +80,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Valor:'), { target: { value: '5000' } });
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-05-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '5' } });
     const tesouroButton = getByText((text, element) => (text === 'Tesouro')
       && (element.tagName === 'BUTTON'));
 

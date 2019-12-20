@@ -28,6 +28,12 @@
       "prefer-object-spread": "off",
       "react/prop-types": [0],
       "import/prefer-default-export": "off",
-      "jest/prefer-expect-assertions": "off"
+      "jest/prefer-expect-assertions": "off",
+      "object-curly-newline": ["error", {
+        "ObjectExpression": { "minProperties": 8, "multiline": true, "consistent": true  },
+        "ObjectPattern": { "minProperties": 8, "multiline": true, "consistent": true  },
+        "ImportDeclaration": { "minProperties": 8, "multiline": true, "consistent": true  },
+        "ExportDeclaration": { "minProperties": 8, "multiline": true, "consistent": true  }
+      }]
     }
 }
