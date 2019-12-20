@@ -8,6 +8,14 @@ describe('getNextDay', () => {
     expect(getNextDay(new Date('2020-02-28'))).toStrictEqual(new Date('2020-02-29'));
     expect(getNextDay(new Date('2020-02-29'))).toStrictEqual(new Date('2020-03-01'));
   });
+  it('should return the next day even when DST starts/ends', () => {
+    expect(getNextDay(new Date('2018-11-03'))).toStrictEqual(new Date('2018-11-04'));
+    expect(getNextDay(new Date('2018-11-04'))).toStrictEqual(new Date('2018-11-05'));
+    expect(getNextDay(new Date('2018-11-05'))).toStrictEqual(new Date('2018-11-06'));
+    expect(getNextDay(new Date('2019-02-15'))).toStrictEqual(new Date('2019-02-16'));
+    expect(getNextDay(new Date('2019-02-16'))).toStrictEqual(new Date('2019-02-17'));
+    expect(getNextDay(new Date('2019-02-17'))).toStrictEqual(new Date('2019-02-18'));
+  });
 });
 
 describe('isBusinessDay', () => {
