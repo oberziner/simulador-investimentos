@@ -7,54 +7,48 @@ import { newCDB } from './simulation/cdb';
 import { newTesouro } from './simulation/tesouro';
 
 class App extends Component {
+  static lciFactory({ startDate, initialValue, endDate }) {
+    return newLCI(startDate, initialValue, newRate(0.04, 'year252'), endDate);
+  }
+
+  static cdbFactory({ startDate, initialValue, endDate }) {
+    return newCDB(startDate, initialValue, newRate(0.04, 'year252'), endDate);
+  }
+
+  static tesouroFactory({ startDate, initialValue, endDate }) {
+    return newTesouro(startDate, initialValue, newRate(0.05, 'year252'), endDate);
+  }
+
+  static parseInputChange(e) {
+    switch (e.target.id) {
+      case 'startDate':
+      case 'endDate': return new Date(e.target.value);
+      case 'initialValue': return e.target.value;
+      default: return e.target.value;
+    }
+  }
+
   constructor(props) {
     super(props);
 
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.addLCI = this.addInvestment.bind(this);
-    this.addCDB = this.addInvestmentCDB.bind(this);
-    this.addTesouro = this.addInvestmentTesouro.bind(this);
+    this.addLCI = this.addInvestment.bind(this, App.lciFactory);
+    this.addCDB = this.addInvestment.bind(this, App.cdbFactory);
+    this.addTesouro = this.addInvestment.bind(this, App.tesouroFactory);
 
     this.state = {
       investments: [],
     };
   }
 
-  addInvestment() {
+  addInvestment(investmentFactory) {
     this.setState((state) => ({
-      investments: [...state.investments, newLCI(
-        new Date(state.startDate),
-        state.initialValue,
-        newRate(0.04, 'year252'),
-        new Date(state.endDate),
-      )],
-    }));
-  }
-
-  addInvestmentCDB() {
-    this.setState((state) => ({
-      investments: [...state.investments, newCDB(
-        new Date(state.startDate),
-        state.initialValue,
-        newRate(0.04, 'year252'),
-        new Date(state.endDate),
-      )],
-    }));
-  }
-
-  addInvestmentTesouro() {
-    this.setState((state) => ({
-      investments: [...state.investments, newTesouro(
-        new Date(state.startDate),
-        state.initialValue,
-        newRate(0.05, 'year252'),
-        new Date(state.endDate),
-      )],
+      investments: [...state.investments, investmentFactory(state)],
     }));
   }
 
   handleOnChange(e) {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: App.parseInputChange(e) });
   }
 
   render() {
