@@ -23,7 +23,7 @@ class App extends Component {
   addInvestment() {
     this.setState((state) => ({
       investments: [...state.investments, newLCI(
-        new Date('2019-04-01'),
+        new Date(state.startDate),
         state.initialValue,
         newRate(0.04, 'year252'),
         new Date('2019-12-01'),
@@ -34,10 +34,10 @@ class App extends Component {
   addInvestmentCDB() {
     this.setState((state) => ({
       investments: [...state.investments, newCDB(
-        new Date('2019-04-01'),
+        new Date(state.startDate),
         state.initialValue,
         newRate(0.04, 'year252'),
-        new Date('2019-12-01'),
+        new Date('2018-12-01'),
       )],
     }));
   }
@@ -45,7 +45,7 @@ class App extends Component {
   addInvestmentTesouro() {
     this.setState((state) => ({
       investments: [...state.investments, newTesouro(
-        new Date('2019-04-01'),
+        new Date(state.startDate),
         state.initialValue,
         newRate(0.05, 'year252'),
         new Date('2019-12-01'),
@@ -66,6 +66,14 @@ class App extends Component {
           <input
             type="text"
             id="initialValue"
+            onChange={this.handleOnChange}
+          />
+        </label>
+        <label htmlFor="startDate">
+          Data Inicial:
+          <input
+            type="date"
+            id="startDate"
             onChange={this.handleOnChange}
           />
         </label>
