@@ -12,6 +12,8 @@ describe('investment component', () => {
       startDate: new Date('2019-04-01'),
       endDate: new Date('2019-12-01'),
       initialValue: 10000,
+      totalTaxes: 0,
+      netValue: 12000,
       steps: [
         { date: new Date('2019-04-01'), value: 10000 },
         { date: new Date('2019-08-01'), value: 11000 },
@@ -27,9 +29,13 @@ describe('investment component', () => {
     expect(div.children[2]).toHaveTextContent('Data fim: 2019-12-01');
     expect(div.children[3]).toHaveTextContent('Valor inicial: R$ 10.000,00',
       { normalizeWhitespace: true });
-    expect(div.children).toHaveLength(5);
+    expect(div.children[4]).toHaveTextContent('Impostos: R$ 0,00',
+      { normalizeWhitespace: true });
+    expect(div.children[5]).toHaveTextContent('Valor Liquido: R$ 12.000,00',
+      { normalizeWhitespace: true });
+    expect(div.children).toHaveLength(7);
 
-    const steps = div.children[4].children[0].children;
+    const steps = div.children[6].children[0].children;
     expect(steps[0]).toHaveTextContent('1 - 2019-12-01R$ 12.000,00',
       { normalizeWhitespace: true });
     expect(steps[1]).toHaveTextContent('2 - 2019-08-01R$ 11.000,00',

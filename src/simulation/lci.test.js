@@ -59,6 +59,15 @@ describe('lci object', () => {
   it('should have an initialValue', () => {
     expect(lci.initialValue).toBe(1000);
   });
+  it('should have an grossValue', () => {
+    expect(lci.grossValue).toBeCloseTo(1007.77, 2);
+  });
+  it('should have totalTaxes equal 0', () => {
+    expect(lci.totalTaxes).toBe(0);
+  });
+  it('should have an netValue equal to the grossValue', () => {
+    expect(lci.netValue).toBeCloseTo(1007.77, 2);
+  });
   it('should have a list of steps', () => {
     expect(lci.steps).toHaveLength(63);
   });

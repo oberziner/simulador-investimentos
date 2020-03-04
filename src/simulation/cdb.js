@@ -21,7 +21,9 @@ export const newCDB = (startDate, initialValue, rate, endDate) => {
   }
 
   const totalDays = differenceDays(startDate, endDate) - 1;
-  const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - steps[0].value, totalDays);
+  const grossValue = steps[steps.length - 1].value;
+  const totalTaxes = calculateIncomeTax(grossValue - initialValue, totalDays);
+  const netValue = grossValue - totalTaxes;
 
   return {
     title: `CDB ${rate.toString()}`,
@@ -29,6 +31,8 @@ export const newCDB = (startDate, initialValue, rate, endDate) => {
     endDate,
     initialValue,
     totalTaxes,
+    grossValue,
+    netValue,
     totalDays,
     steps,
   };

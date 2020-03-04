@@ -16,6 +16,12 @@ describe('cdb object', () => {
   it('should have an initialValue', () => {
     expect(cdb.initialValue).toBe(1000);
   });
+  it('should have an grossValue', () => {
+    expect(cdb.grossValue).toBeCloseTo(1007.77, 2);
+  });
+  it('should have an netValue equal to the grossValue', () => {
+    expect(cdb.netValue).toBeCloseTo(1006.03, 2);
+  });
   it('should have a list of steps', () => {
     expect(cdb.steps).toHaveLength(63);
   });

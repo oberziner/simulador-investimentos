@@ -18,11 +18,18 @@ export const newLCI = (startDate, initialValue, rate, endDate) => {
     steps.push(i);
   }
 
+  const grossValue = steps[steps.length - 1].value;
+  const totalTaxes = 0;
+  const netValue = grossValue - totalTaxes;
+
   return {
     title: `LCI ${rate.toString()}`,
     startDate,
     endDate,
     initialValue,
+    grossValue,
+    totalTaxes,
+    netValue,
     steps,
   };
 };

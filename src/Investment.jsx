@@ -15,6 +15,12 @@ const Investment = ({ investment }) => (
     <p>
       {`Valor inicial: ${f.formatMoney(investment.initialValue)}`}
     </p>
+    <p>
+      {`Impostos: ${f.formatMoney(investment.totalTaxes)}`}
+    </p>
+    <p>
+      {`Valor Liquido: ${f.formatMoney(investment.netValue)}`}
+    </p>
     <table>
       <tbody>
         {investment.steps.slice().reverse().map((obj, i) => (
