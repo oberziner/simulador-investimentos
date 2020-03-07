@@ -10,6 +10,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-04-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '6' } });
+    fireEvent.change(getByLabelText('% CDI:'), { target: { value: '90' } });
     const lciButton = getByText((text, element) => (text === 'LCI')
       && (element.tagName === 'BUTTON'));
 
@@ -18,9 +19,9 @@ describe('app', () => {
     waitForElement(() => getByRole('heading'))
       .then((element) => {
         expect(element.parentNode.parentNode).toHaveClass('investment-container');
-        expect(element.parentNode).toHaveTextContent(/^LCI 6% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(element.parentNode).toHaveTextContent(/^LCI 90% SELIC 6% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.399,87/,
+        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.360,12/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/244 - 2019-04-01R\$ 9.999,00$/,
           { normalizeWhitespace: true });
@@ -34,6 +35,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-04-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
+    fireEvent.change(getByLabelText('% CDI:'), { target: { value: '100' } });
     const lciButton = getByText((text, element) => (text === 'LCI')
       && (element.tagName === 'BUTTON'));
 
@@ -44,9 +46,9 @@ describe('app', () => {
       .then((elements) => {
         expect(elements).toHaveLength(2);
 
-        expect(elements[0].parentNode).toHaveTextContent(/^LCI 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(elements[0].parentNode).toHaveTextContent(/^LCI 100% SELIC 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
-        expect(elements[1].parentNode).toHaveTextContent(/^LCI 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
+        expect(elements[1].parentNode).toHaveTextContent(/^LCI 100% SELIC 4% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
         done();
       });

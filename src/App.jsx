@@ -8,8 +8,8 @@ import { newCDB } from './simulation/cdb';
 import { newTesouro } from './simulation/tesouro';
 
 class App extends Component {
-  static lciFactory({ startDate, initialValue, endDate, selicValue }) {
-    return newLCI(startDate, initialValue, selicValue, endDate);
+  static lciFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
+    return newLCI(startDate, initialValue, selicValue, percentCDI, endDate);
   }
 
   static cdbFactory({ startDate, initialValue, endDate, selicValue }) {

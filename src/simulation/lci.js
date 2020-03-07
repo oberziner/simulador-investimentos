@@ -1,4 +1,5 @@
 import f from './sequence-factory';
+import { newRate } from './interest-rates';
 import { newDateGenerator, newInterestCalculator } from './investment-rules';
 
 export const newLCISeq = (dateGenerator, interestGenerator) => f.newSequence(
@@ -10,8 +11,9 @@ export const newLCISeq = (dateGenerator, interestGenerator) => f.newSequence(
   },
 );
 
-export const newLCI = (startDate, initialValue, rate, endDate) => {
-  const seq = newLCISeq(newDateGenerator(startDate), newInterestCalculator(initialValue, rate));
+export const newLCI = (startDate, initialValue, rate, percentRate, endDate) => {
+  const lciRate = newRate(rate.yearly252Rate() * (percentRate / 100), 'year252');
+  const seq = newLCISeq(newDateGenerator(startDate), newInterestCalculator(initialValue, lciRate));
   const steps = [];
 
   for (let i = seq.next(); ((i.date < endDate)); i = seq.next()) {
@@ -23,7 +25,7 @@ export const newLCI = (startDate, initialValue, rate, endDate) => {
   const netValue = grossValue - totalTaxes;
 
   return {
-    title: `LCI ${rate.toString()}`,
+    title: `LCI ${percentRate}% SELIC ${rate.toString()}`,
     startDate,
     endDate,
     initialValue,

@@ -45,10 +45,10 @@ describe('lci sequence', () => {
 });
 
 describe('lci object', () => {
-  const lci = newLCI(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), new Date('2019-05-03'));
+  const lci = newLCI(new Date('2019-03-01'), 1000, newRate(0.05, 'year252'), 90, new Date('2019-05-03'));
 
   it('should have a title with the rate being used', () => {
-    expect(lci.title).toBe('LCI 5% a.a.');
+    expect(lci.title).toBe('LCI 90% SELIC 5% a.a.');
   });
   it('should have a startDate', () => {
     expect(lci.startDate).toStrictEqual(new Date('2019-03-01'));
@@ -60,13 +60,13 @@ describe('lci object', () => {
     expect(lci.initialValue).toBe(1000);
   });
   it('should have an grossValue', () => {
-    expect(lci.grossValue).toBeCloseTo(1007.77, 2);
+    expect(lci.grossValue).toBeCloseTo(1007.01, 2);
   });
   it('should have totalTaxes equal 0', () => {
     expect(lci.totalTaxes).toBe(0);
   });
   it('should have an netValue equal to the grossValue', () => {
-    expect(lci.netValue).toBeCloseTo(1007.77, 2);
+    expect(lci.netValue).toBeCloseTo(1007.01, 2);
   });
   it('should have a list of steps', () => {
     expect(lci.steps).toHaveLength(63);
@@ -76,13 +76,13 @@ describe('lci object', () => {
   });
   it('should have the day before the end date as last step with the correct value', () => {
     expect(lci.steps[lci.steps.length - 1].date).toStrictEqual(new Date('2019-05-02'));
-    expect(lci.steps[lci.steps.length - 1].value).toBeCloseTo(1007.77, 2);
+    expect(lci.steps[lci.steps.length - 1].value).toBeCloseTo(1007.01, 2);
   });
   it('should have the correct values for the dates', () => {
     expect(lci.steps[23].date).toStrictEqual(new Date('2019-03-24'));
-    expect(lci.steps[23].value).toBeCloseTo(1002.52, 2);
+    expect(lci.steps[23].value).toBeCloseTo(1002.27, 2);
 
     expect(lci.steps[49].date).toStrictEqual(new Date('2019-04-19'));
-    expect(lci.steps[49].value).toBeCloseTo(1006.21, 2);
+    expect(lci.steps[49].value).toBeCloseTo(1005.61, 2);
   });
 });

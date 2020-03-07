@@ -10,6 +10,7 @@ describe('inputlist component', () => {
       startDate: '2015-01-01',
       endDate: '2016-01-01',
       selicValue: '5',
+      percentCDI: '90',
     };
 
     const { getByLabelText } = render(<InputList
@@ -21,6 +22,7 @@ describe('inputlist component', () => {
     expect(getByLabelText('Data Inicial:')).toHaveValue('2015-01-01');
     expect(getByLabelText('Data Final:')).toHaveValue('2016-01-01');
     expect(getByLabelText('SELIC:')).toHaveValue('5');
+    expect(getByLabelText('% CDI:')).toHaveValue('90');
   });
 
   it('should call callback on value change', () => {
@@ -44,6 +46,7 @@ describe('inputlist component', () => {
       startDate: '2015-01-01',
       endDate: '2016-01-01',
       selicValue: '5',
+      percentCDI: '90',
     };
 
     const mockCallback = jest.fn();
@@ -53,10 +56,11 @@ describe('inputlist component', () => {
       onChange={mockCallback}
     />);
 
-    expect(mockCallback.mock.calls).toHaveLength(4);
+    expect(mockCallback.mock.calls).toHaveLength(5);
     expect(mockCallback.mock.calls[0][0]).toStrictEqual({ id: 'initialValue', value: '4444' });
     expect(mockCallback.mock.calls[1][0]).toStrictEqual({ id: 'startDate', value: '2015-01-01' });
     expect(mockCallback.mock.calls[2][0]).toStrictEqual({ id: 'endDate', value: '2016-01-01' });
     expect(mockCallback.mock.calls[3][0]).toStrictEqual({ id: 'selicValue', value: '5' });
+    expect(mockCallback.mock.calls[4][0]).toStrictEqual({ id: 'percentCDI', value: '90' });
   });
 });
