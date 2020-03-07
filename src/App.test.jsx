@@ -60,6 +60,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2018-04-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2018-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
+    fireEvent.change(getByLabelText('% CDI:'), { target: { value: '90' } });
     const cdbButton = getByText((text, element) => (text === 'CDB')
       && (element.tagName === 'BUTTON'));
 
@@ -67,9 +68,9 @@ describe('app', () => {
 
     waitForElement(() => getByRole('heading'))
       .then((element) => {
-        expect(element.parentNode).toHaveTextContent(/^CDB 4% a.a.Data inicio: 2018-04-01Data fim: 2018-12-01Valor inicial: R\$ 8.888,00/,
+        expect(element.parentNode).toHaveTextContent(/^CDB 90% SELIC 4% a.a.Data inicio: 2018-04-01Data fim: 2018-12-01Valor inicial: R\$ 8.888,00/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/^1 - 2018-11-30R\$ 9.124,88/,
+        expect(getByRole('table')).toHaveTextContent(/^1 - 2018-11-30R\$ 9.101,33/,
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/244 - 2018-04-01R\$ 8.888,00$/,
           { normalizeWhitespace: true });

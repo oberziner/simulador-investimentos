@@ -12,8 +12,8 @@ class App extends Component {
     return newLCI(startDate, initialValue, selicValue, percentCDI, endDate);
   }
 
-  static cdbFactory({ startDate, initialValue, endDate, selicValue }) {
-    return newCDB(startDate, initialValue, selicValue, endDate);
+  static cdbFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
+    return newCDB(startDate, initialValue, selicValue, percentCDI, endDate);
   }
 
   static tesouroFactory({ startDate, initialValue, endDate, selicValue }) {
@@ -63,6 +63,7 @@ class App extends Component {
             startDate: '2015-01-01',
             endDate: '2016-01-01',
             selicValue: '5',
+            percentCDI: '90',
           }}
         />
 
