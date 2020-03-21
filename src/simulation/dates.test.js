@@ -1,4 +1,4 @@
-import { getNextDay, isBusinessDay, differenceDays } from './dates';
+import { getNextDay, isBusinessDay, differenceDays, differenceBusinessDays } from './dates';
 
 describe('getNextDay', () => {
   it('should return the next day', () => {
@@ -41,5 +41,14 @@ describe('differenceDays', () => {
     expect(differenceDays(new Date('2019-01-01'), new Date('2019-02-01'))).toBe(31);
     expect(differenceDays(new Date('2019-01-01'), new Date('2020-01-01'))).toBe(365);
     expect(differenceDays(new Date('2020-01-01'), new Date('2021-01-01'))).toBe(366);
+  });
+});
+
+describe('differenceBusinessDays', () => {
+  it('should return the difference of days between two dates', () => {
+    expect(differenceBusinessDays(new Date('2008-05-21'), new Date('2014-03-07'))).toBe(1459);
+    expect(differenceBusinessDays(new Date('2008-05-21'), new Date('2014-03-10'))).toBe(1460);
+    expect(differenceBusinessDays(new Date('2020-02-18'), new Date('2025-03-05'))).toBe(1265);
+    expect(differenceBusinessDays(new Date('2020-02-18'), new Date('2025-02-26'))).toBe(1262);
   });
 });

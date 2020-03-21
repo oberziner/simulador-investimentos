@@ -1,14 +1,18 @@
 import f from './sequence-factory';
-import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator } from './investment-rules';
+import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator, newAdjusmentFactorCalculator } from './investment-rules';
 import { differenceDays } from './dates';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
-const newTesouroSeq = (dateGenerator, interestGenerator, custodyFeeCalculator) => f.newSequence(
+const newTesouroSeq = (dateGenerator,
+  interestGenerator,
+  custodyFeeCalculator,
+  adjusmentFactorCalculator) => f.newSequence(
   (prev) => {
     const nextDayCalculated = dateGenerator(prev);
     const interestCalculated = interestGenerator(nextDayCalculated);
-    const custodyFeeAdded = custodyFeeCalculator(interestCalculated);
+    const adjusmentFactorCalculated = adjusmentFactorCalculator(interestCalculated);
+    const custodyFeeAdded = custodyFeeCalculator(adjusmentFactorCalculated);
 
     return custodyFeeAdded;
   },
@@ -19,6 +23,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
     newDateGenerator(startDate),
     newInterestCalculator(initialValue, rate),
     newCustodyFeeCalculator(newRate(0.0025, 'year364')),
+    newAdjusmentFactorCalculator(0.0003, new Date('2025-02-28')),
   );
 
   const steps = [];

@@ -1,4 +1,4 @@
-import { getNextDay, isBusinessDay } from './dates';
+import { getNextDay, isBusinessDay, differenceBusinessDays } from './dates';
 
 export const newDateGenerator = (defaultDate) => (prev) => {
   const newObject = Object.assign({}, prev);
@@ -30,5 +30,20 @@ export const newCustodyFeeCalculator = (rate) => (prev) => {
   } else {
     newObject.custodyFee = 0;
   }
+  return newObject;
+};
+
+const trunc = (val, places) => {
+  const tens = 10 ** places;
+  return Math.trunc(val * tens) / tens;
+};
+
+export const newAdjusmentFactorCalculator = (adjustmentRate, endDate) => (prev) => {
+  const newObject = Object.assign({}, prev);
+  const businessDays = differenceBusinessDays(prev.date, endDate);
+  newObject.businessDays = businessDays;
+  newObject.adjustmentFactor = trunc(100
+    / ((1 + adjustmentRate) ** trunc(businessDays / 252, 14)), 4);
+
   return newObject;
 };

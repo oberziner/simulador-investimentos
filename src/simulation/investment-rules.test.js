@@ -1,5 +1,5 @@
 import { newRate } from './interest-rates';
-import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator } from './investment-rules';
+import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator, newAdjusmentFactorCalculator } from './investment-rules';
 
 describe('newDateGenerator', () => {
   it('should return a function', () => {
@@ -70,6 +70,23 @@ describe('newCustodyFeeCalculator', () => {
     });
     it('accepts an object without a value field, and returns a clone of that object with a new custodyFee field with a fee of 0', () => {
       expect(custodyFeeCalculator({ }).custodyFee).toBe(0);
+    });
+  });
+});
+
+describe('newAdjusmentFactorCalculator', () => {
+  it('should return a function', () => {
+    expect(newAdjusmentFactorCalculator()).toBeInstanceOf(Function);
+  });
+
+  describe('when called with an adjustmentRate and endDate, should return a function that', () => {
+    const adjusmentFactorCalculator = newAdjusmentFactorCalculator(-0.0002, new Date('2014-03-07'));
+
+    it('accepts an object with a current date field, and returns a clone of that object with a new adjustmentFactor field with a multiplication factor adjusted to the number of days remaining in the investment', () => {
+      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(100.1158);
+
+      const adjusmentFactorCalculator2 = newAdjusmentFactorCalculator(0.0002, new Date('2025-02-26'));
+      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(99.8999);
     });
   });
 });
