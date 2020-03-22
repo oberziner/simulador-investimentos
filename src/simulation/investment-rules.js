@@ -1,4 +1,4 @@
-import { getNextDay, isBusinessDay, differenceBusinessDays } from './dates';
+import { getNextDay, isBusinessDay, differenceDays, differenceBusinessDays } from './dates';
 
 const trunc = (val, places) => {
   const tens = 10 ** places;
@@ -41,9 +41,10 @@ export const newInterestCalculatorNominalValue = (defaultValue, rate) => (prev) 
   return newObject;
 };
 
-export const newCustodyFeeCalculator = (rate) => (prev) => {
+export const newCustodyFeeCalculator = (initialDate, rate) => (prev) => {
   const newObject = Object.assign({}, prev);
-  if ('value' in newObject) {
+  const shouldCalculateFee = differenceDays(initialDate, newObject.date) > 1;
+  if (('value' in newObject) && shouldCalculateFee) {
     newObject.custodyFee = newObject.value * rate.dailyRate();
   } else {
     newObject.custodyFee = 0;

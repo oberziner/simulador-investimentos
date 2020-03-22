@@ -38,7 +38,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
     newDateGenerator(startDate),
     newInterestCalculator(nominalValue, rate),
     newInterestCalculatorNominalValue(nominalValue, rate),
-    newCustodyFeeCalculator(newRate(0.0025, 'year364')),
+    newCustodyFeeCalculator(startDate, newRate(0.0025, 'year364')),
     newAdjusmentFactorCalculator(0.0003, endDate),
     newValueAdjuster(),
   );
