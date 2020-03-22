@@ -93,9 +93,9 @@ describe('app', () => {
       .then((element) => {
         expect(element.parentNode).toHaveTextContent(/^Tesouro Direto 5% a.a.Data inicio: 2019-05-01Data fim: 2019-12-01Valor inicial: R\$ 5.000,00/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 5.147,342/,
+        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 5.147,95/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/214 - 2019-05-01R\$ 5.000,00$/,
+        expect(getByRole('table')).toHaveTextContent(/214 - 2019-05-01R\$ 4.999,70$/,
           { normalizeWhitespace: true });
         done();
       });

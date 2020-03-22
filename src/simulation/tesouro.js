@@ -1,29 +1,46 @@
 import f from './sequence-factory';
-import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator, newAdjusmentFactorCalculator } from './investment-rules';
+import {
+  newDateGenerator,
+  newInterestCalculator,
+  newInterestCalculatorNominalValue,
+  newCustodyFeeCalculator,
+  newAdjusmentFactorCalculator,
+  newValueAdjuster,
+} from './investment-rules';
 import { differenceDays } from './dates';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
 const newTesouroSeq = (dateGenerator,
   interestGenerator,
+  interestGeneratorNominalValue,
   custodyFeeCalculator,
-  adjusmentFactorCalculator) => f.newSequence(
+  adjusmentFactorCalculator,
+  valueAdjuster) => f.newSequence(
   (prev) => {
     const nextDayCalculated = dateGenerator(prev);
-    const interestCalculated = interestGenerator(nextDayCalculated);
+    const interestCalculatedNominalValue = interestGeneratorNominalValue(nextDayCalculated);
+    const interestCalculated = interestGenerator(interestCalculatedNominalValue);
     const adjusmentFactorCalculated = adjusmentFactorCalculator(interestCalculated);
     const custodyFeeAdded = custodyFeeCalculator(adjusmentFactorCalculated);
+    const adjustedValue = valueAdjuster(custodyFeeAdded);
 
-    return custodyFeeAdded;
+    return adjustedValue;
   },
 );
 
 export const newTesouro = (startDate, initialValue, rate, endDate) => {
+  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(0.0002, endDate);
+  const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
+  const nominalValue = initialValue / adjustmentFactor;
+
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
-    newInterestCalculator(initialValue, rate),
+    newInterestCalculator(nominalValue, rate),
+    newInterestCalculatorNominalValue(nominalValue, rate),
     newCustodyFeeCalculator(newRate(0.0025, 'year364')),
-    newAdjusmentFactorCalculator(0.0003, new Date('2025-02-28')),
+    newAdjusmentFactorCalculator(0.0003, endDate),
+    newValueAdjuster(),
   );
 
   const steps = [];

@@ -1,5 +1,12 @@
 import { newRate } from './interest-rates';
-import { newDateGenerator, newInterestCalculator, newCustodyFeeCalculator, newAdjusmentFactorCalculator } from './investment-rules';
+import {
+  newDateGenerator,
+  newInterestCalculator,
+  newInterestCalculatorNominalValue,
+  newCustodyFeeCalculator,
+  newAdjusmentFactorCalculator,
+  newValueAdjuster,
+} from './investment-rules';
 
 describe('newDateGenerator', () => {
   it('should return a function', () => {
@@ -55,6 +62,37 @@ describe('newInterestCalculator', () => {
   });
 });
 
+describe('newInterestCalculatorNominalValue', () => {
+  it('should return a function', () => {
+    expect(newInterestCalculatorNominalValue()).toBeInstanceOf(Function);
+  });
+
+  describe('given a rate, should return a function that', () => {
+    it('accepts an object with a nominalValue and a date field, and returns a clone of that object where the nominalValue has interest accumulated according to the rate', () => {
+      const interestCalculatorNominalValue = newInterestCalculatorNominalValue(0, newRate(0.01, 'day'));
+      expect(interestCalculatorNominalValue({ date: new Date('2019-05-22'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), nominalValue: 1010 });
+    });
+    it('adds interest only on business days', () => {
+      const interestCalculatorNominalValue = newInterestCalculatorNominalValue(0, newRate(0.01, 'day'));
+      expect(interestCalculatorNominalValue({ date: new Date('2019-03-02'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-03-02'), nominalValue: 1000 }); // Saturday
+      expect(interestCalculatorNominalValue({ date: new Date('2019-03-03'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-03-03'), nominalValue: 1000 }); // Sunday
+      expect(interestCalculatorNominalValue({ date: new Date('2019-03-04'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-03-04'), nominalValue: 1000 }); // Carnival holiday
+    });
+  });
+
+  describe('given a rate and a defaultValue, should return a function that', () => {
+    const defaultValue = 500;
+    const interestCalculatorNominalValue = newInterestCalculatorNominalValue(defaultValue, newRate(0.01, 'day'));
+
+    it('accepts an object with a nominalValue and a date field, and returns a clone of that object where the nominalValue has interest accumulated according to the rate', () => {
+      expect(interestCalculatorNominalValue({ date: new Date('2019-05-22'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), nominalValue: 1010 });
+    });
+    it('given an object without a nominalValue field, returns a clone of that object where the nominalValue is equal to defaultValue', () => {
+      expect(interestCalculatorNominalValue({ })).toStrictEqual({ nominalValue: defaultValue });
+    });
+  });
+});
+
 describe('newCustodyFeeCalculator', () => {
   it('should return a function', () => {
     expect(newCustodyFeeCalculator()).toBeInstanceOf(Function);
@@ -83,10 +121,37 @@ describe('newAdjusmentFactorCalculator', () => {
     const adjusmentFactorCalculator = newAdjusmentFactorCalculator(-0.0002, new Date('2014-03-07'));
 
     it('accepts an object with a current date field, and returns a clone of that object with a new adjustmentFactor field with a multiplication factor adjusted to the number of days remaining in the investment', () => {
-      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(100.1158);
+      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.001158);
 
       const adjusmentFactorCalculator2 = newAdjusmentFactorCalculator(0.0002, new Date('2025-02-26'));
-      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(99.8999);
+      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(0.998999);
+    });
+  });
+});
+
+describe('newValueAdjuster', () => {
+  it('should return a function', () => {
+    expect(newValueAdjuster()).toBeInstanceOf(Function);
+  });
+
+  describe('when called, should return a function that', () => {
+    const valueAdjuster = newValueAdjuster();
+
+    it('accepts an object with a nominalValue and a adjustmentFactor fields, and returns a clone of that object with a new the field value containing the nominalValue adjusted with the adjustmentFactor', () => {
+      expect(valueAdjuster({ adjustmentFactor: 0.9, nominalValue: 0 }).value).toBe(0);
+      expect(valueAdjuster({ adjustmentFactor: 0.95, nominalValue: 10 }).value).toBeCloseTo(9.5, 2);
+      expect(valueAdjuster({ adjustmentFactor: 2, nominalValue: 123.45 }).value)
+        .toBeCloseTo(246.9, 2);
+      expect(valueAdjuster({ adjustmentFactor: 1, nominalValue: 100 }).value).toBe(100);
+    });
+
+    it('accepts an object without a value field, and returns a clone of that object with an empty value', () => {
+      expect(valueAdjuster({ }).value).toBeUndefined();
+      expect(valueAdjuster({ nominalValue: null }).value).toBeNull();
+    });
+
+    it('accepts an object without a adjustmentFactor field, and returns a clone of that object with an the same value', () => {
+      expect(valueAdjuster({ nominalValue: 10 }).value).toBe(10);
     });
   });
 });
