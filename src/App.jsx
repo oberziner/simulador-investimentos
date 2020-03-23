@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import Investment from './Investment';
 import { InputList } from './InputList';
 import { CdbAndCdi } from './CdbAndCdi';
+import { Tesouro } from './Tesouro';
 import './main.css';
 import { newRate } from './simulation/interest-rates';
-import { newTesouro } from './simulation/tesouro';
 
 class App extends Component {
-  static tesouroFactory({ startDate, initialValue, endDate, selicValue }) {
-    return newTesouro(startDate, initialValue, selicValue, endDate);
-  }
-
   static parseInputChange(e) {
     switch (e.id) {
       case 'startDate':
@@ -24,7 +20,6 @@ class App extends Component {
     super(props);
 
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.addTesouro = this.createInvestment.bind(this, App.tesouroFactory);
     this.addInvestment = this.addInvestment.bind(this);
 
     this.state = {
@@ -41,12 +36,6 @@ class App extends Component {
     }));
   }
 
-  createInvestment(investmentFactory) {
-    this.setState((state) => ({
-      investments: [...state.investments, investmentFactory(state.values)],
-    }));
-  }
-
   handleOnChange(e) {
     this.setState((state) => ({
       values: { ...state.values, [e.id]: App.parseInputChange(e) },
@@ -56,7 +45,6 @@ class App extends Component {
   render() {
     const { investments } = this.state;
     const { values } = this.state;
-    // console.log('render app', this.state.values);
     return (
       <div>
         <InputList
@@ -75,7 +63,11 @@ class App extends Component {
           onInvestmentAdd={this.addInvestment}
         />
 
-        <button type="button" onClick={this.addTesouro}>Tesouro</button>
+        <Tesouro
+          values={values}
+          onInvestmentAdd={this.addInvestment}
+        />
+
         <div>
           {investments.map((i) => (
             <div key={Math.random()} className="investment-container">
