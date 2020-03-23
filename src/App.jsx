@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import Investment from './Investment';
 import { InputList } from './InputList';
+import { CdbAndCdi } from './CdbAndCdi';
 import './main.css';
 import { newRate } from './simulation/interest-rates';
-import { newLCI } from './simulation/lci';
 import { newCDB } from './simulation/cdb';
 import { newTesouro } from './simulation/tesouro';
 
 class App extends Component {
-  static lciFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
-    return newLCI(startDate, initialValue, selicValue, percentCDI, endDate);
-  }
-
   static cdbFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
     return newCDB(startDate, initialValue, selicValue, percentCDI, endDate);
   }
@@ -33,27 +29,40 @@ class App extends Component {
     super(props);
 
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.addLCI = this.addInvestment.bind(this, App.lciFactory);
-    this.addCDB = this.addInvestment.bind(this, App.cdbFactory);
-    this.addTesouro = this.addInvestment.bind(this, App.tesouroFactory);
+    this.addCDB = this.createInvestment.bind(this, App.cdbFactory);
+    this.addTesouro = this.createInvestment.bind(this, App.tesouroFactory);
+    this.addInvestment = this.addInvestment.bind(this);
 
     this.state = {
       investments: [],
+      values: {
+        percentCDI: '90',
+      },
     };
   }
 
-  addInvestment(investmentFactory) {
+  addInvestment(investment) {
     this.setState((state) => ({
-      investments: [...state.investments, investmentFactory(state)],
+      investments: [...state.investments, investment],
+    }));
+  }
+
+  createInvestment(investmentFactory) {
+    this.setState((state) => ({
+      investments: [...state.investments, investmentFactory(state.values)],
     }));
   }
 
   handleOnChange(e) {
-    this.setState({ [e.id]: App.parseInputChange(e) });
+    this.setState((state) => ({
+      values: { ...state.values, [e.id]: App.parseInputChange(e) },
+    }));
   }
 
   render() {
     const { investments } = this.state;
+    const { values } = this.state;
+    // console.log('render app', this.state.values);
     return (
       <div>
         <InputList
@@ -66,8 +75,12 @@ class App extends Component {
             percentCDI: '90',
           }}
         />
+        <CdbAndCdi
+          values={values}
+          onChange={this.handleOnChange}
+          onInvestmentAdd={this.addInvestment}
+        />
 
-        <button type="button" onClick={this.addLCI}>LCI</button>
         <button type="button" onClick={this.addCDB}>CDB</button>
         <button type="button" onClick={this.addTesouro}>Tesouro</button>
         <div>
