@@ -68,8 +68,11 @@ describe('cdbAndCdi component', () => {
 
     const lciButton = getByText('LCI');
     lciButton.click();
+    const cdbButton = getByText('CDB');
+    cdbButton.click();
 
-    expect(mockCallback2.mock.calls).toHaveLength(1);
+    expect(mockCallback2.mock.calls).toHaveLength(2);
     expect(mockCallback2.mock.calls[0][0]).toMatchObject({ title: 'LCI 90% SELIC 4.15% a.a.' });
+    expect(mockCallback2.mock.calls[1][0]).toMatchObject({ title: 'CDB 90% SELIC 4.15% a.a.' });
   });
 });

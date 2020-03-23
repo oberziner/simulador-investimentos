@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { newLCI } from './simulation/lci';
+import { newCDB } from './simulation/cdb';
 
 export class CdbAndCdi extends Component {
+  static cdbFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
+    return newCDB(startDate, initialValue, selicValue, percentCDI, endDate);
+  }
+
   static lciFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
     return newLCI(startDate, initialValue, selicValue, percentCDI, endDate);
   }
@@ -12,6 +17,7 @@ export class CdbAndCdi extends Component {
     this.notifyInvestmentAdded = props.onInvestmentAdd;
     this.onChange = props.onChange;
     this.addLCI = this.addInvestment.bind(this, CdbAndCdi.lciFactory);
+    this.addCDB = this.addInvestment.bind(this, CdbAndCdi.cdbFactory);
     this.handleChange = this.handleChange.bind(this);
 
     this.state = {
@@ -49,6 +55,7 @@ export class CdbAndCdi extends Component {
           />
         </label>
         <button type="button" onClick={this.addLCI.bind(this, values)}>LCI</button>
+        <button type="button" onClick={this.addCDB.bind(this, values)}>CDB</button>
       </div>
     );
   }

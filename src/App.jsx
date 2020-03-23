@@ -4,14 +4,9 @@ import { InputList } from './InputList';
 import { CdbAndCdi } from './CdbAndCdi';
 import './main.css';
 import { newRate } from './simulation/interest-rates';
-import { newCDB } from './simulation/cdb';
 import { newTesouro } from './simulation/tesouro';
 
 class App extends Component {
-  static cdbFactory({ startDate, initialValue, endDate, selicValue, percentCDI }) {
-    return newCDB(startDate, initialValue, selicValue, percentCDI, endDate);
-  }
-
   static tesouroFactory({ startDate, initialValue, endDate, selicValue }) {
     return newTesouro(startDate, initialValue, selicValue, endDate);
   }
@@ -29,7 +24,6 @@ class App extends Component {
     super(props);
 
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.addCDB = this.createInvestment.bind(this, App.cdbFactory);
     this.addTesouro = this.createInvestment.bind(this, App.tesouroFactory);
     this.addInvestment = this.addInvestment.bind(this);
 
@@ -81,7 +75,6 @@ class App extends Component {
           onInvestmentAdd={this.addInvestment}
         />
 
-        <button type="button" onClick={this.addCDB}>CDB</button>
         <button type="button" onClick={this.addTesouro}>Tesouro</button>
         <div>
           {investments.map((i) => (
