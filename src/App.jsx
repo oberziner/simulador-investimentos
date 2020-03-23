@@ -54,7 +54,6 @@ class App extends Component {
             startDate: '2015-01-01',
             endDate: '2016-01-01',
             selicValue: '5',
-            percentCDI: '90',
           }}
         />
         <CdbAndCdi

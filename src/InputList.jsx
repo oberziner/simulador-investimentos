@@ -12,7 +12,6 @@ export class InputList extends Component {
       startDate: '',
       endDate: '',
       selicValue: '',
-      percentCDI: '',
       ...props.values,
     };
 
@@ -64,15 +63,6 @@ export class InputList extends Component {
             id="selicValue"
             onChange={this.handleChange}
             value={state.selicValue}
-          />
-        </label>
-        <label htmlFor="percentCDI">
-          % CDI:
-          <input
-            type="text"
-            id="percentCDI"
-            onChange={this.handleChange}
-            value={state.percentCDI}
           />
         </label>
       </div>
