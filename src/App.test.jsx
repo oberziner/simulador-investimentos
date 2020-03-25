@@ -11,7 +11,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '6' } });
     fireEvent.change(getByLabelText('% CDI:'), { target: { value: '90' } });
-    const lciButton = getByText((text, element) => (text === 'LCI')
+    const lciButton = getByText((text, element) => (text === '(L)CI')
       && (element.tagName === 'BUTTON'));
 
     lciButton.click();
@@ -36,7 +36,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
     fireEvent.change(getByLabelText('% CDI:'), { target: { value: '100' } });
-    const lciButton = getByText((text, element) => (text === 'LCI')
+    const lciButton = getByText((text, element) => (text === '(L)CI')
       && (element.tagName === 'BUTTON'));
 
     lciButton.click();
@@ -61,7 +61,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2018-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
     fireEvent.change(getByLabelText('% CDI:'), { target: { value: '90' } });
-    const cdbButton = getByText((text, element) => (text === 'CDB')
+    const cdbButton = getByText((text, element) => (text === '(C)DB')
       && (element.tagName === 'BUTTON'));
 
     cdbButton.click();
@@ -84,7 +84,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-05-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '5' } });
-    const tesouroButton = getByText((text, element) => (text === 'Tesouro')
+    const tesouroButton = getByText((text, element) => (text === '(T)esouro')
       && (element.tagName === 'BUTTON'));
 
     tesouroButton.click();

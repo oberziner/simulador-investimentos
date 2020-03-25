@@ -2,6 +2,31 @@ body {
   white-space: nowrap;
 }
 
+.input-list {
+  vertical-align: top;
+  display: inline-block;
+  min-width: 16em;
+}
+
+.input-list > label {
+  display: block;
+  text-align: right;
+  padding: 5px;
+}
+
+.input-list > label > input {
+  display: inline-block;
+  width: 10em;
+  margin-left: 4px;
+}
+
+.input-list > button {
+  display: block;
+  margin: 5px auto;
+  padding: 5px;
+  min-width: 50%;
+}
+
 .investment-container {
   display: inline-block;
   margin: 0 10px;
@@ -13,7 +38,7 @@ body {
   border-radius: 10px;
 }
 
-.title {
+.investment-title {
   color: blue
 }
 

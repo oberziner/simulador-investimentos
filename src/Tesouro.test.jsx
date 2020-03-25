@@ -20,7 +20,7 @@ describe('tesouro component', () => {
       onInvestmentAdd={mockCallback}
     />);
 
-    const tesouroButton = getByText('Tesouro');
+    const tesouroButton = getByText('(T)esouro');
     tesouroButton.click();
 
     expect(mockCallback.mock.calls).toHaveLength(1);

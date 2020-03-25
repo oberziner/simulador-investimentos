@@ -24,8 +24,8 @@ export class Tesouro extends Component {
   render() {
     const { values } = this.props;
     return (
-      <div>
-        <button type="button" onClick={this.addTesouro.bind(this, values)}>Tesouro</button>
+      <div className="input-list">
+        <button type="button" accessKey="t" onClick={this.addTesouro.bind(this, values)}>(T)esouro</button>
       </div>
     );
   }

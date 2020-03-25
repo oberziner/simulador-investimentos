@@ -47,25 +47,27 @@ class App extends Component {
     const { values } = this.state;
     return (
       <div>
-        <InputList
-          onChange={this.handleOnChange}
-          values={{
-            initialValue: 4444,
-            startDate: '2015-01-01',
-            endDate: '2016-01-01',
-            selicValue: '5',
-          }}
-        />
-        <CdbAndCdi
-          values={values}
-          onChange={this.handleOnChange}
-          onInvestmentAdd={this.addInvestment}
-        />
+        <div className="input-box">
+          <InputList
+            onChange={this.handleOnChange}
+            values={{
+              initialValue: 4444,
+              startDate: '2015-01-01',
+              endDate: '2016-01-01',
+              selicValue: '5',
+            }}
+          />
+          <CdbAndCdi
+            values={values}
+            onChange={this.handleOnChange}
+            onInvestmentAdd={this.addInvestment}
+          />
 
-        <Tesouro
-          values={values}
-          onInvestmentAdd={this.addInvestment}
-        />
+          <Tesouro
+            values={values}
+            onInvestmentAdd={this.addInvestment}
+          />
+        </div>
 
         <div>
           {investments.map((i) => (

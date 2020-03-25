@@ -44,7 +44,7 @@ export class CdbAndCdi extends Component {
     const { values } = this.props;
     // console.log('render cdb', this.props.values);
     return (
-      <div>
+      <div className="input-list">
         <label htmlFor="percentCDI">
           % CDI:
           <input
@@ -54,8 +54,8 @@ export class CdbAndCdi extends Component {
             value={state.percentCDI}
           />
         </label>
-        <button type="button" onClick={this.addLCI.bind(this, values)}>LCI</button>
-        <button type="button" onClick={this.addCDB.bind(this, values)}>CDB</button>
+        <button type="button" accessKey="l" onClick={this.addLCI.bind(this, values)}>(L)CI</button>
+        <button type="button" accessKey="c" onClick={this.addCDB.bind(this, values)}>(C)DB</button>
       </div>
     );
   }

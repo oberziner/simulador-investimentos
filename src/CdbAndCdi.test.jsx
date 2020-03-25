@@ -66,9 +66,9 @@ describe('cdbAndCdi component', () => {
       onInvestmentAdd={mockCallback2}
     />);
 
-    const lciButton = getByText('LCI');
+    const lciButton = getByText('(L)CI');
     lciButton.click();
-    const cdbButton = getByText('CDB');
+    const cdbButton = getByText('(C)DB');
     cdbButton.click();
 
     expect(mockCallback2.mock.calls).toHaveLength(2);

@@ -28,7 +28,7 @@ export class InputList extends Component {
   render() {
     const { state } = this;
     return (
-      <div>
+      <div className="input-list">
         <label htmlFor="initialValue">
           Valor:
           <input
