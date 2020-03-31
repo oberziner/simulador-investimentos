@@ -2,11 +2,14 @@ import holidays from './holidays.json';
 import datesAndTaxesJSON from './dates-and-taxes.json';
 
 const datesAndTaxes = datesAndTaxesJSON.map((i) => {
+  const breakDateForSelicTax = new Date('2020-02-29');
   const date = new Date(i.date);
+  const sellSelicTax = (date.getTime() > breakDateForSelicTax.getTime()) ? 0.0004 : 0.0003;
   return {
     date,
     yearlySelic: i.yearlySelic,
     dailySelic: i.dailySelic,
+    sellSelicTax,
   };
 });
 

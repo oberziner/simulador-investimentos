@@ -134,6 +134,7 @@ describe('findDate', () => {
   it('should return the object with the taxes for a given date', () => {
     expect(findDate(new Date('2020-02-26'))).toStrictEqual({
       date: new Date('2020-02-26'),
+      sellSelicTax: 0.0003,
       yearlySelic: '4.15',
       dailySelic: '1.00016137',
     });
@@ -146,5 +147,13 @@ describe('findDate', () => {
   it('should return null for weekends and holidays', () => {
     expect(findDate(new Date('2020-02-23'))).toBeNull();
     expect(findDate(new Date('2019-03-04'))).toBeNull();
+  });
+  it('should return sellSelicTax as 0.0003 before 2020-02-29', () => {
+    expect(findDate(new Date('2020-02-03')).sellSelicTax).toBe(0.0003);
+    expect(findDate(new Date('2020-02-26')).sellSelicTax).toBe(0.0003);
+  });
+  it('should return sellSelicTax as 0.0004 after 2020-02-29', () => {
+    expect(findDate(new Date('2020-03-09')).sellSelicTax).toBe(0.0004);
+    expect(findDate(new Date('2020-03-23')).sellSelicTax).toBe(0.0004);
   });
 });

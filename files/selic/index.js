@@ -3,6 +3,7 @@ const readline = require('readline');
 
 const fileStream = fs.createReadStream('selic_diaria.csv');
 
+
 const rl = readline.createInterface({
   input: fileStream,
   crlfDelay: Infinity,
