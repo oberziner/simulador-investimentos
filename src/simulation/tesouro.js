@@ -7,7 +7,7 @@ import {
   newAdjusmentFactorCalculator,
   newValueAdjuster,
 } from './investment-rules';
-import { differenceDays } from './dates';
+import { differenceDays, findDate } from './dates';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
@@ -34,12 +34,16 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
   const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
   const nominalValue = initialValue / adjustmentFactor;
 
+  const repo = {
+    find: (date) => findDate(date),
+  };
+
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
-    newInterestCalculator(nominalValue, rate),
-    newInterestCalculatorNominalValue(nominalValue, rate),
+    newInterestCalculator(nominalValue, rate, repo),
+    newInterestCalculatorNominalValue(nominalValue, rate, repo),
     newCustodyFeeCalculator(startDate, newRate(0.0025, 'year364')),
-    newAdjusmentFactorCalculator(0.0003, endDate),
+    newAdjusmentFactorCalculator(0.0003, endDate, repo),
     newValueAdjuster(),
   );
 
@@ -50,7 +54,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
   }
 
   const totalDays = differenceDays(startDate, endDate) - 1;
-  const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - steps[0].value, totalDays);
+  const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - initialValue, totalDays);
   const totalCustodyFee = steps.reduce((total, i) => total + i.custodyFee, 0);
 
   return {
