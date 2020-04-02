@@ -1,6 +1,7 @@
 import f from './sequence-factory';
 import { newRate } from './interest-rates';
 import { newDateGenerator, newInterestCalculator } from './investment-rules';
+import { findDate } from './dates';
 
 export const newLCISeq = (dateGenerator, interestGenerator) => f.newSequence(
   (prev) => {
@@ -13,7 +14,19 @@ export const newLCISeq = (dateGenerator, interestGenerator) => f.newSequence(
 
 export const newLCI = (startDate, initialValue, rate, percentRate, endDate) => {
   const lciRate = newRate(rate.yearly252Rate() * (percentRate / 100), 'year252');
-  const seq = newLCISeq(newDateGenerator(startDate), newInterestCalculator(initialValue, lciRate));
+
+  const repo = {
+    find: (date) => {
+      const dayRate = Object.assign({}, findDate(date));
+      dayRate.dailySelic = ((dayRate.dailySelic - 1) * (percentRate / 100)) + 1;
+      return dayRate;
+    },
+  };
+
+  const seq = newLCISeq(
+    newDateGenerator(startDate),
+    newInterestCalculator(initialValue, lciRate, repo),
+  );
   const steps = [];
 
   for (let i = seq.next(); ((i.date < endDate)); i = seq.next()) {

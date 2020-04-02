@@ -1,6 +1,6 @@
 import f from './sequence-factory';
 import { newDateGenerator, newInterestCalculator } from './investment-rules';
-import { differenceDays } from './dates';
+import { differenceDays, findDate } from './dates';
 import { newRate } from './interest-rates';
 import { calculateIncomeTax } from './taxes';
 
@@ -15,7 +15,19 @@ const newCDBSeq = (dateGenerator, interestGenerator) => f.newSequence(
 
 export const newCDB = (startDate, initialValue, rate, percentRate, endDate) => {
   const cdbRate = newRate(rate.yearly252Rate() * (percentRate / 100), 'year252');
-  const seq = newCDBSeq(newDateGenerator(startDate), newInterestCalculator(initialValue, cdbRate));
+
+  const repo = {
+    find: (date) => {
+      const dayRate = Object.assign({}, findDate(date));
+      dayRate.dailySelic = ((dayRate.dailySelic - 1) * (percentRate / 100)) + 1;
+      return dayRate;
+    },
+  };
+
+  const seq = newCDBSeq(
+    newDateGenerator(startDate),
+    newInterestCalculator(initialValue, cdbRate, repo),
+  );
   const steps = [];
 
   for (let i = seq.next(); ((i.date < endDate)); i = seq.next()) {
