@@ -26,14 +26,14 @@ describe('tesouro object', () => {
   });
   it('should have the day before the end date as last step with the correct value', () => {
     expect(tesouro.steps[tesouro.steps.length - 1].date).toStrictEqual(new Date('2018-06-02'));
-    expect(tesouro.steps[tesouro.steps.length - 1].value).toBeCloseTo(1010.18, 2);
+    expect(tesouro.steps[tesouro.steps.length - 1].value).toBeCloseTo(1010.17, 2);
   });
   it('should have the correct values for the dates', () => {
     expect(tesouro.steps[23].date).toStrictEqual(new Date('2018-04-26'));
-    expect(tesouro.steps[23].value).toBeCloseTo(1004.20, 2);
+    expect(tesouro.steps[23].value).toBeCloseTo(1004.19, 2);
 
     expect(tesouro.steps[49].date).toStrictEqual(new Date('2018-05-22'));
-    expect(tesouro.steps[49].value).toBeCloseTo(1008.43, 2);
+    expect(tesouro.steps[49].value).toBeCloseTo(1008.42, 2);
   });
   it('.totalDays should return the number of days between the initial date and the end date', () => {
     expect(tesouro.totalDays).toBe(60);
@@ -67,7 +67,7 @@ describe('tesouro object taxes', () => {
 
 describe('tesouro values', () => {
   it('should be calculated correctly', () => {
-    const tesouro = newTesouro(new Date('2020-02-20'), 10524.88, newRate(0.0415, 'year252'), new Date('2025-02-25'));
+    const tesouro = newTesouro(new Date('2020-02-20'), 10524.898433084, newRate(0.0415, 'year252'), new Date('2025-03-01'));
 
     // expect(JSON.stringify(tesouro.steps.splice(0, 10), null, 2))
     // .toStrictEqual(new Date('2020-02-21'));
@@ -80,19 +80,19 @@ describe('tesouro values', () => {
     expect(tesouro.steps[1].custodyFee).toBe(0);
 
     expect(tesouro.steps[2].date).toStrictEqual(new Date('2020-02-22'));
-    expect(tesouro.steps[2].value).toBeCloseTo(10521.33, 2);
+    expect(tesouro.steps[2].value).toBeCloseTo(10521.34, 2);
     expect(tesouro.steps[2].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[3].date).toStrictEqual(new Date('2020-02-23'));
-    expect(tesouro.steps[3].value).toBeCloseTo(10521.33, 2);
+    expect(tesouro.steps[3].value).toBeCloseTo(10521.34, 2);
     expect(tesouro.steps[3].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[4].date).toStrictEqual(new Date('2020-02-24'));
-    expect(tesouro.steps[4].value).toBeCloseTo(10521.33, 2);
+    expect(tesouro.steps[4].value).toBeCloseTo(10521.34, 2);
     expect(tesouro.steps[4].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[5].date).toStrictEqual(new Date('2020-02-25'));
-    expect(tesouro.steps[5].value).toBeCloseTo(10521.33, 2);
+    expect(tesouro.steps[5].value).toBeCloseTo(10521.34, 2);
     expect(tesouro.steps[5].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[6].date).toStrictEqual(new Date('2020-02-26'));
@@ -100,11 +100,11 @@ describe('tesouro values', () => {
     expect(tesouro.steps[6].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[7].date).toStrictEqual(new Date('2020-02-27'));
-    expect(tesouro.steps[7].value).toBeCloseTo(10524.76, 2);
+    expect(tesouro.steps[7].value).toBeCloseTo(10524.75, 2);
     expect(tesouro.steps[7].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[8].date).toStrictEqual(new Date('2020-02-28'));
-    expect(tesouro.steps[8].value).toBeCloseTo(10526.47, 2);
+    expect(tesouro.steps[8].value).toBeCloseTo(10526.46, 2);
     expect(tesouro.steps[9].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[9].date).toStrictEqual(new Date('2020-02-29'));
@@ -116,18 +116,18 @@ describe('tesouro values', () => {
     expect(tesouro.steps[10].custodyFee).toBeCloseTo(0.0722, 4);
 
     expect(tesouro.steps[11].date).toStrictEqual(new Date('2020-03-02'));
-    expect(tesouro.steps[11].value).toBeCloseTo(10522.94, 2);
+    expect(tesouro.steps[11].value).toBeCloseTo(10522.93, 2);
 
     expect(tesouro.steps[12].date).toStrictEqual(new Date('2020-03-03'));
-    expect(tesouro.steps[12].value).toBeCloseTo(10524.66, 2);
+    expect(tesouro.steps[12].value).toBeCloseTo(10524.64, 2);
 
     expect(tesouro.steps[13].date).toStrictEqual(new Date('2020-03-04'));
-    expect(tesouro.steps[13].value).toBeCloseTo(10526.37, 2);
+    expect(tesouro.steps[13].value).toBeCloseTo(10526.36, 2);
 
     expect(tesouro.steps[14].date).toStrictEqual(new Date('2020-03-05'));
-    expect(tesouro.steps[14].value).toBeCloseTo(10528.08, 2);
+    expect(tesouro.steps[14].value).toBeCloseTo(10528.07, 2);
 
     expect(tesouro.steps[15].date).toStrictEqual(new Date('2020-03-06'));
-    expect(tesouro.steps[15].value).toBeCloseTo(10529.80, 2);
+    expect(tesouro.steps[15].value).toBeCloseTo(10529.79, 2);
   });
 });

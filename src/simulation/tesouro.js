@@ -3,24 +3,27 @@ import {
   newDateGenerator,
   newInterestCalculator,
   newInterestCalculatorNominalValue,
+  newNominalValueProjector,
   newCustodyFeeCalculator,
   newAdjusmentFactorCalculator,
   newValueAdjuster,
 } from './investment-rules';
-import { differenceDays, findDate } from './dates';
+import { differenceDays, findDate, getPreviousBusinessDayRates } from './dates';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
 const newTesouroSeq = (dateGenerator,
   interestGenerator,
   interestGeneratorNominalValue,
+  nominalValueProjector,
   custodyFeeCalculator,
   adjusmentFactorCalculator,
   valueAdjuster) => f.newSequence(
   (prev) => {
     const nextDayCalculated = dateGenerator(prev);
     const interestCalculatedNominalValue = interestGeneratorNominalValue(nextDayCalculated);
-    const interestCalculated = interestGenerator(interestCalculatedNominalValue);
+    const nominalValueProjected = nominalValueProjector(interestCalculatedNominalValue);
+    const interestCalculated = interestGenerator(nominalValueProjected);
     const adjusmentFactorCalculated = adjusmentFactorCalculator(interestCalculated);
     const custodyFeeAdded = custodyFeeCalculator(adjusmentFactorCalculated);
     const adjustedValue = valueAdjuster(custodyFeeAdded);
@@ -29,19 +32,28 @@ const newTesouroSeq = (dateGenerator,
   },
 );
 
-export const newTesouro = (startDate, initialValue, rate, endDate) => {
-  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(0.0002, endDate);
+const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, yearlySelic) => {
+  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(buyPremium, endDate);
   const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
-  const nominalValue = initialValue / adjustmentFactor;
+  const projectedNominalValue = initialValue / adjustmentFactor;
+  const metaSelicDiaria = newRate((1 * yearlySelic + 0.1) / 100, 'year252');
+  return projectedNominalValue / (metaSelicDiaria.dailyRate() + 1);
+};
+
+export const newTesouro = (startDate, initialValue, rate, endDate) => {
+  const nominalValue = nominalValueFromBuyPrice(startDate,
+    endDate, initialValue, 0.0002, getPreviousBusinessDayRates(startDate).yearlySelic);
 
   const repo = {
     find: (date) => findDate(date),
+    findPreviousBusinessDay: (date) => getPreviousBusinessDayRates(date),
   };
 
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
     newInterestCalculator(nominalValue, rate, repo),
     newInterestCalculatorNominalValue(nominalValue, rate, repo),
+    newNominalValueProjector(rate, repo),
     newCustodyFeeCalculator(startDate, newRate(0.0025, 'year364')),
     newAdjusmentFactorCalculator(0.0003, endDate, repo),
     newValueAdjuster(),

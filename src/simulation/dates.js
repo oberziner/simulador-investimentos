@@ -74,6 +74,11 @@ export const findDate = (date) => {
   return idx > -1 ? datesAndTaxes[idx] : null;
 };
 
+export const getPreviousBusinessDayRates = (date) => {
+  const idx = indexOfLatestDateBefore(getPreviousDay(date));
+  return idx > -1 ? datesAndTaxes[idx] : null;
+};
+
 export const differenceBusinessDays = (dateFrom, dateTo) => {
   const dateFromIdx = indexOfEarliestDateAfter(dateFrom);
   const dateToIdx = indexOfEarliestDateAfter(dateTo);

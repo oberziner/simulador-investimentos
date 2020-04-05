@@ -131,10 +131,10 @@ describe('newAdjusmentFactorCalculator', () => {
     const adjusmentFactorCalculator = newAdjusmentFactorCalculator(-0.0002, new Date('2014-03-07'));
 
     it('accepts an object with a current date field, and returns a clone of that object with a new adjustmentFactor field with a multiplication factor adjusted to the number of days remaining in the investment', () => {
-      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.001158);
+      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.0011579);
 
       const adjusmentFactorCalculator2 = newAdjusmentFactorCalculator(0.0002, new Date('2025-02-26'));
-      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(0.998999);
+      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(0.9989998);
     });
   });
 });
@@ -147,21 +147,22 @@ describe('newValueAdjuster', () => {
   describe('when called, should return a function that', () => {
     const valueAdjuster = newValueAdjuster();
 
-    it('accepts an object with a nominalValue and a adjustmentFactor fields, and returns a clone of that object with a new the field value containing the nominalValue adjusted with the adjustmentFactor', () => {
-      expect(valueAdjuster({ adjustmentFactor: 0.9, nominalValue: 0 }).value).toBe(0);
-      expect(valueAdjuster({ adjustmentFactor: 0.95, nominalValue: 10 }).value).toBeCloseTo(9.5, 2);
-      expect(valueAdjuster({ adjustmentFactor: 2, nominalValue: 123.45 }).value)
+    it('accepts an object with a projectedNominalValue and a adjustmentFactor fields, and returns a clone of that object with a new the field value containing the projectedNominalValue adjusted with the adjustmentFactor', () => {
+      expect(valueAdjuster({ adjustmentFactor: 0.9, projectedNominalValue: 0 }).value).toBe(0);
+      expect(valueAdjuster({ adjustmentFactor: 0.95, projectedNominalValue: 10 }).value)
+        .toBeCloseTo(9.5, 2);
+      expect(valueAdjuster({ adjustmentFactor: 2, projectedNominalValue: 123.45 }).value)
         .toBeCloseTo(246.9, 2);
-      expect(valueAdjuster({ adjustmentFactor: 1, nominalValue: 100 }).value).toBe(100);
+      expect(valueAdjuster({ adjustmentFactor: 1, projectedNominalValue: 100 }).value).toBe(100);
     });
 
     it('accepts an object without a value field, and returns a clone of that object with an empty value', () => {
       expect(valueAdjuster({ }).value).toBeUndefined();
-      expect(valueAdjuster({ nominalValue: null }).value).toBeNull();
+      expect(valueAdjuster({ projectedNominalValue: null }).value).toBeNull();
     });
 
     it('accepts an object without a adjustmentFactor field, and returns a clone of that object with an the same value', () => {
-      expect(valueAdjuster({ nominalValue: 10 }).value).toBe(10);
+      expect(valueAdjuster({ projectedNominalValue: 10 }).value).toBe(10);
     });
   });
 });

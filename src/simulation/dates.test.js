@@ -7,6 +7,7 @@ import {
   findDate,
   indexOfLatestDateBefore,
   indexOfEarliestDateAfter,
+  getPreviousBusinessDayRates,
 } from './dates';
 
 describe('getNextDay', () => {
@@ -155,5 +156,20 @@ describe('findDate', () => {
   it('should return sellSelicTax as 0.0004 after 2020-02-29', () => {
     expect(findDate(new Date('2020-03-09')).sellSelicTax).toBe(0.0004);
     expect(findDate(new Date('2020-03-23')).sellSelicTax).toBe(0.0004);
+  });
+});
+
+describe('getPreviousBusinessDayRates', () => {
+  it('should return the object with the taxes from the business day before the parameter', () => {
+    expect(getPreviousBusinessDayRates(new Date('2020-02-26'))).toStrictEqual({
+      date: new Date('2020-02-21'),
+      sellSelicTax: 0.0003,
+      yearlySelic: '4.15',
+      dailySelic: '1.00016137',
+    });
+  });
+  it('should return the correct business days', () => {
+    expect(getPreviousBusinessDayRates(new Date('2020-01-27')).date).toStrictEqual(new Date('2020-01-24'));
+    expect(getPreviousBusinessDayRates(new Date('2020-01-02')).date).toStrictEqual(new Date('2019-12-31'));
   });
 });
