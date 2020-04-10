@@ -27,6 +27,9 @@ describe('rate object', () => {
     it('should convert daily rate to yearly364 rate', () => {
       expect(newRate(0.01, 'day').yearly364Rate()).toBeCloseTo(36.409341, 6);
     });
+    it('should convert daily rate to yearly365 rate', () => {
+      expect(newRate(0.01, 'day').yearly365Rate()).toBeCloseTo(36.783434, 6);
+    });
   });
 
   describe('created with monthly rate', () => {
@@ -41,6 +44,9 @@ describe('rate object', () => {
     });
     it('should convert monthly rate to yearly364 rate', () => {
       expect(newRate(0.01, 'month').yearly364Rate()).toBeCloseTo(0.126825, 6);
+    });
+    it('should convert monthly rate to yearly365 rate', () => {
+      expect(newRate(0.01, 'month').yearly365Rate()).toBeCloseTo(0.126825, 6);
     });
   });
 
@@ -57,11 +63,14 @@ describe('rate object', () => {
     it('should throw and error on yearly364', () => {
       expect(() => newRate(0.01, 'year252').yearly364Rate()).toThrow('Cannot convert year252 rate to year364 rate');
     });
+    it('should throw and error on yearly365', () => {
+      expect(() => newRate(0.01, 'year252').yearly365Rate()).toThrow('Cannot convert year252 rate to year365 rate');
+    });
   });
 
   describe('created with yearly364 rate', () => {
     it('should convert yearly364 rate to dailyRate rate', () => {
-      expect(newRate(0.01, 'year364').dailyRate()).toBeCloseTo(0.0000273, 7);
+      expect(newRate(0.01, 'year364').dailyRate()).toBeCloseTo(0.000027336, 8);
     });
     it('should convert yearly364 rate to monthly rate', () => {
       expect(newRate(0.01, 'year364').monthlyRate()).toBeCloseTo(0.0008295, 7);
@@ -72,7 +81,29 @@ describe('rate object', () => {
     it('should throw and error on yearly252', () => {
       expect(() => newRate(0.01, 'year364').yearly252Rate()).toThrow('Cannot convert year364 rate to year252 rate');
     });
+    it('should throw and error on yearly365', () => {
+      expect(() => newRate(0.01, 'year364').yearly365Rate()).toThrow('Cannot convert year364 rate to year365 rate');
+    });
   });
+
+  describe('created with yearly365 rate', () => {
+    it('should convert yearly365 rate to dailyRate rate', () => {
+      expect(newRate(0.01, 'year365').dailyRate()).toBeCloseTo(0.00002726, 8);
+    });
+    it('should convert yearly365 rate to monthly rate', () => {
+      expect(newRate(0.01, 'year365').monthlyRate()).toBeCloseTo(0.0008295, 7);
+    });
+    it('should return yearly365 correctly', () => {
+      expect(newRate(0.01, 'year365').yearly365Rate()).toBeCloseTo(0.01, 6);
+    });
+    it('should throw and error on yearly252', () => {
+      expect(() => newRate(0.01, 'year365').yearly252Rate()).toThrow('Cannot convert year365 rate to year252 rate');
+    });
+    it('should throw and error on yearly364', () => {
+      expect(() => newRate(0.01, 'year365').yearly364Rate()).toThrow('Cannot convert year365 rate to year364 rate');
+    });
+  });
+
 
   it('.toString should return a text description of the rate', () => {
     expect(newRate(0.00021, 'day').toString()).toBe('0.021% a.d.');
