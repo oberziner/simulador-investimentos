@@ -142,7 +142,8 @@ describe('tesouro sold before due date', () => {
 
     expect(tesouro.steps).toHaveLength(65);
     expect(tesouro.startDate).toStrictEqual(new Date('2019-12-16'));
-    expect(tesouro.endDate).toStrictEqual(new Date('2025-03-01'));
+    expect(tesouro.dueDate).toStrictEqual(new Date('2025-03-01'));
+    expect(tesouro.endDate).toStrictEqual(new Date('2020-02-18'));
     expect(tesouro.initialValue).toBe(10025.47264);
     expect(tesouro.totalTaxes).toBeCloseTo(15.77, 2);
     expect(tesouro.totalDays).toBe(63);

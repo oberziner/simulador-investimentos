@@ -72,7 +72,8 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
   return {
     title: `Tesouro Direto ${rate.toString()}`,
     startDate,
-    endDate,
+    endDate: sellingDate,
+    dueDate: endDate,
     initialValue,
     totalTaxes,
     totalDays,
