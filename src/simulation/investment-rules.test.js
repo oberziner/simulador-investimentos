@@ -115,9 +115,11 @@ describe('newCustodyFeeCalculator', () => {
     it('accepts an object without a value field, and returns a clone of that object with a new custodyFee field with a fee of 0', () => {
       expect(custodyFeeCalculator({ date: new Date('2019-03-04') }).custodyFee).toBe(0);
       expect(custodyFeeCalculator({ }).custodyFee).toBe(0);
+      expect(custodyFeeCalculator({ }).totalCustodyFee).toBe(0);
     });
     it('accepts an object without a date field, and returns a clone of that object with a new custodyFee field with a fee of 0', () => {
       expect(custodyFeeCalculator({ value: 10 }).custodyFee).toBe(0);
+      expect(custodyFeeCalculator({ value: 10 }).totalCustodyFee).toBe(0);
     });
   });
 });

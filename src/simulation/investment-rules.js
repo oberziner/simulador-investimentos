@@ -83,9 +83,11 @@ export const newCustodyFeeCalculator = (initialDate, rate) => (prev) => {
   const newObject = Object.assign({}, prev);
   const shouldCalculateFee = differenceDays(initialDate, newObject.date) > 1;
   if (('value' in newObject) && shouldCalculateFee) {
-    newObject.custodyFee = newObject.value * rate.dailyRate();
+    newObject.custodyFee = trunc(newObject.value * rate.dailyRate(), 4);
+    newObject.totalCustodyFee += newObject.custodyFee;
   } else {
     newObject.custodyFee = 0;
+    newObject.totalCustodyFee = 0;
   }
   return newObject;
 };
