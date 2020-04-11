@@ -83,6 +83,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Valor:'), { target: { value: '5000' } });
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-05-01' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
+    fireEvent.change(getByLabelText('Data de vencimento:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '5' } });
     const tesouroButton = getByText((text, element) => (text === '(T)esouro')
       && (element.tagName === 'BUTTON'));

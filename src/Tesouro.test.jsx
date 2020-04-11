@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { Tesouro } from './Tesouro';
@@ -11,19 +11,26 @@ describe('tesouro component', () => {
     const values = {
       initialValue: 10524.89,
       startDate: new Date('2020-02-21'),
-      endDate: new Date('2020-02-26'),
+      endDate: new Date('2020-10-26'),
       selicValue: newRate(0.0415, 'year252'),
     };
 
-    const { getByText } = render(<Tesouro
+    const { getByText, getByLabelText } = render(<Tesouro
       values={values}
       onInvestmentAdd={mockCallback}
     />);
+
+    fireEvent.change(getByLabelText('Data de vencimento:'), { target: { value: '2025-03-01' } });
+    expect(getByLabelText('Data de vencimento:')).toHaveValue('2025-03-01');
 
     const tesouroButton = getByText('(T)esouro');
     tesouroButton.click();
 
     expect(mockCallback.mock.calls).toHaveLength(1);
-    expect(mockCallback.mock.calls[0][0]).toMatchObject({ title: 'Tesouro Direto 4.15% a.a.' });
+    expect(mockCallback.mock.calls[0][0]).toMatchObject({
+      title: 'Tesouro Direto 4.15% a.a.',
+      endDate: new Date('2020-10-26'),
+      dueDate: new Date('2025-03-01'),
+    });
   });
 });
