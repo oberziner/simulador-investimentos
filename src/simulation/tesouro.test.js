@@ -44,6 +44,12 @@ describe('tesouro object', () => {
   it('.totalCustodyFee should return the total of custody fees owed', () => {
     expect(tesouro.totalCustodyFee).toBeCloseTo(0.41, 2);
   });
+  it('should have an grossValue', () => {
+    expect(tesouro.grossValue).toBeCloseTo(1010.17, 2);
+  });
+  it('.netValue should return the grossValue minus taxes', () => {
+    expect(tesouro.netValue).toBeCloseTo(1007.47, 2);
+  });
   it('should calculate a daily custody fee of 0.25% per year', () => {
     const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'), new Date('2019-05-03'));
     expect(tesouroCustodyFee.steps[1].custodyFee).toBeCloseTo(0, 2);
@@ -146,8 +152,10 @@ describe('tesouro sold before due date', () => {
     expect(tesouro.endDate).toStrictEqual(new Date('2020-02-18'));
     expect(tesouro.initialValue).toBe(10025.47264);
     expect(tesouro.totalTaxes).toBeCloseTo(15.77, 2);
-    expect(tesouro.totalDays).toBe(63);
     expect(tesouro.totalCustodyFee).toBeCloseTo(4.33, 2);
+    expect(tesouro.grossValue).toBeCloseTo(10095.55, 2);
+    expect(tesouro.netValue).toBeCloseTo(10075.45, 2);
+    expect(tesouro.totalDays).toBe(63);
 
     expect(tesouro.steps[0].date).toStrictEqual(new Date('2019-12-16'));
     expect(tesouro.steps[0].value).toBeCloseTo(10020.27, 2);

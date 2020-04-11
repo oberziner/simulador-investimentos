@@ -65,9 +65,11 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
     steps.push(i);
   }
 
+  const grossValue = steps[steps.length - 1].value;
   const totalDays = differenceDays(startDate, sellingDate) - 1;
   const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - initialValue, totalDays);
   const totalCustodyFee = steps.reduce((total, i) => total + i.custodyFee, 0);
+  const netValue = grossValue - totalTaxes - totalCustodyFee;
 
   return {
     title: `Tesouro Direto ${rate.toString()}`,
@@ -76,6 +78,8 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
     dueDate: endDate,
     initialValue,
     totalTaxes,
+    grossValue,
+    netValue,
     totalDays,
     totalCustodyFee,
     steps,
