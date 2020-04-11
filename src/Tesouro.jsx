@@ -3,7 +3,7 @@ import { newTesouro } from './simulation/tesouro';
 
 export class Tesouro extends Component {
   static tesouroFactory({ startDate, initialValue, endDate, selicValue }) {
-    return newTesouro(startDate, initialValue, selicValue, endDate);
+    return newTesouro(startDate, initialValue, selicValue, endDate, endDate);
   }
 
   constructor(props) {

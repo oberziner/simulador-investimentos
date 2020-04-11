@@ -40,7 +40,7 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
   return projectedNominalValue / (metaSelicDiaria.dailyRate() + 1);
 };
 
-export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate = endDate) => {
+export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
   const nominalValue = nominalValueFromBuyPrice(startDate,
     endDate, initialValue, 0.0002, getPreviousBusinessDayRates(startDate).yearlySelic);
 

@@ -2,7 +2,7 @@ import { newTesouro } from './tesouro';
 import { newRate } from './interest-rates';
 
 describe('tesouro object', () => {
-  const tesouro = newTesouro(new Date('2018-04-03'), 1000, newRate(0.05, 'year252'), new Date('2018-06-03'));
+  const tesouro = newTesouro(new Date('2018-04-03'), 1000, newRate(0.05, 'year252'), new Date('2018-06-03'), new Date('2018-06-03'));
 
   it('should have a title with the rate being used', () => {
     expect(tesouro.title).toBe('Tesouro Direto 5% a.a.');
@@ -45,24 +45,24 @@ describe('tesouro object', () => {
     expect(tesouro.totalCustodyFee).toBeCloseTo(0.41, 2);
   });
   it('should calculate a daily custody fee of 0.25% per year', () => {
-    const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'));
+    const tesouroCustodyFee = newTesouro(new Date('2019-03-01'), 1000000, newRate(0.05, 'year252'), new Date('2019-05-03'), new Date('2019-05-03'));
     expect(tesouroCustodyFee.steps[1].custodyFee).toBeCloseTo(0, 2);
     expect(tesouroCustodyFee.steps[2].custodyFee).toBeCloseTo(6.84, 2);
     expect(tesouroCustodyFee.steps[61].custodyFee).toBeCloseTo(6.906, 2);
   });
   it('.totalCustodyFee should aggregate all custody fees on the investment', () => {
-    const tesouroCustodyFee = newTesouro(new Date('2018-04-03'), 1000000, newRate(0.05, 'year252'), new Date('2018-06-03'));
+    const tesouroCustodyFee = newTesouro(new Date('2018-04-03'), 1000000, newRate(0.05, 'year252'), new Date('2018-06-03'), new Date('2018-06-03'));
     expect(tesouroCustodyFee.totalCustodyFee).toBeCloseTo(412.68, 2);
   });
 });
 
 describe('tesouro object taxes', () => {
   it('should be charged not counting the start and end days', () => {
-    let tesouro = newTesouro(new Date('2018-04-03'), 10000, newRate(0.05, 'year252'), new Date('2018-10-01'));
+    let tesouro = newTesouro(new Date('2018-04-03'), 10000, newRate(0.05, 'year252'), new Date('2018-10-01'), new Date('2018-10-01'));
     expect(tesouro.totalDays).toBe(180);
     expect(tesouro.totalTaxes).toBeCloseTo(71.11, 2);
 
-    tesouro = newTesouro(new Date('2018-04-03'), 10000, newRate(0.05, 'year252'), new Date('2018-10-02'));
+    tesouro = newTesouro(new Date('2018-04-03'), 10000, newRate(0.05, 'year252'), new Date('2018-10-02'), new Date('2018-10-02'));
     expect(tesouro.totalDays).toBe(181);
     expect(tesouro.totalTaxes).toBeCloseTo(63.72, 2);
   });
@@ -70,7 +70,7 @@ describe('tesouro object taxes', () => {
 
 describe('tesouro values', () => {
   it('should be calculated correctly', () => {
-    const tesouro = newTesouro(new Date('2020-02-20'), 10524.898433084, newRate(0.0415, 'year252'), new Date('2025-03-01'));
+    const tesouro = newTesouro(new Date('2020-02-20'), 10524.898433084, newRate(0.0415, 'year252'), new Date('2025-03-01'), new Date('2025-03-01'));
 
     // expect(JSON.stringify(tesouro.steps.splice(0, 10), null, 2))
     // .toStrictEqual(new Date('2020-02-21'));
