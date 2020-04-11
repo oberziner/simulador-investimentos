@@ -7,5 +7,5 @@ const formatter = new Intl.NumberFormat('pt-BR', {
 
 export default {
   formatDate: (d) => `${d.getUTCFullYear()}-${addZero(d.getUTCMonth() + 1)}-${addZero(d.getUTCDate())}`,
-  formatMoney: formatter.format,
+  formatMoney: (value = 0) => formatter.format(value),
 };

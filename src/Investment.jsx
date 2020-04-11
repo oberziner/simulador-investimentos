@@ -16,7 +16,13 @@ const Investment = ({ investment }) => (
       {`Valor inicial: ${f.formatMoney(investment.initialValue)}`}
     </p>
     <p>
+      {`Valor Bruto: ${f.formatMoney(investment.grossValue)}`}
+    </p>
+    <p>
       {`Impostos: ${f.formatMoney(investment.totalTaxes)}`}
+    </p>
+    <p>
+      {`Taxa de Custodia: ${f.formatMoney(investment.totalCustodyFee)}`}
     </p>
     <p>
       {`Valor Liquido: ${f.formatMoney(investment.netValue)}`}
