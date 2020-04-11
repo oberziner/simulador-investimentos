@@ -40,7 +40,7 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
   return projectedNominalValue / (metaSelicDiaria.dailyRate() + 1);
 };
 
-export const newTesouro = (startDate, initialValue, rate, endDate) => {
+export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate = endDate) => {
   const nominalValue = nominalValueFromBuyPrice(startDate,
     endDate, initialValue, 0.0002, getPreviousBusinessDayRates(startDate).yearlySelic);
 
@@ -61,11 +61,11 @@ export const newTesouro = (startDate, initialValue, rate, endDate) => {
 
   const steps = [];
 
-  for (let i = seq.next(); ((i.date < endDate)); i = seq.next()) {
+  for (let i = seq.next(); ((i.date <= sellingDate)); i = seq.next()) {
     steps.push(i);
   }
 
-  const totalDays = differenceDays(startDate, endDate) - 1;
+  const totalDays = differenceDays(startDate, sellingDate) - 1;
   const totalTaxes = calculateIncomeTax(steps[steps.length - 1].value - initialValue, totalDays);
   const totalCustodyFee = steps.reduce((total, i) => total + i.custodyFee, 0);
 
