@@ -105,7 +105,7 @@ export const newAdjusmentFactorCalculator = (adjustmentRate, endDate, ratesRepo)
   newObject.sellTax = actualRate;
   newObject.businessDays = businessDays;
   newObject.adjustmentFactor = trunc(100
-    / (actualRate ** trunc(businessDays / 252, 14)), 5) / 100;
+    / (actualRate ** trunc(businessDays / 252, 14)) / 100, 6);
 
   return newObject;
 };

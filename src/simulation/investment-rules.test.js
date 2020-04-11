@@ -133,10 +133,10 @@ describe('newAdjusmentFactorCalculator', () => {
     const adjusmentFactorCalculator = newAdjusmentFactorCalculator(-0.0002, new Date('2014-03-07'));
 
     it('accepts an object with a current date field, and returns a clone of that object with a new adjustmentFactor field with a multiplication factor adjusted to the number of days remaining in the investment', () => {
-      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.0011579);
+      expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.001157);
 
       const adjusmentFactorCalculator2 = newAdjusmentFactorCalculator(0.0002, new Date('2025-02-26'));
-      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(0.9989998);
+      expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(0.998999);
     });
   });
 });
