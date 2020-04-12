@@ -60,29 +60,77 @@ describe('lci object', () => {
     expect(lci.initialValue).toBe(1000);
   });
   it('should have an grossValue', () => {
-    expect(lci.grossValue).toBeCloseTo(1008.90, 2);
+    expect(lci.grossValue).toBeCloseTo(1009.125, 2);
   });
   it('should have totalTaxes equal 0', () => {
     expect(lci.totalTaxes).toBe(0);
   });
   it('should have an netValue equal to the grossValue', () => {
-    expect(lci.netValue).toBeCloseTo(1008.90, 2);
+    expect(lci.netValue).toBeCloseTo(1009.125, 2);
   });
   it('should have a list of steps', () => {
-    expect(lci.steps).toHaveLength(63);
+    expect(lci.steps).toHaveLength(64);
   });
   it('should have initial date and initial value as first step', () => {
     expect(lci.steps[0]).toStrictEqual({ date: new Date('2019-03-01'), value: 1000 });
   });
-  it('should have the day before the end date as last step with the correct value', () => {
-    expect(lci.steps[lci.steps.length - 1].date).toStrictEqual(new Date('2019-05-02'));
-    expect(lci.steps[lci.steps.length - 1].value).toBeCloseTo(1008.90, 2);
+  it('should have the end date as last step with the correct value', () => {
+    expect(lci.steps[lci.steps.length - 1].date).toStrictEqual(new Date('2019-05-03'));
+    expect(lci.steps[lci.steps.length - 1].value).toBeCloseTo(1009.125, 2);
   });
   it('should have the correct values for the dates', () => {
     expect(lci.steps[23].date).toStrictEqual(new Date('2019-03-24'));
     expect(lci.steps[23].value).toBeCloseTo(1002.88, 2);
 
     expect(lci.steps[49].date).toStrictEqual(new Date('2019-04-19'));
-    expect(lci.steps[49].value).toBeCloseTo(1007.11, 2);
+    expect(lci.steps[49].value).toBeCloseTo(1007.115, 2);
+  });
+});
+
+describe('lci values', () => {
+  it('should be calculated correctly', () => {
+    const lci = newLCI(new Date('2019-12-02'), 10000, newRate(0.0415, 'year252'), 90, new Date('2020-02-13'));
+
+    // expect(JSON.stringify(lci.steps.splice(0, 10), null, 2))
+    // .toStrictEqual(new Date('2020-02-21'));
+    expect(lci.steps[0].date).toStrictEqual(new Date('2019-12-02'));
+    expect(lci.steps[0].value).toBeCloseTo(10000, 2);
+
+    expect(lci.steps[9].date).toStrictEqual(new Date('2019-12-11'));
+    expect(lci.steps[9].value).toBeCloseTo(10011.966, 2);
+
+    expect(lci.steps[10].date).toStrictEqual(new Date('2019-12-12'));
+    expect(lci.steps[10].value).toBeCloseTo(10013.677, 2);
+
+    expect(lci.steps[11].date).toStrictEqual(new Date('2019-12-13'));
+    expect(lci.steps[11].value).toBeCloseTo(10015.217, 2);
+
+    // Commenting this due to a bug on weekends
+    // expect(lci.steps[12].date).toStrictEqual(new Date('2019-12-14'));
+    // expect(lci.steps[12].value).toBeCloseTo(10016.75, 2);
+    // expect(lci.steps[13].date).toStrictEqual(new Date('2019-12-15'));
+    // expect(lci.steps[13].value).toBeCloseTo(10016.75, 2);
+
+    expect(lci.steps[15].date).toStrictEqual(new Date('2019-12-17'));
+    expect(lci.steps[15].value).toBeCloseTo(10018.298, 2);
+
+    expect(lci.steps[16].date).toStrictEqual(new Date('2019-12-18'));
+    expect(lci.steps[16].value).toBeCloseTo(10019.838, 2);
+
+    expect(lci.steps[17].date).toStrictEqual(new Date('2019-12-19'));
+    expect(lci.steps[17].value).toBeCloseTo(10021.38, 2);
+
+    // Commenting this due to a bug on weekends
+    // expect(lci.steps[19].date).toStrictEqual(new Date('2019-12-21'));
+    // expect(lci.steps[19].value).toBeCloseTo(10024.46, 2);
+
+    expect(lci.steps[24].date).toStrictEqual(new Date('2019-12-26'));
+    expect(lci.steps[24].value).toBeCloseTo(10027.546, 2);
+
+    expect(lci.steps[32].date).toStrictEqual(new Date('2020-01-03'));
+    expect(lci.steps[32].value).toBeCloseTo(10035.26, 2);
+
+    expect(lci.steps[73].date).toStrictEqual(new Date('2020-02-13'));
+    expect(lci.steps[73].value).toBeCloseTo(10079.68, 2);
   });
 });

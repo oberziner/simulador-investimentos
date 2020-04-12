@@ -21,9 +21,9 @@ describe('app', () => {
         expect(element.parentNode.parentNode).toHaveClass('investment-container');
         expect(element.parentNode).toHaveTextContent(/^LCI 90% SELIC 6% a.a.Data inicio: 2019-04-01Data fim: 2019-12-01Valor inicial: R\$ 9.999,00/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-11-30R\$ 10.355,15/,
+        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-12-01R\$ 10.355,68/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/244 - 2019-04-01R\$ 9.999,00$/,
+        expect(getByRole('table')).toHaveTextContent(/245 - 2019-04-01R\$ 9.999,00$/,
           { normalizeWhitespace: true });
         done();
       });

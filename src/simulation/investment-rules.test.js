@@ -39,7 +39,11 @@ describe('newInterestCalculator', () => {
   describe('given a rate, should return a function that', () => {
     it('accepts an object with a value and a date field, and returns a clone of that object where the value has interest accumulated according to the rate', () => {
       const interestCalculator = newInterestCalculator(0, newRate(0.01, 'day'));
-      expect(interestCalculator({ date: new Date('2019-05-22'), value: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), value: 1010 });
+      expect(interestCalculator({ date: new Date('2019-05-22'), value: 1000 })).toStrictEqual({
+        date: new Date('2019-05-22'),
+        usedRate: 1.01,
+        value: 1010,
+      });
     });
     it('adds interest only on business days', () => {
       const interestCalculator = newInterestCalculator(0, newRate(0.01, 'day'));
@@ -54,7 +58,11 @@ describe('newInterestCalculator', () => {
     const interestCalculator = newInterestCalculator(defaultValue, newRate(0.01, 'day'));
 
     it('accepts an object with a value and a date field, and returns a clone of that object where the value has interest accumulated according to the rate', () => {
-      expect(interestCalculator({ date: new Date('2019-05-22'), value: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), value: 1010 });
+      expect(interestCalculator({ date: new Date('2019-05-22'), value: 1000 })).toStrictEqual({
+        date: new Date('2019-05-22'),
+        usedRate: 1.01,
+        value: 1010,
+      });
     });
     it('given an object without a value field, returns a clone of that object where the value is equal to defaultValue', () => {
       expect(interestCalculator({ })).toStrictEqual({ value: defaultValue });

@@ -29,6 +29,7 @@ export const newInterestCalculator = (defaultValue, rate, ratesRepo) => (prev) =
         }
       }
       newObject.value = trunc(newObject.value * actualRate, 6);
+      newObject.usedRate = actualRate;
     }
   } else {
     newObject.value = defaultValue;
