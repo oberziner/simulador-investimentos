@@ -41,8 +41,12 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
 };
 
 export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
+  let { yearlySelic } = getPreviousBusinessDayRates(startDate);
+  if (!yearlySelic) {
+    yearlySelic = rate.yearly252Rate() * 100;
+  }
   const nominalValue = nominalValueFromBuyPrice(startDate,
-    endDate, initialValue, 0.0002, getPreviousBusinessDayRates(startDate).yearlySelic);
+    endDate, initialValue, 0.0002, yearlySelic);
 
   const repo = {
     find: (date) => findDate(date),

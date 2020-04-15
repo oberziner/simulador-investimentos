@@ -51,9 +51,9 @@ class App extends Component {
           <InputList
             onChange={this.handleOnChange}
             values={{
-              initialValue: 4444,
-              startDate: '2015-01-01',
-              endDate: '2016-01-01',
+              initialValue: 10000,
+              startDate: '2020-01-01',
+              endDate: '2021-01-01',
               selicValue: '5',
             }}
           />
