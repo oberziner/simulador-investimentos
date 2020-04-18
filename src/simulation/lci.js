@@ -1,7 +1,7 @@
 import f from './sequence-factory';
 import { newRate } from './interest-rates';
 import { newDateGenerator, newInterestCalculator } from './investment-rules';
-import { getPreviousBusinessDayRates } from './dates';
+import { getPreviousBusinessDayRates } from '../repositories/dates-and-taxes';
 
 export const newLCISeq = (dateGenerator, interestGenerator) => f.newSequence(
   (prev) => {

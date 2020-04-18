@@ -1,6 +1,7 @@
 import f from './sequence-factory';
 import { newDateGenerator, newInterestCalculator } from './investment-rules';
-import { differenceDays, findDate } from './dates';
+import { differenceDays } from './dates';
+import { findDate } from '../repositories/dates-and-taxes';
 import { newRate } from './interest-rates';
 import { calculateIncomeTax } from './taxes';
 

@@ -1,4 +1,5 @@
-import { getNextDay, isBusinessDay, differenceDays, differenceBusinessDays } from './dates';
+import { getNextDay, isBusinessDay, differenceDays } from './dates';
+import { differenceBusinessDays } from '../repositories/dates-and-taxes';
 import { newRate } from './interest-rates';
 
 const trunc = (val, places) => {
