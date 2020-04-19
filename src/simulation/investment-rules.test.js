@@ -13,7 +13,7 @@ describe('newDateGenerator', () => {
     expect(newDateGenerator()).toBeInstanceOf(Function);
   });
   describe('should return a function that', () => {
-    it('given an object with a date field, returns a clone of that object where the date is 1 day ahed the original date', () => {
+    it('given an object with a date field, returns a clone of that object where the date is 1 day ahead the original date', () => {
       const dateGenerator = newDateGenerator();
       expect(dateGenerator({ date: new Date('2020-02-28') })).toStrictEqual({ date: new Date('2020-02-29') });
     });
@@ -22,7 +22,7 @@ describe('newDateGenerator', () => {
     const defaultDate = new Date('2019-07-01');
     const dateGenerator = newDateGenerator(defaultDate);
 
-    it('given an object with a date field, returns a clone of that object where the date is 1 day ahed the original date', () => {
+    it('given an object with a date field, returns a clone of that object where the date is 1 day ahead the original date', () => {
       expect(dateGenerator({ date: new Date('2020-02-28') })).toStrictEqual({ date: new Date('2020-02-29') });
     });
     it('given an object without a date field, returns a clone of that object where the date is equal to defaultDate', () => {
