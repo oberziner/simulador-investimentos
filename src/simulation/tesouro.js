@@ -9,7 +9,7 @@ import {
   newValueAdjuster,
 } from './investment-rules';
 import { differenceDays } from './dates';
-import { getPreviousBusinessDayRates, findDate } from '../repositories/dates-and-taxes';
+import { getPreviousBusinessDayRates, findDate ,newRepositoryWithFuture, } from '../repositories/dates-and-taxes';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
