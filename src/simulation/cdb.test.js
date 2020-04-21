@@ -37,7 +37,7 @@ describe('cdb object', () => {
     expect(cdb.steps[23].value).toBeCloseTo(1002.88, 2);
 
     expect(cdb.steps[49].date).toStrictEqual(new Date('2019-04-19'));
-    expect(cdb.steps[49].value).toBeCloseTo(1007.11, 2);
+    expect(cdb.steps[49].value).toBeCloseTo(1007.12, 2);
   });
   it('.totalDays should return the number of days between the initial date and the end date', () => {
     expect(cdb.totalDays).toBe(62);

@@ -20,8 +20,8 @@ export const newLCI = (startDate, initialValue, rate, percentRate, endDate) => {
   const repo = {
     getDailyRate: (date) => {
       const dayRate = repof.getPreviousBusinessYearSelic(date);
-      const rateObj = newRate((dayRate / 100) * (percentRate / 100), 'year252');
-      return ((rateObj.dailyRate())) + 1;
+      const rateObj = newRate((dayRate / 100), 'year252');
+      return ((rateObj.dailyRate() * (percentRate / 100))) + 1;
     },
   };
 
