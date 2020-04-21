@@ -104,6 +104,17 @@ export const newRepositoryWithFuture = (defaultValues) => ({
     return null;
   },
 
+  getYearlySelic: (date) => {
+    const obj = findDate(date);
+    if (obj) {
+      if (date > repository.lastHistoricalDate) {
+        return defaultValues.yearlySelic
+      }
+      return obj.yearlySelic;
+    }
+    return null;
+  },
+
   getPreviousBusinessDaySelic: (date) => {
     const obj = getPreviousBusinessDayRates(date);
     if (obj) {
@@ -111,6 +122,17 @@ export const newRepositoryWithFuture = (defaultValues) => ({
         return defaultValues.dailySelic
       }
       return obj.dailySelic;
+    }
+    return null;
+  },
+
+  getPreviousBusinessYearSelic: (date) => {
+    const obj = getPreviousBusinessDayRates(date);
+    if (obj) {
+      if (obj.date > repository.lastHistoricalDate) {
+        return defaultValues.yearlySelic
+      }
+      return obj.yearlySelic;
     }
     return null;
   }

@@ -19,19 +19,13 @@ export const newDateGenerator = (defaultDate) => (prev) => {
   return newObject;
 };
 
-export const newInterestCalculator = (defaultValue, rate, ratesRepo) => (prev) => {
+export const newInterestCalculator = (defaultValue, ratesRepo) => (prev) => {
   const newObject = Object.assign({}, prev);
   const { value, date } = newObject;
 
   if (value) {
     if (isBusinessDay(date)) {
-      let actualRate = rate.dailyRate() + 1;
-      if (ratesRepo) {
-        const obj = ratesRepo.find(date);
-        if (obj && obj.dailySelic) {
-          actualRate = obj.dailySelic;
-        }
-      }
+      const actualRate = ratesRepo.getDailyRate(date);
       newObject.value = trunc(value * actualRate, 6);
       newObject.usedRate = actualRate;
     }
@@ -41,19 +35,13 @@ export const newInterestCalculator = (defaultValue, rate, ratesRepo) => (prev) =
   return newObject;
 };
 
-export const newInterestCalculatorNominalValue = (defaultValue, rate, ratesRepo) => (prev) => {
+export const newInterestCalculatorNominalValue = (defaultValue, ratesRepo) => (prev) => {
   const newObject = Object.assign({}, prev);
   const { nominalValue, date } = newObject;
 
   if (nominalValue) {
     if (isBusinessDay(date)) {
-      let actualRate = rate.dailyRate() + 1;
-      if (ratesRepo) {
-        const obj = ratesRepo.findPreviousBusinessDay(date);
-        if (obj && obj.dailySelic) {
-          actualRate = obj.dailySelic;
-        }
-      }
+      const actualRate = ratesRepo.getPreviousBusinessDayRate(date);
       newObject.nominalValue = trunc(nominalValue * actualRate, 6);
     }
   } else {
@@ -99,18 +87,13 @@ export const newCustodyFeeCalculator = (initialDate, rate) => (prev) => {
   return newObject;
 };
 
-export const newAdjusmentFactorCalculator = (adjustmentRate, endDate, ratesRepo) => (prev) => {
+export const newAdjusmentFactorCalculator = (endDate, ratesRepo) => (prev) => {
   const newObject = Object.assign({}, prev);
   const { date } = newObject;
 
   const businessDays = differenceBusinessDays(date, endDate) - 1;
-  let actualRate = adjustmentRate + 1;
-  if (ratesRepo) {
-    const obj = ratesRepo.find(date);
-    if (obj && obj.sellSelicTax) {
-      actualRate = obj.sellSelicTax + 1;
-    }
-  }
+  const actualRate = ratesRepo.getAdjustmentRate(date) + 1;
+
   newObject.sellTax = actualRate;
   newObject.businessDays = businessDays;
   newObject.adjustmentFactor = trunc(100

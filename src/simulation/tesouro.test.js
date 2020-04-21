@@ -146,6 +146,8 @@ describe('tesouro sold before due date', () => {
   it('wawa should be calculated correctly', () => {
     const tesouro = newTesouro(new Date('2019-12-16'), 10025.47264, newRate(0.0415, 'year252'), new Date('2025-03-01'), new Date('2020-02-18'));
 
+    // expect(JSON.stringify(tesouro.steps.splice(0, 10), null, 2))
+    // .toStrictEqual(new Date('2020-02-21'));
     expect(tesouro.steps).toHaveLength(65);
     expect(tesouro.startDate).toStrictEqual(new Date('2019-12-16'));
     expect(tesouro.dueDate).toStrictEqual(new Date('2025-03-01'));

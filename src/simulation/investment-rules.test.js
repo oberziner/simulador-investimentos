@@ -32,13 +32,15 @@ describe('newDateGenerator', () => {
 });
 
 describe('newInterestCalculator', () => {
+  const ratesRepository = ({ getDailyRate: () => 1.01 });
+
   it('should return a function', () => {
     expect(newInterestCalculator()).toBeInstanceOf(Function);
   });
 
-  describe('given a rate, should return a function that', () => {
+  describe('given a rates repository, should return a function that', () => {
     it('accepts an object with a value and a date field, and returns a clone of that object where the value has interest accumulated according to the rate', () => {
-      const interestCalculator = newInterestCalculator(0, newRate(0.01, 'day'));
+      const interestCalculator = newInterestCalculator(0, ratesRepository);
       expect(interestCalculator({ date: new Date('2019-05-22'), value: 1000 })).toStrictEqual({
         date: new Date('2019-05-22'),
         usedRate: 1.01,
@@ -46,7 +48,7 @@ describe('newInterestCalculator', () => {
       });
     });
     it('adds interest only on business days', () => {
-      const interestCalculator = newInterestCalculator(0, newRate(0.01, 'day'));
+      const interestCalculator = newInterestCalculator(0, ratesRepository);
       expect(interestCalculator({ date: new Date('2019-03-02'), value: 1000 })).toStrictEqual({ date: new Date('2019-03-02'), value: 1000 }); // Saturday
       expect(interestCalculator({ date: new Date('2019-03-03'), value: 1000 })).toStrictEqual({ date: new Date('2019-03-03'), value: 1000 }); // Sunday
       expect(interestCalculator({ date: new Date('2019-03-04'), value: 1000 })).toStrictEqual({ date: new Date('2019-03-04'), value: 1000 }); // Carnival holiday
@@ -55,7 +57,7 @@ describe('newInterestCalculator', () => {
 
   describe('given a rate and a defaultValue, should return a function that', () => {
     const defaultValue = 500;
-    const interestCalculator = newInterestCalculator(defaultValue, newRate(0.01, 'day'));
+    const interestCalculator = newInterestCalculator(defaultValue, ratesRepository);
 
     it('accepts an object with a value and a date field, and returns a clone of that object where the value has interest accumulated according to the rate', () => {
       expect(interestCalculator({ date: new Date('2019-05-22'), value: 1000 })).toStrictEqual({
@@ -71,17 +73,19 @@ describe('newInterestCalculator', () => {
 });
 
 describe('newInterestCalculatorNominalValue', () => {
+  const ratesRepository = ({ getPreviousBusinessDayRate: () => 1.01 });
+
   it('should return a function', () => {
     expect(newInterestCalculatorNominalValue()).toBeInstanceOf(Function);
   });
 
   describe('given a rate, should return a function that', () => {
     it('accepts an object with a nominalValue and a date field, and returns a clone of that object where the nominalValue has interest accumulated according to the rate', () => {
-      const interestCalculatorNominalValue = newInterestCalculatorNominalValue(0, newRate(0.01, 'day'));
+      const interestCalculatorNominalValue = newInterestCalculatorNominalValue(0, ratesRepository);
       expect(interestCalculatorNominalValue({ date: new Date('2019-05-22'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), nominalValue: 1010 });
     });
     it('adds interest only on business days', () => {
-      const interestCalculatorNominalValue = newInterestCalculatorNominalValue(0, newRate(0.01, 'day'));
+      const interestCalculatorNominalValue = newInterestCalculatorNominalValue(0, ratesRepository);
       expect(interestCalculatorNominalValue({ date: new Date('2019-03-02'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-03-02'), nominalValue: 1000 }); // Saturday
       expect(interestCalculatorNominalValue({ date: new Date('2019-03-03'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-03-03'), nominalValue: 1000 }); // Sunday
       expect(interestCalculatorNominalValue({ date: new Date('2019-03-04'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-03-04'), nominalValue: 1000 }); // Carnival holiday
@@ -90,7 +94,7 @@ describe('newInterestCalculatorNominalValue', () => {
 
   describe('given a rate and a defaultValue, should return a function that', () => {
     const defaultValue = 500;
-    const interestCalculatorNominalValue = newInterestCalculatorNominalValue(defaultValue, newRate(0.01, 'day'));
+    const interestCalculatorNominalValue = newInterestCalculatorNominalValue(defaultValue, ratesRepository);
 
     it('accepts an object with a nominalValue and a date field, and returns a clone of that object where the nominalValue has interest accumulated according to the rate', () => {
       expect(interestCalculatorNominalValue({ date: new Date('2019-05-22'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), nominalValue: 1010 });
@@ -137,13 +141,15 @@ describe('newAdjusmentFactorCalculator', () => {
     expect(newAdjusmentFactorCalculator()).toBeInstanceOf(Function);
   });
 
-  describe('when called with an adjustmentRate and endDate, should return a function that', () => {
-    const adjusmentFactorCalculator = newAdjusmentFactorCalculator(-0.0002, new Date('2014-03-07'));
+  describe('when called with an adjustmentRate repository and endDate, should return a function that', () => {
 
     it('accepts an object with a current date field, and returns a clone of that object with a new adjustmentFactor field with a multiplication factor adjusted to the number of days remaining in the investment', () => {
+      const ratesRepository = ({ getAdjustmentRate: () =>  -0.0002});
+      const adjusmentFactorCalculator = newAdjusmentFactorCalculator(new Date('2014-03-07'), ratesRepository);
       expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.001157);
 
-      const adjusmentFactorCalculator2 = newAdjusmentFactorCalculator(0.0002, new Date('2025-02-26'));
+      const ratesRepository2 = ({ getAdjustmentRate: () => 0.0002 });
+      const adjusmentFactorCalculator2 = newAdjusmentFactorCalculator(new Date('2025-02-26'), ratesRepository2);
       expect(adjusmentFactorCalculator2({ date: new Date('2020-02-18') }).adjustmentFactor).toBe(0.998999);
     });
   });

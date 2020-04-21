@@ -34,7 +34,7 @@ const newTesouroSeq = (dateGenerator,
 );
 
 const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, yearlySelic) => {
-  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(buyPremium, endDate);
+  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(endDate, { getAdjustmentRate: () => buyPremium});
   const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
   const projectedNominalValue = initialValue / adjustmentFactor;
   const metaSelicDiaria = newRate((1 * yearlySelic + 0.1) / 100, 'year252');
@@ -42,6 +42,25 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
 };
 
 export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
+  const repof = newRepositoryWithFuture({dailySelic: rate.dailyRate() + 1});
+
+  const repo = {
+    find: (date) => findDate(date),
+    findPreviousBusinessDay: (date) => getPreviousBusinessDayRates(date),
+
+    getDailyRate: (date) => repof.getDailySelic(date),
+    getPreviousBusinessDayRate: (date) => repof.getPreviousBusinessDaySelic(date),
+    getAdjustmentRate: (date) => {
+      let actualRate = 0.0003;
+      const obj = findDate(date);
+      if (obj && obj.sellSelicTax) {
+        actualRate = obj.sellSelicTax;
+      }
+      return actualRate;
+    }
+  };
+
+
   let { yearlySelic } = getPreviousBusinessDayRates(startDate);
   if (!yearlySelic) {
     yearlySelic = rate.yearly252Rate() * 100;
@@ -49,18 +68,13 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
   const nominalValue = nominalValueFromBuyPrice(startDate,
     endDate, initialValue, 0.0002, yearlySelic);
 
-  const repo = {
-    find: (date) => findDate(date),
-    findPreviousBusinessDay: (date) => getPreviousBusinessDayRates(date),
-  };
-
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
-    newInterestCalculator(nominalValue, rate, repo),
-    newInterestCalculatorNominalValue(nominalValue, rate, repo),
+    newInterestCalculator(nominalValue, repo),
+    newInterestCalculatorNominalValue(nominalValue, repo),
     newNominalValueProjector(rate, repo),
     newCustodyFeeCalculator(startDate, newRate(0.0025, 'year365')),
-    newAdjusmentFactorCalculator(0.0003, endDate, repo),
+    newAdjusmentFactorCalculator(endDate, repo),
     newValueAdjuster(),
   );
 
