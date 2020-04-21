@@ -42,11 +42,14 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
 };
 
 export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
-  const repof = newRepositoryWithFuture({dailySelic: rate.dailyRate() + 1});
+  const repof = newRepositoryWithFuture({dailySelic: rate.dailyRate() + 1, yearlySelic: rate.yearly252Rate() + 1});
 
   const repo = {
     find: (date) => findDate(date),
     findPreviousBusinessDay: (date) => getPreviousBusinessDayRates(date),
+
+    getYearlySelic: repof.getYearlySelic,
+    getPreviousBusinessYearSelic: repof.getPreviousBusinessYearSelic,
 
     getDailyRate: (date) => repof.getDailySelic(date),
     getPreviousBusinessDayRate: (date) => repof.getPreviousBusinessDaySelic(date),
@@ -72,7 +75,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
     newDateGenerator(startDate),
     newInterestCalculator(nominalValue, repo),
     newInterestCalculatorNominalValue(nominalValue, repo),
-    newNominalValueProjector(rate, repo),
+    newNominalValueProjector(repo),
     newCustodyFeeCalculator(startDate, newRate(0.0025, 'year365')),
     newAdjusmentFactorCalculator(endDate, repo),
     newValueAdjuster(),

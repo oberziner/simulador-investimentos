@@ -50,21 +50,19 @@ export const newInterestCalculatorNominalValue = (defaultValue, ratesRepo) => (p
   return newObject;
 };
 
-export const newNominalValueProjector = (rate, ratesRepo) => (prev) => {
+export const newNominalValueProjector = (ratesRepo) => (prev) => {
   const newObject = Object.assign({}, prev);
   const { nominalValue, date } = newObject;
 
   if (nominalValue) {
-    let selicTarget = newRate(rate.yearly252Rate() + 0.001, 'year252');
-    if (ratesRepo) {
-      let obj = ratesRepo.find(date);
-      if (!obj) {
-        obj = ratesRepo.findPreviousBusinessDay(date);
-      }
-      if (obj && obj.yearlySelic) {
-        selicTarget = newRate((1 * obj.yearlySelic + 0.1) / 100, 'year252');
-      }
+    let yearlySelic = ratesRepo.getYearlySelic(date);
+    if (!yearlySelic) {
+      yearlySelic = ratesRepo.getPreviousBusinessYearSelic(date);
     }
+    if (!yearlySelic ) {
+      throw new Error(`Could not find selicTarget for ${date}`)
+    }
+    const selicTarget = newRate(yearlySelic / 100 + 0.001, 'year252');
     newObject.projectedNominalValue = trunc(nominalValue * (selicTarget.dailyRate() + 1), 6);
   } else {
     throw new Error(`object should have nominalValue: ${JSON.stringify(prev)}`);
