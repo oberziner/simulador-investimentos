@@ -17,7 +17,7 @@ const parseDate = (dateStr) => {
 rl.on('line', (input) => {
   const values = input.split(';');
   const date = parseDate(values[0]);
-  const yearlySelic = values[1].replace(',', '.');
+  const yearlySelic = values[1].replace('.', '').replace(',', '.');
   const dailySelic = values[2].replace(',', '.');
   const object = {
     date,
