@@ -20,8 +20,10 @@ const initializeRepository = (sourceJson) => {
     const sellSelicTax = getTesouroSelicSellTax(date);
     return {
       date,
-      yearlySelic: +i.yearlySelic,
-      dailySelic: +i.dailySelic,
+      selic: {
+        dailyRate: () => +i.dailySelic,
+        yearlyRate: () => +i.yearlySelic,
+      },
       sellSelicTax,
     };
   });
@@ -92,47 +94,25 @@ export const differenceBusinessDays = (dateFrom, dateTo) => {
   return dateToIdx - dateFromIdx;
 };
 
-export const newRepositoryWithFuture = (defaultValues) => ({
-  getDailySelic: (date) => {
+export const newRepositoryWithProjectedValues = (defaultValues) => ({
+  getSelicForDate: (date) => {
     const obj = findDate(date);
     if (obj) {
       if (date > repository.lastHistoricalDate) {
-        return defaultValues.dailySelic;
+        return defaultValues.selic;
       }
-      return obj.dailySelic;
+      return obj.selic;
     }
     return null;
   },
 
-  getYearlySelic: (date) => {
-    const obj = findDate(date);
-    if (obj) {
-      if (date > repository.lastHistoricalDate) {
-        return defaultValues.yearlySelic;
-      }
-      return obj.yearlySelic;
-    }
-    return null;
-  },
-
-  getPreviousBusinessDaySelic: (date) => {
+  getSelicForPreviousBusinessDay: (date) => {
     const obj = getPreviousBusinessDayRates(date);
     if (obj) {
       if (obj.date > repository.lastHistoricalDate) {
-        return defaultValues.dailySelic;
+        return defaultValues.selic;
       }
-      return obj.dailySelic;
-    }
-    return null;
-  },
-
-  getPreviousBusinessYearSelic: (date) => {
-    const obj = getPreviousBusinessDayRates(date);
-    if (obj) {
-      if (obj.date > repository.lastHistoricalDate) {
-        return defaultValues.yearlySelic;
-      }
-      return obj.yearlySelic;
+      return obj.selic;
     }
     return null;
   },

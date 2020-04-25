@@ -73,7 +73,7 @@ describe('newInterestCalculator', () => {
 });
 
 describe('newInterestCalculatorNominalValue', () => {
-  const ratesRepository = ({ getPreviousBusinessDayRate: () => 1.01 });
+  const ratesRepository = ({ getSelicForPreviousBusinessDay: () => ({ dailyRate: () => 1.01 }) });
 
   it('should return a function', () => {
     expect(newInterestCalculatorNominalValue()).toBeInstanceOf(Function);

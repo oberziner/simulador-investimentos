@@ -5,7 +5,7 @@ import {
   findDate,
   getPreviousBusinessDayRates,
   differenceBusinessDays,
-  newRepositoryWithFuture,
+  newRepositoryWithProjectedValues,
 } from './dates-and-taxes';
 
 
@@ -78,12 +78,11 @@ describe('indexOfEarliestDateAfter', () => {
 
 describe('findDate', () => {
   it('should return the object with the taxes for a given date', () => {
-    expect(findDate(new Date('2020-02-26'))).toStrictEqual({
-      date: new Date('2020-02-26'),
-      sellSelicTax: 0.0003,
-      yearlySelic: 4.15,
-      dailySelic: 1.00016137,
-    });
+    const obj = findDate(new Date('2020-02-26'));
+    expect(obj.date).toStrictEqual(new Date('2020-02-26'));
+    expect(obj.sellSelicTax).toStrictEqual(0.0003);
+    expect(obj.selic.dailyRate()).toStrictEqual(1.00016137);
+    expect(obj.selic.yearlyRate()).toStrictEqual(4.15);
   });
   it('should return an object only a date for dates in the future', () => {
     expect(findDate(new Date('2025-06-18'))).toStrictEqual({
@@ -106,12 +105,11 @@ describe('findDate', () => {
 
 describe('getPreviousBusinessDayRates', () => {
   it('should return the object with the taxes from the business day before the parameter', () => {
-    expect(getPreviousBusinessDayRates(new Date('2020-02-26'))).toStrictEqual({
-      date: new Date('2020-02-21'),
-      sellSelicTax: 0.0003,
-      yearlySelic: 4.15,
-      dailySelic: 1.00016137,
-    });
+    const obj = getPreviousBusinessDayRates(new Date('2020-02-26'));
+    expect(obj.date).toStrictEqual(new Date('2020-02-21'));
+    expect(obj.sellSelicTax).toStrictEqual(0.0003);
+    expect(obj.selic.dailyRate()).toStrictEqual(1.00016137);
+    expect(obj.selic.yearlyRate()).toStrictEqual(4.15);
   });
   it('should return the correct business days', () => {
     expect(getPreviousBusinessDayRates(new Date('2020-01-27')).date).toStrictEqual(new Date('2020-01-24'));
@@ -143,58 +141,100 @@ describe('differenceBusinessDays', () => {
 });
 
 describe('repositoryWithFuture', () => {
-  describe('getDailySelic', () => {
+  describe('getSelicForDate', () => {
     it('should return the historical rate for dates inside the period with historical dates', () => {
-      const repo = newRepositoryWithFuture();
-      expect(repo.getDailySelic(new Date('2010-03-29'))).toBe(1.00032927);
-      expect(repo.getDailySelic(new Date('2020-02-28'))).toBe(1.00016137);
-      expect(repo.getDailySelic(new Date('2020-04-09'))).toBe(1.00014227);
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getSelicForDate(new Date('2010-03-29')).dailyRate()).toBe(1.00032927);
+      expect(repo.getSelicForDate(new Date('2010-03-29')).yearlyRate()).toBe(8.65);
+      expect(repo.getSelicForDate(new Date('2020-02-28')).dailyRate()).toBe(1.00016137);
+      expect(repo.getSelicForDate(new Date('2020-02-28')).yearlyRate()).toBe(4.15);
+      expect(repo.getSelicForDate(new Date('2020-04-09')).dailyRate()).toBe(1.00014227);
+      expect(repo.getSelicForDate(new Date('2020-04-09')).yearlyRate()).toBe(3.65);
     });
 
     it('should return null for weekends and holidays inside the period with historical dates', () => {
-      const repo = newRepositoryWithFuture();
-      expect(repo.getDailySelic(new Date('2020-02-23'))).toBeNull();
-      expect(repo.getDailySelic(new Date('2019-03-04'))).toBeNull();
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getSelicForDate(new Date('2020-02-23'))).toBeNull();
+      expect(repo.getSelicForDate(new Date('2019-03-04'))).toBeNull();
     });
 
     it('should return the default rate for dates after the last date with historical data', () => {
-      const repo = newRepositoryWithFuture({ dailySelic: 4.42 });
-      expect(repo.getDailySelic(new Date('2020-04-13'))).toBe(4.42);
-      expect(repo.getDailySelic(new Date('2055-03-04'))).toBe(4.42);
+      const repo = newRepositoryWithProjectedValues({
+        selic: {
+          dailyRate: () => 4.42,
+          yearlyRate: () => 10.42,
+        },
+      });
+      expect(repo.getSelicForDate(new Date('2020-04-13')).dailyRate()).toBe(4.42);
+      expect(repo.getSelicForDate(new Date('2020-04-13')).yearlyRate()).toBe(10.42);
+      expect(repo.getSelicForDate(new Date('2055-03-04')).dailyRate()).toBe(4.42);
+      expect(repo.getSelicForDate(new Date('2055-03-04')).yearlyRate()).toBe(10.42);
     });
     it('should return null for weekends and holidays after the last date with historical data', () => {
-      const repo = newRepositoryWithFuture({ dailySelic: 4.42 });
-      expect(repo.getDailySelic(new Date('2020-04-10'))).toBeNull();
-      expect(repo.getDailySelic(new Date('2055-03-06'))).toBeNull();
+      const repo = newRepositoryWithProjectedValues({
+        selic: {
+          dailyRate: () => 4.42,
+          yearlyRate: () => 10.42,
+        },
+      });
+      expect(repo.getSelicForDate(new Date('2020-04-10'))).toBeNull();
+      expect(repo.getSelicForDate(new Date('2055-03-06'))).toBeNull();
     });
   });
 
-  describe('getPreviousBusinessDaySelic', () => {
+  describe('getSelicForPreviousBusinessDay', () => {
     it('should return the historical rate for dates inside the period with historical dates', () => {
-      const repo = newRepositoryWithFuture();
-      expect(repo.getPreviousBusinessDaySelic(new Date('2010-03-29'))).toBe(1.00032927);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-02-28'))).toBe(1.00016137);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-09'))).toBe(1.00014227);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-13'))).toBe(1.00014227);
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2010-03-29')).dailyRate()).toBe(1.00032927);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2010-03-29')).yearlyRate()).toBe(8.65);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-02-28')).dailyRate()).toBe(1.00016137);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-02-28')).yearlyRate()).toBe(4.15);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-09')).dailyRate()).toBe(1.00014227);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-09')).yearlyRate()).toBe(3.65);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-13')).dailyRate()).toBe(1.00014227);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-13')).yearlyRate()).toBe(3.65);
     });
 
     it('should return the historical rate for weekends and holidays if the previous business day is inside the period with historical dates', () => {
-      const repo = newRepositoryWithFuture({ dailySelic: 4.42 });
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-02-23'))).toBe(1.00016137);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-10'))).toBe(1.00014227);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-11'))).toBe(1.00014227);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-12'))).toBe(1.00014227);
+      const repo = newRepositoryWithProjectedValues({
+        selic: {
+          dailyRate: () => 4.42,
+          yearlyRate: () => 10.42,
+        },
+      });
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-02-23')).dailyRate()).toBe(1.00016137);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-02-23')).yearlyRate()).toBe(4.15);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-10')).dailyRate()).toBe(1.00014227);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-10')).yearlyRate()).toBe(3.65);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-11')).dailyRate()).toBe(1.00014227);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-11')).yearlyRate()).toBe(3.65);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-12')).dailyRate()).toBe(1.00014227);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-12')).yearlyRate()).toBe(3.65);
     });
 
     it('should return the default rate for dates after the last date with historical data', () => {
-      const repo = newRepositoryWithFuture({ dailySelic: 4.42 });
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-14'))).toBe(4.42);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2055-03-04'))).toBe(4.42);
+      const repo = newRepositoryWithProjectedValues({
+        selic: {
+          dailyRate: () => 4.42,
+          yearlyRate: () => 10.42,
+        },
+      });
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-14')).dailyRate()).toBe(4.42);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-14')).yearlyRate()).toBe(10.42);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2055-03-04')).dailyRate()).toBe(4.42);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2055-03-04')).yearlyRate()).toBe(10.42);
     });
-    it('should return the historical rate for weekends and holidays if the previous business day is after the period with historical dates', () => {
-      const repo = newRepositoryWithFuture({ dailySelic: 4.42 });
-      expect(repo.getPreviousBusinessDaySelic(new Date('2020-04-18'))).toBe(4.42);
-      expect(repo.getPreviousBusinessDaySelic(new Date('2055-03-06'))).toBe(4.42);
+    it('should return the default rate for weekends and holidays if the previous business day is after the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues({
+        selic: {
+          dailyRate: () => 4.42,
+          yearlyRate: () => 10.42,
+        },
+      });
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-18')).dailyRate()).toBe(4.42);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2020-04-18')).yearlyRate()).toBe(10.42);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2055-03-06')).dailyRate()).toBe(4.42);
+      expect(repo.getSelicForPreviousBusinessDay(new Date('2055-03-06')).yearlyRate()).toBe(10.42);
     });
   });
 });

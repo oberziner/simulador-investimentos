@@ -9,7 +9,7 @@ import {
   newValueAdjuster,
 } from './investment-rules';
 import { differenceDays } from './dates';
-import { getPreviousBusinessDayRates, findDate, newRepositoryWithFuture } from '../repositories/dates-and-taxes';
+import { findDate, newRepositoryWithProjectedValues } from '../repositories/dates-and-taxes';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
@@ -44,20 +44,18 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
 };
 
 export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
-  const repof = newRepositoryWithFuture({
-    dailySelic: rate.dailyRate() + 1,
-    yearlySelic: rate.yearly252Rate() + 1,
+  const repof = newRepositoryWithProjectedValues({
+    selic: {
+      dailyRate: () => rate.dailyRate() + 1,
+      yearlyRate: () => rate.yearly252Rate() * 100,
+    },
   });
 
   const repo = {
-    find: (date) => findDate(date),
-    findPreviousBusinessDay: (date) => getPreviousBusinessDayRates(date),
+    getSelicForDate: repof.getSelicForDate,
+    getSelicForPreviousBusinessDay: repof.getSelicForPreviousBusinessDay,
 
-    getYearlySelic: repof.getYearlySelic,
-    getPreviousBusinessYearSelic: repof.getPreviousBusinessYearSelic,
-
-    getDailyRate: (date) => repof.getDailySelic(date),
-    getPreviousBusinessDayRate: (date) => repof.getPreviousBusinessDaySelic(date),
+    getDailyRate: (date) => repof.getSelicForDate(date).dailyRate(),
     getAdjustmentRate: (date) => {
       let actualRate = 0.0003;
       const obj = findDate(date);
@@ -68,13 +66,9 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
     },
   };
 
-
-  let { yearlySelic } = getPreviousBusinessDayRates(startDate);
-  if (!yearlySelic) {
-    yearlySelic = rate.yearly252Rate() * 100;
-  }
+  const yearlyRate = repof.getSelicForPreviousBusinessDay(startDate).yearlyRate();
   const nominalValue = nominalValueFromBuyPrice(startDate,
-    endDate, initialValue, 0.0002, yearlySelic);
+    endDate, initialValue, 0.0002, yearlyRate);
 
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
