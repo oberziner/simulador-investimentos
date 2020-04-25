@@ -11,7 +11,7 @@ describe('lci sequence', () => {
   });
 
   it('subsequent .next should return the updated value for each day (changing the value only on business days)', () => {
-    const ratesRepo = {getDailyRate: (date) => newRate(0.05, 'year252').dailyRate() + 1};
+    const ratesRepo = { getDailyRate: () => newRate(0.05, 'year252').dailyRate() + 1 };
     const lci = newLCISeq(newDateGenerator(new Date('2019-02-28')), newInterestCalculator(1000, ratesRepo));
     lci.next(); // jump first
 

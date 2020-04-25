@@ -94,7 +94,9 @@ describe('newInterestCalculatorNominalValue', () => {
 
   describe('given a rate and a defaultValue, should return a function that', () => {
     const defaultValue = 500;
-    const interestCalculatorNominalValue = newInterestCalculatorNominalValue(defaultValue, ratesRepository);
+    const interestCalculatorNominalValue = newInterestCalculatorNominalValue(
+      defaultValue, ratesRepository,
+    );
 
     it('accepts an object with a nominalValue and a date field, and returns a clone of that object where the nominalValue has interest accumulated according to the rate', () => {
       expect(interestCalculatorNominalValue({ date: new Date('2019-05-22'), nominalValue: 1000 })).toStrictEqual({ date: new Date('2019-05-22'), nominalValue: 1010 });
@@ -116,22 +118,16 @@ describe('newCustodyFeeCalculator', () => {
     it('accepts an object with a value field, and returns a clone of that object with a new custodyFee field with a fee of calculated for that day with the given rate', () => {
       expect(custodyFeeCalculator({ date: new Date('2019-03-04'), value: 0 }).custodyFee).toBe(0);
       expect(custodyFeeCalculator({ date: new Date('2019-03-04'), value: 10000 }).custodyFee).toBeCloseTo(0.07, 2);
+      expect(custodyFeeCalculator({ date: new Date('2019-03-03'), value: 10000 }).custodyFee).toBeCloseTo(0.07, 2);
       expect(custodyFeeCalculator({ date: new Date('2019-03-04'), value: 100000 }).custodyFee).toBeCloseTo(0.69, 2);
     });
     it('should not generate a custody fee on the two first days of the investment', () => {
       expect(custodyFeeCalculator({ date: new Date('2019-03-01'), value: 10000 }).custodyFee).toBe(0);
       expect(custodyFeeCalculator({ date: new Date('2019-03-02'), value: 10000 }).custodyFee).toBe(0);
-      expect(custodyFeeCalculator({ date: new Date('2019-03-03'), value: 10000 }).custodyFee).toBeCloseTo(0.07, 2);
-      expect(custodyFeeCalculator({ date: new Date('2019-03-04'), value: 10000 }).custodyFee).toBeCloseTo(0.07, 2);
     });
     it('accepts an object without a value field, and returns a clone of that object with a new custodyFee field with a fee of 0', () => {
       expect(custodyFeeCalculator({ date: new Date('2019-03-04') }).custodyFee).toBe(0);
-      expect(custodyFeeCalculator({ }).custodyFee).toBe(0);
-      expect(custodyFeeCalculator({ }).totalCustodyFee).toBe(0);
-    });
-    it('accepts an object without a date field, and returns a clone of that object with a new custodyFee field with a fee of 0', () => {
-      expect(custodyFeeCalculator({ value: 10 }).custodyFee).toBe(0);
-      expect(custodyFeeCalculator({ value: 10 }).totalCustodyFee).toBe(0);
+      expect(custodyFeeCalculator({ date: new Date('2019-03-04') }).totalCustodyFee).toBe(0);
     });
   });
 });
@@ -142,9 +138,8 @@ describe('newAdjusmentFactorCalculator', () => {
   });
 
   describe('when called with an adjustmentRate repository and endDate, should return a function that', () => {
-
     it('accepts an object with a current date field, and returns a clone of that object with a new adjustmentFactor field with a multiplication factor adjusted to the number of days remaining in the investment', () => {
-      const ratesRepository = ({ getAdjustmentRate: () =>  -0.0002});
+      const ratesRepository = ({ getAdjustmentRate: () => -0.0002 });
       const adjusmentFactorCalculator = newAdjusmentFactorCalculator(new Date('2014-03-07'), ratesRepository);
       expect(adjusmentFactorCalculator({ date: new Date('2008-05-21') }).adjustmentFactor).toBe(1.001157);
 

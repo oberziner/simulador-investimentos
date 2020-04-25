@@ -5,7 +5,7 @@ export const isBusinessDay = (date) => (date.getUTCDay() !== 0) // sunday
   && (!(date.toISOString().substring(0, 10) in holidays));
 
 export const differenceDays = (dateFrom, dateTo) => Math.trunc(
-  (dateTo - dateFrom) / 1000 / 60 / 60 / 24,
+  (dateTo.getTime() - dateFrom.getTime()) / 1000 / 60 / 60 / 24,
 );
 
 export const getNextDay = (date) => new Date(date.getTime() + 86400000);

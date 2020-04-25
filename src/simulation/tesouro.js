@@ -9,7 +9,7 @@ import {
   newValueAdjuster,
 } from './investment-rules';
 import { differenceDays } from './dates';
-import { getPreviousBusinessDayRates, findDate ,newRepositoryWithFuture, } from '../repositories/dates-and-taxes';
+import { getPreviousBusinessDayRates, findDate, newRepositoryWithFuture } from '../repositories/dates-and-taxes';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
@@ -34,7 +34,9 @@ const newTesouroSeq = (dateGenerator,
 );
 
 const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, yearlySelic) => {
-  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(endDate, { getAdjustmentRate: () => buyPremium});
+  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(endDate, {
+    getAdjustmentRate: () => buyPremium,
+  });
   const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
   const projectedNominalValue = initialValue / adjustmentFactor;
   const metaSelicDiaria = newRate((1 * yearlySelic + 0.1) / 100, 'year252');
@@ -42,7 +44,10 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
 };
 
 export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
-  const repof = newRepositoryWithFuture({dailySelic: rate.dailyRate() + 1, yearlySelic: rate.yearly252Rate() + 1});
+  const repof = newRepositoryWithFuture({
+    dailySelic: rate.dailyRate() + 1,
+    yearlySelic: rate.yearly252Rate() + 1,
+  });
 
   const repo = {
     find: (date) => findDate(date),
@@ -60,7 +65,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
         actualRate = obj.sellSelicTax;
       }
       return actualRate;
-    }
+    },
   };
 
 
