@@ -1,7 +1,7 @@
 import React from 'react';
 import f from './format';
 
-const Investment = ({ investment }) => (
+const Investment = ({ investment, onRemoveClick }) => (
   <div className="investment">
     <h2 className="investment-title">
       {investment.title}
@@ -27,6 +27,7 @@ const Investment = ({ investment }) => (
     <p>
       {`Valor Liquido: ${f.formatMoney(investment.netValue)}`}
     </p>
+    <button type="button" onClick={onRemoveClick.bind(null, investment)}>Remover</button>
     <table>
       <tbody>
         {investment.steps.slice().reverse().map((obj, i) => (

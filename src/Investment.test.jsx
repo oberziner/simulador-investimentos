@@ -22,7 +22,7 @@ describe('investment component', () => {
       ],
     };
 
-    const { container } = render(<Investment investment={investment} />);
+    const { container } = render(<Investment investment={investment} onRemoveClick={jest.fn()} />);
     const div = container.firstChild;
     expect(div).toHaveClass('investment');
     expect(div.children[0]).toHaveTextContent('CDB');
@@ -38,9 +38,9 @@ describe('investment component', () => {
       { normalizeWhitespace: true });
     expect(div.children[7]).toHaveTextContent('Valor Liquido: R$ 11.800,22',
       { normalizeWhitespace: true });
-    expect(div.children).toHaveLength(9);
+    expect(div.children).toHaveLength(10);
 
-    const steps = div.children[8].children[0].children;
+    const steps = div.children[9].children[0].children;
     expect(steps[0]).toHaveTextContent('1 - 2019-12-01R$ 12.000,00',
       { normalizeWhitespace: true });
     expect(steps[1]).toHaveTextContent('2 - 2019-08-01R$ 11.000,00',

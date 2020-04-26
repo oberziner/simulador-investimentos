@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { v4 as randomUUID } from 'uuid';
 import Investment from './Investment';
 import { InputList } from './InputList';
 import { CdbAndCdi } from './CdbAndCdi';
@@ -21,6 +22,7 @@ class App extends Component {
 
     this.handleOnChange = this.handleOnChange.bind(this);
     this.addInvestment = this.addInvestment.bind(this);
+    this.removeInvestment = this.removeInvestment.bind(this);
 
     this.state = {
       investments: [],
@@ -32,7 +34,13 @@ class App extends Component {
 
   addInvestment(investment) {
     this.setState((state) => ({
-      investments: [...state.investments, investment],
+      investments: [...state.investments, { ...investment, id: randomUUID() }],
+    }));
+  }
+
+  removeInvestment(investment) {
+    this.setState((state) => ({
+      investments: state.investments.filter((i) => i !== investment),
     }));
   }
 
@@ -71,8 +79,8 @@ class App extends Component {
 
         <div>
           {investments.map((i) => (
-            <div key={Math.random()} className="investment-container">
-              <Investment investment={i} />
+            <div key={i.id} className="investment-container">
+              <Investment investment={i} onRemoveClick={this.removeInvestment} />
             </div>
           ))}
         </div>

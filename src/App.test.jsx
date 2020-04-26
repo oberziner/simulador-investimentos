@@ -11,8 +11,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '6' } });
     fireEvent.change(getByLabelText('% CDI:'), { target: { value: '90' } });
-    const lciButton = getByText((text, element) => (text === '(L)CI')
-      && (element.tagName === 'BUTTON'));
+    const lciButton = getByText((text) => (text === '(L)CI'));
 
     lciButton.click();
 
@@ -36,8 +35,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
     fireEvent.change(getByLabelText('% CDI:'), { target: { value: '100' } });
-    const lciButton = getByText((text, element) => (text === '(L)CI')
-      && (element.tagName === 'BUTTON'));
+    const lciButton = getByText((text) => (text === '(L)CI'));
 
     lciButton.click();
     lciButton.click();
@@ -61,8 +59,7 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2018-12-01' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
     fireEvent.change(getByLabelText('% CDI:'), { target: { value: '90' } });
-    const cdbButton = getByText((text, element) => (text === '(C)DB')
-      && (element.tagName === 'BUTTON'));
+    const cdbButton = getByText((text) => (text === '(C)DB'));
 
     cdbButton.click();
 
@@ -98,6 +95,47 @@ describe('app', () => {
           { normalizeWhitespace: true });
         expect(getByRole('table')).toHaveTextContent(/215 - 2019-05-01R\$ 4.999,70$/,
           { normalizeWhitespace: true });
+        done();
+      });
+  }));
+
+
+  it('should remove an investment when the remove button is clicked', () => new Promise((done) => {
+    const { getAllByRole, getByText, getAllByText, getByLabelText } = render(<App />);
+    const lciButton = getByText((text) => (text === '(L)CI'));
+
+    fireEvent.change(getByLabelText('Valor:'), { target: { value: '9999' } });
+    fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-04-01' } });
+    fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4' } });
+    fireEvent.change(getByLabelText('% CDI:'), { target: { value: '100' } });
+    lciButton.click();
+
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '5' } });
+    lciButton.click();
+
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '6' } });
+    lciButton.click();
+
+    waitForElement(() => getAllByRole('heading'))
+      .then((elements) => {
+        expect(elements).toHaveLength(3);
+
+        expect(elements[0].parentNode).toHaveTextContent(/^LCI 100% SELIC 4%/, { normalizeWhitespace: true });
+        expect(elements[1].parentNode).toHaveTextContent(/^LCI 100% SELIC 5%/, { normalizeWhitespace: true });
+        expect(elements[2].parentNode).toHaveTextContent(/^LCI 100% SELIC 6%/, { normalizeWhitespace: true });
+
+        const removeButtons = getAllByText((text) => (text === 'Remover'));
+        removeButtons[1].click();
+
+        waitForElement(() => getAllByRole('heading'))
+          .then((elementsAfterRemove) => {
+            expect(elementsAfterRemove).toHaveLength(2);
+
+            expect(elementsAfterRemove[0].parentNode).toHaveTextContent(/^LCI 100% SELIC 4%/, { normalizeWhitespace: true });
+            expect(elementsAfterRemove[1].parentNode).toHaveTextContent(/^LCI 100% SELIC 6%/, { normalizeWhitespace: true });
+          });
+
         done();
       });
   }));
