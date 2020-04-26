@@ -27,7 +27,7 @@ const Investment = ({ investment, onRemoveClick }) => (
     <p>
       {`Valor Liquido: ${f.formatMoney(investment.netValue)}`}
     </p>
-    <button type="button" onClick={onRemoveClick.bind(null, investment)}>Remover</button>
+    <button className="remove-button" type="button" onClick={onRemoveClick.bind(null, investment)}>Remover</button>
     <table>
       <tbody>
         {investment.steps.slice().reverse().map((obj, i) => (

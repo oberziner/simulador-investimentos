@@ -1,11 +1,42 @@
 body {
+  margin: 0;
   white-space: nowrap;
+  background-color: hsla(195, 70%, 56%, 1);
+}
+
+button {
+  padding: 10px 10px;
+  border: none;
+  margin: 5px auto;
+  outline: none;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.7em;
+  cursor: pointer;
+  transition: background-color 0.4s;
+}
+
+input::-webkit-datetime-edit-day-field:focus,
+input::-webkit-datetime-edit-month-field:focus,
+input::-webkit-datetime-edit-year-field:focus,
+input::selection {
+  background-color: rgba(248, 90, 192, 0.56); 
+}
+
+.input-box {
+  padding: 10px 0;
+  display: flex;
+  background-color: #2293b9;
+  box-shadow: 0px -6px 15px 3px black;
 }
 
 .input-list {
-  vertical-align: top;
-  display: inline-block;
-  min-width: 16em;
+  margin: 0 10px;
+  padding: 10px 5px;
+  border-radius: 10px;
+  border: 1px solid hsla(195, 70%, 40%, 1);
+  background-color: #33a2c7;
 }
 
 .input-list > label {
@@ -18,27 +49,42 @@ body {
   display: inline-block;
   width: 10em;
   margin-left: 4px;
+  padding: 3px;
+  border: 0;
+  outline: none;
+  border-radius: 3px;
+  background-color: hsla(195, 70%, 75%, 1);
+  border-bottom: 1px solid hsla(195, 70%, 37%, 1);
 }
 
 .input-list > button {
   display: block;
-  margin: 5px auto;
-  padding: 5px;
   min-width: 50%;
+  background-color: hsla(195, 70%, 37%, 1);
+}
+
+.input-list > button:hover,
+.input-list > button:focus {
+  background-color: hsla(195, 70%, 30%, 1);
 }
 
 .investment-container {
   display: inline-block;
-  margin: 0 10px;
+  margin: 10px;
 }
 
 .investment {
-  border: 1px solid black;
+  border: 1px solid white;
   padding: 0px 10px;
   border-radius: 10px;
+  background-color: #fff;
 }
 
 .investment-title {
   color: blue
 }
 
+.remove-button {
+  background-color: hsla(0, 100%, 70%, 1);
+  padding: 8px 10px;
+}
