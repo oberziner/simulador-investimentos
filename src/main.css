@@ -75,16 +75,33 @@ input::selection {
 
 .investment {
   border: 1px solid white;
-  padding: 0px 10px;
+  padding: 0px 15px;
   border-radius: 10px;
   background-color: #fff;
 }
 
 .investment-title {
-  color: blue
+  margin: 15px 0;
+  color: hsl(195, 69%, 25%)
+}
+
+.investment-line {
+  padding: 10px 5px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+}
+
+.investment-line > p{
+  margin: 0;
+}
+
+.net-value {
+  background-color: #d3e4d5;
 }
 
 .remove-button {
+  margin: 10px 10px;
+  padding: 7px 10px;
   background-color: hsla(0, 100%, 70%, 1);
-  padding: 8px 10px;
 }
