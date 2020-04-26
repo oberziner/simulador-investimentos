@@ -40,7 +40,10 @@ const Investment = ({ investment, onRemoveClick }) => (
         {investment.steps.slice().reverse().map((obj, i) => (
           <tr key={obj.date}>
             <td>
-              {`${i + 1} - ${f.formatDate(obj.date)}`}
+              {`${i + 1} - `}
+            </td>
+            <td>
+              {`${f.formatDate(obj.date)}`}
             </td>
             <td>
               {f.formatMoney(obj.value)}

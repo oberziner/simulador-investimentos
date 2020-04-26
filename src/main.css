@@ -17,6 +17,10 @@ button {
   transition: background-color 0.4s;
 }
 
+td {
+  padding: 0 10px;
+}
+
 input::-webkit-datetime-edit-day-field:focus,
 input::-webkit-datetime-edit-month-field:focus,
 input::-webkit-datetime-edit-year-field:focus,
