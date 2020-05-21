@@ -1,6 +1,7 @@
 import datesAndTaxesJSON from './dates-and-taxes.json';
 import ipcaJSON from './ipca.json';
 import projectedIpcaJSON from './projected_ipca.json';
+import tesouroIPCARatesJSON from './tesouro_ipca_rates.json';
 import {
   getNextDay,
   getPreviousDay,
@@ -36,6 +37,18 @@ const projectedIpcaRepo = {
     };
   }),
   lastHistoricalDate: new Date(projectedIpcaJSON[projectedIpcaJSON.length - 1].date),
+};
+
+const tesouroIPCARatesRepo = {
+  data: tesouroIPCARatesJSON.map((i) => {
+    const date = new Date(i.date);
+    return {
+      date,
+      buyTax: +i.buyTax,
+      sellTax: +i.sellTax,
+    };
+  }),
+  lastHistoricalDate: new Date(tesouroIPCARatesJSON[tesouroIPCARatesJSON.length - 1].date),
 };
 
 const initializeRepository = (sourceJson) => {
@@ -109,6 +122,11 @@ export const findDate = (date, optionalRepository) => {
   return idx > -1 ? repository.data[idx] : null;
 };
 
+export const findDateOrPreviousDate = (date, optionalRepository) => {
+  const repository = optionalRepository || selicRepo;
+  const idx = indexOfDate(date, -1, repository);
+  return idx > -1 ? repository.data[idx] : null;
+};
 
 export const getPreviousBusinessDayRates = (date) => {
   const idx = indexOfLatestDateBefore(getPreviousDay(date));
@@ -166,5 +184,18 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
     return null;
   },
 
+  getTesouroIPCATaxes: (date) => {
+    if (date > tesouroIPCARatesRepo.lastHistoricalDate) {
+      return defaultValues;
+    }
+    const obj = findDateOrPreviousDate(date, tesouroIPCARatesRepo);
+    if (obj) {
+      return {
+        buyTax: obj.buyTax,
+        sellTax: obj.sellTax,
+      };
+    }
+    return null;
+  },
 
 });
