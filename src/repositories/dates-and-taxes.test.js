@@ -4,6 +4,7 @@ import {
   indexOfLatestDateBefore,
   findDate,
   findDateOrPreviousDate,
+  nextBusinessday,
   getPreviousBusinessDayRates,
   differenceBusinessDays,
   newRepositoryWithProjectedValues,
@@ -120,6 +121,23 @@ describe('findDateOrPreviousDate', () => {
   it('should return the previous business day for weekends and holidays', () => {
     expect(findDateOrPreviousDate(new Date('2020-02-24')).date).toStrictEqual(new Date('2020-02-21'));
     expect(findDateOrPreviousDate(new Date('2019-03-04')).date).toStrictEqual(new Date('2019-03-01'));
+  });
+});
+
+describe('nextBusinessday', () => {
+  it('should return the next business day', () => {
+    expect(nextBusinessday(new Date('2020-02-17')).date).toStrictEqual(new Date('2020-02-18'));
+    expect(nextBusinessday(new Date('2020-02-18')).date).toStrictEqual(new Date('2020-02-19'));
+    expect(nextBusinessday(new Date('2020-02-19')).date).toStrictEqual(new Date('2020-02-20'));
+    expect(nextBusinessday(new Date('2020-02-20')).date).toStrictEqual(new Date('2020-02-21'));
+    expect(nextBusinessday(new Date('2020-02-21')).date).toStrictEqual(new Date('2020-02-26'));
+    expect(nextBusinessday(new Date('2020-02-22')).date).toStrictEqual(new Date('2020-02-26'));
+    expect(nextBusinessday(new Date('2020-02-23')).date).toStrictEqual(new Date('2020-02-26'));
+    expect(nextBusinessday(new Date('2020-02-24')).date).toStrictEqual(new Date('2020-02-26'));
+    expect(nextBusinessday(new Date('2020-02-25')).date).toStrictEqual(new Date('2020-02-26'));
+    expect(nextBusinessday(new Date('2020-02-26')).date).toStrictEqual(new Date('2020-02-27'));
+    expect(nextBusinessday(new Date('2020-02-27')).date).toStrictEqual(new Date('2020-02-28'));
+    expect(nextBusinessday(new Date('2020-02-28')).date).toStrictEqual(new Date('2020-03-02'));
   });
 });
 

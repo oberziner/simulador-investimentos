@@ -122,6 +122,12 @@ export const findDate = (date, optionalRepository) => {
   return idx > -1 ? repository.data[idx] : null;
 };
 
+export const nextBusinessday = (date) => {
+  const nextDay = getNextDay(date);
+  const idx = indexOfDate(nextDay, 1, selicRepo);
+  return idx > -1 ? selicRepo.data[idx] : null;
+};
+
 export const findDateOrPreviousDate = (date, optionalRepository) => {
   const repository = optionalRepository || selicRepo;
   const idx = indexOfDate(date, -1, repository);
