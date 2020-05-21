@@ -1,5 +1,5 @@
-import { getNextDay, isBusinessDay, differenceDays } from './dates';
-import { differenceBusinessDays } from '../repositories/dates-and-taxes';
+import { getNextDay, isBusinessDay, differenceDays, previousDateWithDayOfMonth, nextDateWithDayOfMonth } from './dates';
+import { differenceBusinessDays, nextBusinessday } from '../repositories/dates-and-taxes';
 import { newRate } from './interest-rates';
 
 const trunc = (val, places) => {
@@ -51,6 +51,22 @@ export const newInterestCalculatorNominalValue = (defaultValue, ratesRepo) => (p
 };
 
 // TODO: NEEDS TEST
+export const newInflationCalculatorNominalValue = (defaultValue, ratesRepo) => (prev) => {
+  const newObject = Object.assign({}, prev);
+  const { nominalValue, date } = newObject;
+
+  if (nominalValue) {
+    const actualRate = ratesRepo.getIPCAForDate(date);
+    if (actualRate) {
+      newObject.nominalValue = trunc(nominalValue * (1 + actualRate), 6);
+    }
+  } else {
+    newObject.nominalValue = defaultValue;
+  }
+  return newObject;
+};
+
+// TODO: NEEDS TEST
 export const newNominalValueProjector = (ratesRepo) => (prev) => {
   const newObject = Object.assign({}, prev);
   const { nominalValue, date } = newObject;
@@ -68,6 +84,35 @@ export const newNominalValueProjector = (ratesRepo) => (prev) => {
     const yearlySelic = selic.yearlyRate();
     const selicTarget = newRate(yearlySelic / 100 + 0.001, 'year252');
     newObject.projectedNominalValue = trunc(nominalValue * (selicTarget.dailyRate() + 1), 6);
+  } else {
+    throw new Error(`object should have nominalValue: ${JSON.stringify(prev)}`);
+  }
+  return newObject;
+};
+
+// TODO: NEEDS TEST
+export const newIPCANominalValueProjector = (ratesRepo) => (prev) => {
+  const newObject = Object.assign({}, prev);
+  const { nominalValue, date } = newObject;
+
+  if (nominalValue) {
+    const liquidationDate = nextBusinessday(date).date;
+    const previousIPCADate = previousDateWithDayOfMonth(liquidationDate, 15);
+    const nextIPCADate = nextDateWithDayOfMonth(liquidationDate, 15);
+    const daysSinceLastIPCADate = differenceDays(previousIPCADate, liquidationDate);
+    const daysBetweenLastIPCADateAndNextIPCADate = differenceDays(previousIPCADate, nextIPCADate);
+    const projectedIpca = ratesRepo.getProjectedIPCAForDate(date);
+
+    newObject.projectedIpca = projectedIpca;
+    newObject.daysSinceLastIPCADate = daysSinceLastIPCADate;
+    newObject.daysBetweenLastIPCADateAndNextIPCADate = daysBetweenLastIPCADateAndNextIPCADate;
+
+    if (projectedIpca) {
+      newObject.projectedNominalValue = nominalValue
+        * (1 + projectedIpca) ** (daysSinceLastIPCADate / daysBetweenLastIPCADateAndNextIPCADate);
+    } else {
+      newObject.projectedNominalValue = nominalValue;
+    }
   } else {
     throw new Error(`object should have nominalValue: ${JSON.stringify(prev)}`);
   }
