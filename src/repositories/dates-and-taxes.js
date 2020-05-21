@@ -1,4 +1,5 @@
 import datesAndTaxesJSON from './dates-and-taxes.json';
+import ipcaJSON from './ipca.json';
 import {
   getNextDay,
   getPreviousDay,
@@ -12,6 +13,17 @@ const getTesouroSelicSellTax = (date) => {
     return 0.0004;
   }
   return 0.0003;
+};
+
+const ipcaRepo = {
+  data: ipcaJSON.map((i) => {
+    const date = new Date(i.date);
+    return {
+      date,
+      ipca: i.ipca,
+    };
+  }),
+  lastHistoricalDate: new Date('2020-04-15'),
 };
 
 const initializeRepository = (sourceJson) => {
@@ -44,9 +56,10 @@ const initializeRepository = (sourceJson) => {
   };
 };
 
-const repository = initializeRepository(datesAndTaxesJSON);
+const selicRepo = initializeRepository(datesAndTaxesJSON);
 
-export const indexOfDate = (date, returnBeforeAfter) => {
+export const indexOfDate = (date, returnBeforeAfter, optionalRepository) => {
+  const repository = optionalRepository || selicRepo;
   let startIndex = 0;
   let endIndex = repository.data.length - 1;
   let loops = 0;
@@ -78,14 +91,16 @@ export const indexOfDate = (date, returnBeforeAfter) => {
 export const indexOfLatestDateBefore = (date) => indexOfDate(date, -1);
 export const indexOfEarliestDateAfter = (date) => indexOfDate(date, 1);
 
-export const findDate = (date) => {
-  const idx = indexOfDate(date);
+export const findDate = (date, optionalRepository) => {
+  const repository = optionalRepository || selicRepo;
+  const idx = indexOfDate(date, 0, repository);
   return idx > -1 ? repository.data[idx] : null;
 };
 
+
 export const getPreviousBusinessDayRates = (date) => {
   const idx = indexOfLatestDateBefore(getPreviousDay(date));
-  return idx > -1 ? repository.data[idx] : null;
+  return idx > -1 ? selicRepo.data[idx] : null;
 };
 
 export const differenceBusinessDays = (dateFrom, dateTo) => {
@@ -98,7 +113,7 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
   getSelicForDate: (date) => {
     const obj = findDate(date);
     if (obj) {
-      if (date > repository.lastHistoricalDate) {
+      if (date > selicRepo.lastHistoricalDate) {
         return defaultValues.selic;
       }
       return obj.selic;
@@ -109,11 +124,23 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
   getSelicForPreviousBusinessDay: (date) => {
     const obj = getPreviousBusinessDayRates(date);
     if (obj) {
-      if (obj.date > repository.lastHistoricalDate) {
+      if (obj.date > selicRepo.lastHistoricalDate) {
         return defaultValues.selic;
       }
       return obj.selic;
     }
     return null;
   },
+
+  getIPCAForDate: (date) => {
+    const obj = findDate(date, ipcaRepo);
+    if (obj) {
+      return obj.ipca;
+    }
+    if ((date > ipcaRepo.lastHistoricalDate) && (date.getUTCDate() === 15)) {
+      return defaultValues.ipca;
+    }
+    return null;
+  },
+
 });

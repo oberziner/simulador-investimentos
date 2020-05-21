@@ -237,4 +237,42 @@ describe('repositoryWithFuture', () => {
       expect(repo.getSelicForPreviousBusinessDay(new Date('2055-03-06')).yearlyRate()).toBe(10.42);
     });
   });
+
+  describe('getIPCAForDate', () => {
+    it('should return the historical rate for dates inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getIPCAForDate(new Date('2019-12-13'))).toBe(0.0051);
+      expect(repo.getIPCAForDate(new Date('2020-01-15'))).toBe(0.0115);
+      expect(repo.getIPCAForDate(new Date('2020-03-13'))).toBe(0.0025);
+      expect(repo.getIPCAForDate(new Date('2020-04-15'))).toBe(0.0007);
+    });
+
+    it('should return null for days without IPCA publication inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getIPCAForDate(new Date('2020-02-23'))).toBeNull();
+      expect(repo.getIPCAForDate(new Date('2019-03-04'))).toBeNull();
+      expect(repo.getIPCAForDate(new Date('2020-03-14'))).toBeNull();
+      expect(repo.getIPCAForDate(new Date('2020-03-16'))).toBeNull();
+    });
+
+    it('should return the default rate for dates after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        ipca: 4.42,
+      });
+      expect(repo.getIPCAForDate(new Date('2020-05-15'))).toBe(4.42);
+      expect(repo.getIPCAForDate(new Date('2020-06-15'))).toBe(4.42);
+      expect(repo.getIPCAForDate(new Date('2055-03-15'))).toBe(4.42);
+
+      expect(repo.getIPCAForDate(new Date('2020-08-15'))).toBe(4.42); // This should return null, since 15th is a saturday
+    });
+    it('should return null for weekends and holidays after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        ipca: 4.42,
+      });
+      expect(repo.getIPCAForDate(new Date('2020-06-10'))).toBeNull();
+      expect(repo.getIPCAForDate(new Date('2055-03-06'))).toBeNull();
+
+      expect(repo.getIPCAForDate(new Date('2020-08-14'))).toBeNull(); // TODO This should return 4.42, since 15th is a saturday
+    });
+  });
 });
