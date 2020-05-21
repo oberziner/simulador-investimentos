@@ -2,6 +2,8 @@ import {
   getNextDay,
   isBusinessDay,
   differenceDays,
+  previousDateWithDayOfMonth,
+  nextDateWithDayOfMonth,
 } from './dates';
 
 describe('getNextDay', () => {
@@ -45,5 +47,26 @@ describe('differenceDays', () => {
     expect(differenceDays(new Date('2019-01-01'), new Date('2019-02-01'))).toBe(31);
     expect(differenceDays(new Date('2019-01-01'), new Date('2020-01-01'))).toBe(365);
     expect(differenceDays(new Date('2020-01-01'), new Date('2021-01-01'))).toBe(366);
+  });
+});
+
+describe('previousDateWithDayOfMonth', () => {
+  it('should return the last date before date which had a day equal to the day parameter', () => {
+    expect(previousDateWithDayOfMonth(new Date('2020-01-01'), 15)).toStrictEqual(new Date('2019-12-15'));
+    expect(previousDateWithDayOfMonth(new Date('2020-01-14'), 15)).toStrictEqual(new Date('2019-12-15'));
+    expect(previousDateWithDayOfMonth(new Date('2020-01-15'), 15)).toStrictEqual(new Date('2019-12-15'));
+    expect(previousDateWithDayOfMonth(new Date('2020-01-16'), 15)).toStrictEqual(new Date('2020-01-15'));
+    expect(previousDateWithDayOfMonth(new Date('2020-02-10'), 15)).toStrictEqual(new Date('2020-01-15'));
+  });
+});
+
+describe('nextDateWithDayOfMonth', () => {
+  it('should return the first date after date which had a day equal to the day parameter', () => {
+    expect(nextDateWithDayOfMonth(new Date('2019-12-20'), 15)).toStrictEqual(new Date('2020-01-15'));
+    expect(nextDateWithDayOfMonth(new Date('2020-01-01'), 15)).toStrictEqual(new Date('2020-01-15'));
+    expect(nextDateWithDayOfMonth(new Date('2020-01-14'), 15)).toStrictEqual(new Date('2020-01-15'));
+    expect(nextDateWithDayOfMonth(new Date('2020-01-15'), 15)).toStrictEqual(new Date('2020-01-15'));
+    expect(nextDateWithDayOfMonth(new Date('2020-01-16'), 15)).toStrictEqual(new Date('2020-02-15'));
+    expect(nextDateWithDayOfMonth(new Date('2020-02-10'), 15)).toStrictEqual(new Date('2020-02-15'));
   });
 });
