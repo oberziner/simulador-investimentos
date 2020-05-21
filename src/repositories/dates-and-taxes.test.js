@@ -275,4 +275,37 @@ describe('repositoryWithFuture', () => {
       expect(repo.getIPCAForDate(new Date('2020-08-14'))).toBeNull(); // TODO This should return 4.42, since 15th is a saturday
     });
   });
+
+  describe('getProjectedIPCAForDate', () => {
+    it('should return the historical rate for dates inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-02'))).toBe(0.0105);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-03'))).toBe(0.0105);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-22'))).toBe(0.0034);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-02-28'))).toBe(0.0015);
+    });
+
+    it('should return null for weekends and holidays inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-11'))).toBeNull();
+      expect(repo.getProjectedIPCAForDate(new Date('2020-02-23'))).toBeNull();
+      expect(repo.getProjectedIPCAForDate(new Date('2020-02-24'))).toBeNull();
+    });
+
+    it('should return the default rate for dates after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        projectedIpca: 4.42,
+      });
+      expect(repo.getProjectedIPCAForDate(new Date('2020-03-02'))).toBe(4.42);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-06-15'))).toBe(4.42);
+      expect(repo.getProjectedIPCAForDate(new Date('2055-03-15'))).toBe(4.42);
+    });
+    it('should return null for weekends and holidays after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        projectedIpca: 4.42,
+      });
+      expect(repo.getProjectedIPCAForDate(new Date('2020-06-14'))).toBeNull();
+      expect(repo.getProjectedIPCAForDate(new Date('2055-03-06'))).toBeNull();
+    });
+  });
 });

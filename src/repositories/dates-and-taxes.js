@@ -1,5 +1,6 @@
 import datesAndTaxesJSON from './dates-and-taxes.json';
 import ipcaJSON from './ipca.json';
+import projectedIpcaJSON from './projected_ipca.json';
 import {
   getNextDay,
   getPreviousDay,
@@ -24,6 +25,17 @@ const ipcaRepo = {
     };
   }),
   lastHistoricalDate: new Date('2020-04-15'),
+};
+
+const projectedIpcaRepo = {
+  data: projectedIpcaJSON.map((i) => {
+    const date = new Date(i.date);
+    return {
+      date,
+      projectedIpca: i.projectedIpca,
+    };
+  }),
+  lastHistoricalDate: new Date(projectedIpcaJSON[projectedIpcaJSON.length - 1].date),
 };
 
 const initializeRepository = (sourceJson) => {
@@ -142,5 +154,17 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
     }
     return null;
   },
+
+  getProjectedIPCAForDate: (date) => {
+    const obj = findDate(date, projectedIpcaRepo);
+    if (obj) {
+      return obj.projectedIpca;
+    }
+    if (date > projectedIpcaRepo.lastHistoricalDate && isBusinessDay(date)) {
+      return defaultValues.projectedIpca;
+    }
+    return null;
+  },
+
 
 });
