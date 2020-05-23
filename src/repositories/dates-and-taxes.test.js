@@ -317,10 +317,10 @@ describe('repositoryWithFuture', () => {
   describe('getProjectedIPCAForDate', () => {
     it('should return the historical rate for dates inside the period with historical dates', () => {
       const repo = newRepositoryWithProjectedValues();
-      expect(repo.getProjectedIPCAForDate(new Date('2020-01-02'))).toBe(0.0105);
-      expect(repo.getProjectedIPCAForDate(new Date('2020-01-03'))).toBe(0.0105);
-      expect(repo.getProjectedIPCAForDate(new Date('2020-01-22'))).toBe(0.0034);
-      expect(repo.getProjectedIPCAForDate(new Date('2020-02-28'))).toBe(0.0015);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-02'))).toBeCloseTo(0.0105, 5);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-03'))).toBeCloseTo(0.0105, 5);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-01-22'))).toBeCloseTo(0.0034, 5);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-02-28'))).toBeCloseTo(0.0015, 5);
     });
 
     it('should return null for weekends and holidays inside the period with historical dates', () => {

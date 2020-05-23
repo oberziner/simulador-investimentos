@@ -33,7 +33,7 @@ const projectedIpcaRepo = {
     const date = new Date(i.date);
     return {
       date,
-      projectedIpca: i.projectedIpca,
+      projectedIpca: i.projectedIpca / 100,
     };
   }),
   lastHistoricalDate: new Date(projectedIpcaJSON[projectedIpcaJSON.length - 1].date),
