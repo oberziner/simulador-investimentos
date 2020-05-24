@@ -11870,5 +11870,165 @@
   {
     "date": "2020-02-28",
     "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-02",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-03",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-04",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-05",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-06",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-09",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-10",
+    "projectedIpca": "0.15"
+  },
+  {
+    "date": "2020-03-11",
+    "projectedIpca": "0.25"
+  },
+  {
+    "date": "2020-03-12",
+    "projectedIpca": "0.25"
+  },
+  {
+    "date": "2020-03-13",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-16",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-17",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-18",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-19",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-20",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-23",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-24",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-25",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-26",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-27",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-30",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-03-31",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-01",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-02",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-03",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-06",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-07",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-08",
+    "projectedIpca": "0.11"
+  },
+  {
+    "date": "2020-04-09",
+    "projectedIpca": "0.07"
+  },
+  {
+    "date": "2020-04-13",
+    "projectedIpca": "0.07"
+  },
+  {
+    "date": "2020-04-14",
+    "projectedIpca": "0.07"
+  },
+  {
+    "date": "2020-04-15",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-16",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-17",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-20",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-22",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-23",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-24",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-27",
+    "projectedIpca": "-0.04"
+  },
+  {
+    "date": "2020-04-28",
+    "projectedIpca": "-0.04"
   }
 ]

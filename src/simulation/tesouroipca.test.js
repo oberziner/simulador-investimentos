@@ -3,20 +3,20 @@ import { newRate } from './interest-rates';
 
 describe('tesouro sold before due date', () => {
   it('wawa should be calculated correctly', () => {
-    const tesouro = newTesouroIPCA(new Date('2020-01-02'), 2955.867824, newRate(0.0415, 'year252'), new Date('2024-08-15'), new Date('2020-04-01'));
+    const tesouro = newTesouroIPCA(new Date('2020-01-02'), 2955.867824, newRate(0.0415, 'year252'), new Date('2024-08-15'), new Date('2020-06-01'));
 
     // expect(JSON.stringify(tesouro.steps.splice(43, 2), null, 2)).toBeNull();
 
-    expect(tesouro.steps).toHaveLength(91);
+    expect(tesouro.steps).toHaveLength(152);
     expect(tesouro.startDate).toStrictEqual(new Date('2020-01-02'));
     expect(tesouro.dueDate).toStrictEqual(new Date('2024-08-15'));
-    expect(tesouro.endDate).toStrictEqual(new Date('2020-04-01'));
+    expect(tesouro.endDate).toStrictEqual(new Date('2020-06-01'));
     expect(tesouro.initialValue).toBe(2955.867824);
     // expect(tesouro.totalTaxes).toBeCloseTo(15.77, 2);
     // expect(tesouro.totalCustodyFee).toBeCloseTo(4.33, 2);
     // expect(tesouro.grossValue).toBeCloseTo(10095.55, 2);
     // expect(tesouro.netValue).toBeCloseTo(10075.45, 2);
-    expect(tesouro.totalDays).toBe(89);
+    expect(tesouro.totalDays).toBe(150);
     expect(tesouro.nominalValue).toBeCloseTo(3257.583827, 6);
 
     expect(tesouro.steps[0].date).toStrictEqual(new Date('2020-01-02'));
@@ -51,5 +51,14 @@ describe('tesouro sold before due date', () => {
 
     expect(tesouro.steps[56].date).toStrictEqual(new Date('2020-02-27'));
     expect(tesouro.steps[56].value).toBeCloseTo(2976.20, 2);
+
+    expect(tesouro.steps[71].date).toStrictEqual(new Date('2020-03-13'));
+    expect(tesouro.steps[71].value).toBeCloseTo(2862.26, 2);
+
+    expect(tesouro.steps[85].date).toStrictEqual(new Date('2020-03-27'));
+    expect(tesouro.steps[85].value).toBeCloseTo(2852.97, 2);
+
+    expect(tesouro.steps[113].date).toStrictEqual(new Date('2020-04-24'));
+    expect(tesouro.steps[113].value).toBeCloseTo(2966.69, 2);
   });
 });

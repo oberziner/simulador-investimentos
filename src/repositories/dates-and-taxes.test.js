@@ -320,7 +320,7 @@ describe('repositoryWithFuture', () => {
       expect(repo.getProjectedIPCAForDate(new Date('2020-01-02'))).toBeCloseTo(0.0105, 5);
       expect(repo.getProjectedIPCAForDate(new Date('2020-01-03'))).toBeCloseTo(0.0105, 5);
       expect(repo.getProjectedIPCAForDate(new Date('2020-01-22'))).toBeCloseTo(0.0034, 5);
-      expect(repo.getProjectedIPCAForDate(new Date('2020-02-28'))).toBeCloseTo(0.0015, 5);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-04-28'))).toBeCloseTo(-0.0004, 5);
     });
 
     it('should return null for weekends and holidays inside the period with historical dates', () => {
@@ -334,7 +334,7 @@ describe('repositoryWithFuture', () => {
       const repo = newRepositoryWithProjectedValues({
         projectedIpca: 4.42,
       });
-      expect(repo.getProjectedIPCAForDate(new Date('2020-03-02'))).toBe(4.42);
+      expect(repo.getProjectedIPCAForDate(new Date('2020-04-29'))).toBe(4.42);
       expect(repo.getProjectedIPCAForDate(new Date('2020-06-15'))).toBe(4.42);
       expect(repo.getProjectedIPCAForDate(new Date('2055-03-15'))).toBe(4.42);
     });
