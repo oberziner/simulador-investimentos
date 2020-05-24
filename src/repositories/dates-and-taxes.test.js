@@ -279,10 +279,10 @@ describe('repositoryWithFuture', () => {
   describe('getIPCAForDate', () => {
     it('should return the historical rate for dates inside the period with historical dates', () => {
       const repo = newRepositoryWithProjectedValues();
-      expect(repo.getIPCAForDate(new Date('2019-12-13'))).toBe(0.0051);
-      expect(repo.getIPCAForDate(new Date('2020-01-15'))).toBe(0.0115);
-      expect(repo.getIPCAForDate(new Date('2020-03-13'))).toBe(0.0025);
-      expect(repo.getIPCAForDate(new Date('2020-04-15'))).toBe(0.0007);
+      expect(repo.getIPCAForDate(new Date('2019-11-01'))).toBeCloseTo(0.0051, 8);
+      expect(repo.getIPCAForDate(new Date('2019-12-01'))).toBeCloseTo(0.0115, 8);
+      expect(repo.getIPCAForDate(new Date('2020-02-01'))).toBeCloseTo(0.0025, 8);
+      expect(repo.getIPCAForDate(new Date('2020-03-01'))).toBeCloseTo(0.0007, 8);
     });
 
     it('should return null for days without IPCA publication inside the period with historical dates', () => {

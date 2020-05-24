@@ -1,8 +1,10 @@
 import { newRate } from './interest-rates';
+import { newRepositoryWithProjectedValues } from '../repositories/dates-and-taxes';
 import {
   newDateGenerator,
   newInterestCalculator,
   newInterestCalculatorNominalValue,
+  newInflationCalculatorNominalValue,
   newCustodyFeeCalculator,
   newAdjusmentFactorCalculator,
   newValueAdjuster,
@@ -103,6 +105,65 @@ describe('newInterestCalculatorNominalValue', () => {
     });
     it('given an object without a nominalValue field, returns a clone of that object where the nominalValue is equal to defaultValue', () => {
       expect(interestCalculatorNominalValue({ })).toStrictEqual({ nominalValue: defaultValue });
+    });
+  });
+});
+
+describe('newInflationCalculatorNominalValue', () => {
+  const repo = newRepositoryWithProjectedValues();
+  const ratesRepository = ({ getIPCAForDate: repo.getIPCAForDate });
+
+  it('should return a function', () => {
+    expect(newInflationCalculatorNominalValue()).toBeInstanceOf(Function);
+  });
+
+  describe('given a rate, should return a function that accepts an object with a nominalValue and a date field and', () => {
+    it('returns a clone of that object where the nominalValue is adjusted by the inflation when the the next business day is the 15th or the first business day after the 15th', () => {
+      const inflationCalculatorNominalValue = newInflationCalculatorNominalValue(
+        0, ratesRepository,
+      );
+      expect(inflationCalculatorNominalValue({ date: new Date('2019-02-15'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2019-02-15'), nominalValue: 10032 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-01-15'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-01-15'), nominalValue: 10115 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-02-14'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-02-14'), nominalValue: 10021 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-03-13'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-03-13'), nominalValue: 10025 });
+    });
+
+    it('returns a clone of that object where the nominalValue is not changed', () => {
+      const inflationCalculatorNominalValue = newInflationCalculatorNominalValue(
+        0, ratesRepository,
+      );
+      expect(inflationCalculatorNominalValue({ date: new Date('2019-02-14'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2019-02-14'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2019-02-16'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2019-02-16'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2019-02-17'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2019-02-17'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2019-02-18'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2019-02-18'), nominalValue: 10000 });
+
+
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-01-14'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-01-14'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-01-16'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-01-16'), nominalValue: 10000 });
+
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-02-13'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-02-13'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-02-15'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-02-15'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-02-16'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-02-16'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-02-17'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-02-17'), nominalValue: 10000 });
+
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-03-12'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-03-12'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-03-14'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-03-14'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-03-15'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-03-15'), nominalValue: 10000 });
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-03-16'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-03-16'), nominalValue: 10000 });
+    });
+  });
+
+  describe('given a rate and a defaultValue, should return a function that', () => {
+    const defaultValue = 500;
+    const inflationCalculatorNominalValue = newInflationCalculatorNominalValue(
+      defaultValue, ratesRepository,
+    );
+
+    it('accepts an object with a nominalValue and a date field, and returns a clone of that object where the nominalValue has interest accumulated according to the rate', () => {
+      expect(inflationCalculatorNominalValue({ date: new Date('2020-01-15'), nominalValue: 10000 })).toStrictEqual({ date: new Date('2020-01-15'), nominalValue: 10115 });
+    });
+    it('given an object without a nominalValue field, returns a clone of that object where the nominalValue is equal to defaultValue', () => {
+      expect(inflationCalculatorNominalValue({ })).toStrictEqual({ nominalValue: defaultValue });
     });
   });
 });

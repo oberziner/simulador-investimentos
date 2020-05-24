@@ -22,7 +22,7 @@ const ipcaRepo = {
     const date = new Date(i.date);
     return {
       date,
-      ipca: i.ipca,
+      ipca: i.ipca / 100,
     };
   }),
   lastHistoricalDate: new Date('2020-04-15'),

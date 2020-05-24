@@ -4,6 +4,7 @@ import {
   differenceDays,
   previousDateWithDayOfMonth,
   nextDateWithDayOfMonth,
+  firstDayOfPreviousMonth,
 } from './dates';
 
 describe('getNextDay', () => {
@@ -68,5 +69,15 @@ describe('nextDateWithDayOfMonth', () => {
     expect(nextDateWithDayOfMonth(new Date('2020-01-15'), 15)).toStrictEqual(new Date('2020-01-15'));
     expect(nextDateWithDayOfMonth(new Date('2020-01-16'), 15)).toStrictEqual(new Date('2020-02-15'));
     expect(nextDateWithDayOfMonth(new Date('2020-02-10'), 15)).toStrictEqual(new Date('2020-02-15'));
+  });
+});
+
+describe('firstDayOfPreviousMonth', () => {
+  it('should return the first day of the previous month', () => {
+    expect(firstDayOfPreviousMonth(new Date('2020-04-15'))).toStrictEqual(new Date('2020-03-01'));
+    expect(firstDayOfPreviousMonth(new Date('2020-04-01'))).toStrictEqual(new Date('2020-03-01'));
+    expect(firstDayOfPreviousMonth(new Date('2020-01-02'))).toStrictEqual(new Date('2019-12-01'));
+    expect(firstDayOfPreviousMonth(new Date('2020-01-01'))).toStrictEqual(new Date('2019-12-01'));
+    expect(firstDayOfPreviousMonth(new Date('2019-12-31'))).toStrictEqual(new Date('2019-11-01'));
   });
 });

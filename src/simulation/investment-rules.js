@@ -1,4 +1,4 @@
-import { getNextDay, isBusinessDay, differenceDays, previousDateWithDayOfMonth, nextDateWithDayOfMonth } from './dates';
+import { getNextDay, isBusinessDay, differenceDays, previousDateWithDayOfMonth, nextDateWithDayOfMonth, firstDayOfPreviousMonth } from './dates';
 import { differenceBusinessDays, nextBusinessday } from '../repositories/dates-and-taxes';
 import { newRate } from './interest-rates';
 
@@ -50,15 +50,18 @@ export const newInterestCalculatorNominalValue = (defaultValue, ratesRepo) => (p
   return newObject;
 };
 
-// TODO: NEEDS TEST
 export const newInflationCalculatorNominalValue = (defaultValue, ratesRepo) => (prev) => {
   const newObject = Object.assign({}, prev);
   const { nominalValue, date } = newObject;
 
   if (nominalValue) {
-    const actualRate = ratesRepo.getIPCAForDate(date);
-    if (actualRate) {
-      newObject.nominalValue = trunc(nominalValue * (1 + actualRate), 6);
+    if (isBusinessDay(date)) {
+      const liquidationDate = nextBusinessday(date).date;
+      if ((date.getUTCDate() <= 15) && (liquidationDate.getUTCDate() > 15)) {
+        const prevMonth = firstDayOfPreviousMonth(date);
+        const actualRate = ratesRepo.getIPCAForDate(prevMonth);
+        newObject.nominalValue = trunc(nominalValue * (1 + actualRate), 6);
+      }
     }
   } else {
     newObject.nominalValue = defaultValue;

@@ -30,3 +30,10 @@ export const nextDateWithDayOfMonth = (date, day) => {
   }
   return new Date(Date.UTC(date.getUTCFullYear() + 1, 0, day, 0));
 };
+
+export const firstDayOfPreviousMonth = (date) => {
+  if (date.getUTCMonth() > 0) {
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - 1, 1));
+  }
+  return new Date(Date.UTC(date.getUTCFullYear() - 1, 11, 1));
+};
