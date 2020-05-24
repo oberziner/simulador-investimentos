@@ -48,5 +48,8 @@ describe('tesouro sold before due date', () => {
 
     expect(tesouro.steps[47].date).toStrictEqual(new Date('2020-02-18'));
     expect(tesouro.steps[47].value).toBeCloseTo(2986.39, 2);
+
+    expect(tesouro.steps[56].date).toStrictEqual(new Date('2020-02-27'));
+    expect(tesouro.steps[56].value).toBeCloseTo(2976.20, 2);
   });
 });

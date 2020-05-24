@@ -353,8 +353,8 @@ describe('repositoryWithFuture', () => {
       expect(repo.getTesouroIPCATaxes(new Date('2020-01-02')).buyTax).toBe(2.28);
       expect(repo.getTesouroIPCATaxes(new Date('2020-01-02')).sellTax).toBe(2.40);
       expect(repo.getTesouroIPCATaxes(new Date('2020-01-03')).sellTax).toBe(2.48);
-      expect(repo.getTesouroIPCATaxes(new Date('2020-04-29')).buyTax).toBe(2.93);
-      expect(repo.getTesouroIPCATaxes(new Date('2020-04-29')).sellTax).toBe(3.05);
+      expect(repo.getTesouroIPCATaxes(new Date('2020-05-21')).buyTax).toBe(2.53);
+      expect(repo.getTesouroIPCATaxes(new Date('2020-05-21')).sellTax).toBe(2.65);
     });
 
     it('should return the tax for the previous business day for weekends and holidays inside the period with historical dates', () => {
@@ -367,8 +367,8 @@ describe('repositoryWithFuture', () => {
         buyTax: 4.42,
         sellTax: 5.42,
       });
-      expect(repo.getTesouroIPCATaxes(new Date('2020-04-30')).buyTax).toBe(4.42);
-      expect(repo.getTesouroIPCATaxes(new Date('2020-04-30')).sellTax).toBe(5.42);
+      expect(repo.getTesouroIPCATaxes(new Date('2020-05-22')).buyTax).toBe(4.42);
+      expect(repo.getTesouroIPCATaxes(new Date('2020-05-22')).sellTax).toBe(5.42);
       expect(repo.getTesouroIPCATaxes(new Date('2020-06-15')).buyTax).toBe(4.42);
       expect(repo.getTesouroIPCATaxes(new Date('2020-06-15')).sellTax).toBe(5.42);
       expect(repo.getTesouroIPCATaxes(new Date('2055-03-15')).buyTax).toBe(4.42);

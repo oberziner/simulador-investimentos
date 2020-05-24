@@ -1,27 +1,38 @@
-/* eslint no-console: "off", import/no-unresolved: "off",
-  prefer-template: "off", import/no-extraneous-dependencies: "off" */
-
-const nodeXls = require('xls-to-json');
 const fs = require('fs');
+const readline = require('readline');
 
-nodeXls({
-  input: 'NTN-B_Principal_2020.xls', // input xls
-  output: null, // output json
-  rowsToSkip: 1,
-}, (err, result) => {
-  if (err) {
-    console.error(err);
-  } else {
-    const data = result.map((i) => {
-      const values = i.Dia.split('/');
-      const buyTax = i['Taxa Compra Manhã'].slice(0, -1);
-      const sellTax = i['Taxa Venda Manhã'].slice(0, -1);
-      return {
-        date: new Date(values[2], values[1] - 1, values[0]).toISOString().substring(0, 10),
-        buyTax,
-        sellTax,
-      };
-    });
-    fs.writeFileSync('output.json', JSON.stringify(data, null, 2));
+const fileStream = fs.createReadStream('PrecoTaxaTesouroDireto.csv');
+
+const rl = readline.createInterface({
+  input: fileStream,
+  crlfDelay: Infinity,
+});
+
+const parseDate = (dateStr) => {
+  const [day, month, year] = dateStr.split('/');
+  return `${year}-${month}-${day}`;
+};
+
+const data = [];
+
+rl.on('line', (input) => {
+  const values = input.split(';');
+  const tipo = values[0];
+  const vencimento = parseDate(values[1]);
+  const date = parseDate(values[2]);
+  if ((tipo === 'Tesouro IPCA+') && (vencimento === '2024-08-15') && (date > '2019')) {
+    const buyTax = values[3].replace(',', '.');
+    const sellTax = values[4].replace(',', '.');
+    const object = {
+      date,
+      buyTax,
+      sellTax,
+    };
+    data.push(object);
   }
+});
+
+rl.on('close', () => {
+  data.sort((a, b) => (a.date > b.date ? 1 : -1));
+  fs.writeFileSync('output.json', JSON.stringify(data, null, 2));
 });
