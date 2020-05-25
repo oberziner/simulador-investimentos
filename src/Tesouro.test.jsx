@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { Tesouro } from './Tesouro';
@@ -15,15 +15,12 @@ describe('tesouro component', () => {
       selicValue: newRate(0.0415, 'year252'),
     };
 
-    const { getByText, getByLabelText } = render(<Tesouro
+    const { getByText } = render(<Tesouro
       values={values}
       onInvestmentAdd={mockCallback}
     />);
 
-    fireEvent.change(getByLabelText('Data de vencimento:'), { target: { value: '2025-03-01' } });
-    expect(getByLabelText('Data de vencimento:')).toHaveValue('2025-03-01');
-
-    const tesouroButton = getByText('(T)esouro');
+    const tesouroButton = getByText('(T)esouro SELIC 2025');
     tesouroButton.click();
 
     expect(mockCallback.mock.calls).toHaveLength(1);

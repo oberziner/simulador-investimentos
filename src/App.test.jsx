@@ -77,23 +77,22 @@ describe('app', () => {
 
   it('should have a button to add a new Tesouro investment', () => new Promise((done) => {
     const { getByRole, getByText, getByLabelText } = render(<App />);
-    fireEvent.change(getByLabelText('Valor:'), { target: { value: '5000' } });
-    fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2019-05-01' } });
-    fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2019-12-01' } });
-    fireEvent.change(getByLabelText('Data de vencimento:'), { target: { value: '2019-12-01' } });
-    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '5' } });
-    const tesouroButton = getByText((text, element) => (text === '(T)esouro')
+    fireEvent.change(getByLabelText('Valor:'), { target: { value: '10524.89' } });
+    fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2020-02-21' } });
+    fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2020-10-26' } });
+    fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4.15' } });
+    const tesouroButton = getByText((text, element) => (text === '(T)esouro SELIC 2025')
       && (element.tagName === 'BUTTON'));
 
     tesouroButton.click();
 
     waitForElement(() => getByRole('heading'))
       .then((element) => {
-        expect(element.parentNode).toHaveTextContent(/^Tesouro Direto 5% a.a.Data inicio: 2019-05-01Data fim: 2019-12-01Valor inicial: R\$ 5.000,00/,
+        expect(element.parentNode).toHaveTextContent(/^Tesouro Direto 4.15% a.a.Data inicio: 2020-02-21Data fim: 2020-10-26Valor inicial: R\$ 10.524,89/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/^1 - 2019-12-01R\$ 5.173,35/,
+        expect(getByRole('table')).toHaveTextContent(/^1 - 2020-10-26R\$ 10.807,55/,
           { normalizeWhitespace: true });
-        expect(getByRole('table')).toHaveTextContent(/215 - 2019-05-01R\$ 4.999,70$/,
+        expect(getByRole('table')).toHaveTextContent(/249 - 2020-02-21R\$ 10.519,63$/,
           { normalizeWhitespace: true });
         done();
       });
