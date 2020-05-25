@@ -13,7 +13,10 @@ const parseDate = (dateStr) => {
   return `${year}-${month}-${day}`;
 };
 
-const data = [];
+const data = {
+  ipca: [],
+  prefixado: [],
+};
 
 rl.on('line', (input) => {
   const values = input.split(';');
@@ -28,11 +31,22 @@ rl.on('line', (input) => {
       buyTax,
       sellTax,
     };
-    data.push(object);
+    data.ipca.push(object);
+  }
+  if ((tipo === 'Tesouro Prefixado') && (vencimento === '2023-01-01') && (date > '2019')) {
+    const buyTax = values[3].replace(',', '.');
+    const sellTax = values[4].replace(',', '.');
+    const object = {
+      date,
+      buyTax,
+      sellTax,
+    };
+    data.prefixado.push(object);
   }
 });
 
 rl.on('close', () => {
-  data.sort((a, b) => (a.date > b.date ? 1 : -1));
+  data.ipca.sort((a, b) => (a.date > b.date ? 1 : -1));
+  data.prefixado.sort((a, b) => (a.date > b.date ? 1 : -1));
   fs.writeFileSync('output.json', JSON.stringify(data, null, 2));
 });

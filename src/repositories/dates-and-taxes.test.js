@@ -385,4 +385,43 @@ describe('repositoryWithFuture', () => {
       expect(repo.getTesouroIPCATaxes(new Date('2055-03-06')).sellTax).toBe(5.42);
     });
   });
+
+  describe('getTesouroPrefixadoTaxes', () => {
+    it('should return the historical rate for dates inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-01-02')).buyTax).toBe(5.75);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-01-02')).sellTax).toBe(5.87);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-01-03')).sellTax).toBe(5.96);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-05-21')).buyTax).toBe(4.62);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-05-21')).sellTax).toBe(4.74);
+    });
+
+    it('should return the tax for the previous business day for weekends and holidays inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-02-23')).buyTax).toBe(5.25);
+    });
+
+    it('should return the default rate for dates after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        buyTax: 4.42,
+        sellTax: 5.42,
+      });
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-05-22')).buyTax).toBe(4.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-05-22')).sellTax).toBe(5.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-06-15')).buyTax).toBe(4.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-06-15')).sellTax).toBe(5.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2055-03-15')).buyTax).toBe(4.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2055-03-15')).sellTax).toBe(5.42);
+    });
+    it('should return the default rate for weekends and holidays after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        buyTax: 4.42,
+        sellTax: 5.42,
+      });
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-06-10')).buyTax).toBe(4.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2020-06-10')).sellTax).toBe(5.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2055-03-06')).buyTax).toBe(4.42);
+      expect(repo.getTesouroPrefixadoTaxes(new Date('2055-03-06')).sellTax).toBe(5.42);
+    });
+  });
 });
