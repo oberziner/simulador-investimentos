@@ -13,24 +13,34 @@ import { newRate } from './interest-rates';
 const newTesouroSeq = (dateGenerator,
   custodyFeeCalculator,
   adjusmentFactorCalculator,
-  valueAdjuster) => f.newSequence(
+  valueAdjuster,
+  nominalValue) => f.newSequence(
   (prev) => {
     const nextDayCalculated = dateGenerator(prev);
     const adjusmentFactorCalculated = adjusmentFactorCalculator(nextDayCalculated);
     const custodyFeeAdded = custodyFeeCalculator(adjusmentFactorCalculated);
-    custodyFeeAdded.projectedNominalValue = 1000; // Tesouro Prefixado nominal value is always 1000
+    custodyFeeAdded.projectedNominalValue = nominalValue;
     const adjustedValue = valueAdjuster(custodyFeeAdded);
 
     return adjustedValue;
   },
 );
 
-export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sellingDate) => {
+const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium) => {
+  const adjusmentFactorCalculator = newAdjusmentFactorCalculator(endDate, {
+    getAdjustmentRate: () => buyPremium,
+  });
+  const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
+  const projectedNominalValue = initialValue / adjustmentFactor;
+
+  return projectedNominalValue;
+};
+
+export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sellingDate,
+  buyRate, sellRate) => {
   const repof = newRepositoryWithProjectedValues({
-    selic: {
-      dailyRate: () => rate.dailyRate() + 1,
-      yearlyRate: () => rate.yearly252Rate() * 100,
-    },
+    buyTax: buyRate,
+    sellTax: sellRate,
   });
 
   const repo = {
@@ -40,13 +50,15 @@ export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sell
     },
   };
 
-  const nominalValue = 1000;
+  const nominalValue = nominalValueFromBuyPrice(startDate, endDate, initialValue,
+    repof.getTesouroPrefixadoTaxes(startDate).buyTax / 100);
 
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
     newCustodyFeeCalculator(startDate, newRate(0.0025, 'year365')),
     newAdjusmentFactorCalculator(endDate, repo),
     newValueAdjuster(),
+    nominalValue,
   );
 
   const steps = [];
