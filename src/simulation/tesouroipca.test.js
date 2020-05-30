@@ -3,7 +3,7 @@ import { newRate } from './interest-rates';
 
 describe('tesouro sold before due date', () => {
   it('wawa should be calculated correctly', () => {
-    const tesouro = newTesouroIPCA(new Date('2020-01-02'), 2955.867824, newRate(0.0415, 'year252'), new Date('2024-08-15'), new Date('2020-06-01'));
+    const tesouro = newTesouroIPCA(new Date('2020-01-02'), 2955.867824, newRate(0.04, 'year252'), new Date('2024-08-15'), new Date('2020-06-01'));
 
     // expect(JSON.stringify(tesouro.steps.splice(43, 2), null, 2)).toBeNull();
 
@@ -60,5 +60,18 @@ describe('tesouro sold before due date', () => {
 
     expect(tesouro.steps[113].date).toStrictEqual(new Date('2020-04-24'));
     expect(tesouro.steps[113].value).toBeCloseTo(2966.69, 2);
+  });
+});
+
+describe('tesouro in the future', () => {
+  it('should be calculated correctly, using projected values', () => {
+    const tesouro = newTesouroIPCA(new Date('2023-01-02'), 10000, newRate(0.04, 'year252'), new Date('2035-05-15'), new Date('2035-05-15'), 4.26, 4.26);
+
+    // expect(JSON.stringify(tesouro.steps.splice(4516, 2), null, 2)).toBeNull();
+
+    expect(tesouro.steps).toHaveLength(4517);
+
+    expect(tesouro.steps[4516].date).toStrictEqual(new Date('2035-05-15'));
+    expect(tesouro.steps[4516].value).toBeCloseTo(27158.71, 2); // Calculadora tesouro says 27108.86
   });
 });

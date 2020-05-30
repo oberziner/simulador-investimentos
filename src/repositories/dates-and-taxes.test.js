@@ -297,11 +297,11 @@ describe('repositoryWithFuture', () => {
       const repo = newRepositoryWithProjectedValues({
         ipca: 4.42,
       });
-      expect(repo.getIPCAForDate(new Date('2020-05-15'))).toBe(4.42);
-      expect(repo.getIPCAForDate(new Date('2020-06-15'))).toBe(4.42);
-      expect(repo.getIPCAForDate(new Date('2055-03-15'))).toBe(4.42);
+      expect(repo.getIPCAForDate(new Date('2020-05-01'))).toBe(4.42);
+      expect(repo.getIPCAForDate(new Date('2020-06-01'))).toBe(4.42);
+      expect(repo.getIPCAForDate(new Date('2055-03-01'))).toBe(4.42);
 
-      expect(repo.getIPCAForDate(new Date('2020-08-15'))).toBe(4.42); // This should return null, since 15th is a saturday
+      expect(repo.getIPCAForDate(new Date('2020-08-01'))).toBe(4.42); // This should return null, since 15th is a saturday
     });
     it('should return null for weekends and holidays after the last date with historical data', () => {
       const repo = newRepositoryWithProjectedValues({

@@ -33,34 +33,36 @@ const newTesouroIPCASeq = (dateGenerator,
   },
 );
 
-const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium) => {
+const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, projectedIPCA) => {
   const adjusmentFactorCalculator = newAdjusmentFactorCalculator(endDate, {
     getAdjustmentRate: () => buyPremium,
   });
   const { adjustmentFactor } = adjusmentFactorCalculator({ date: startDate });
   const projectedNominalValue = initialValue / adjustmentFactor;
-  // console.log(initialValue, adjustmentFactor, projectedNominalValue)
 
   const previousIPCADate = previousDateWithDayOfMonth(startDate, 15);
   const nextIPCADate = nextDateWithDayOfMonth(startDate, 15);
   const daysSinceLastIPCADate = differenceDays(previousIPCADate, startDate) + 1;
   const daysBetweenLastIPCADateAndNextIPCADate = differenceDays(previousIPCADate, nextIPCADate);
 
-  // console.log(startDate, daysSinceLastIPCADate, daysBetweenLastIPCADateAndNextIPCADate)
-
-  const ipcaprojetado = 0.0105;
   const vna = projectedNominalValue
-    / (1 + ipcaprojetado) ** (daysSinceLastIPCADate / daysBetweenLastIPCADateAndNextIPCADate);
+    / (1 + projectedIPCA) ** (daysSinceLastIPCADate / daysBetweenLastIPCADateAndNextIPCADate);
 
   return vna;
 };
 
-export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDate) => {
+export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDate,
+  buyRate, sellRate) => {
+  // TODO handle startDate not being business day
   const repof = newRepositoryWithProjectedValues({
     selic: {
       dailyRate: () => rate.dailyRate() + 1,
       yearlyRate: () => rate.yearly252Rate() * 100,
     },
+    buyTax: buyRate,
+    sellTax: sellRate,
+    ipca: rate.monthlyRate(),
+    projectedIpca: rate.monthlyRate(),
   });
 
   const repo = {
@@ -76,9 +78,11 @@ export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDa
     },
   };
 
-  const yearlyRate = repof.getSelicForPreviousBusinessDay(startDate).yearlyRate();
   const nominalValue = nominalValueFromBuyPrice(startDate,
-    endDate, initialValue, 0.0228, yearlyRate);
+    endDate,
+    initialValue,
+    repof.getTesouroIPCATaxes(startDate).buyTax / 100,
+    repof.getProjectedIPCAForDate(startDate));
 
   const seq = newTesouroIPCASeq(
     newDateGenerator(startDate),

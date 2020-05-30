@@ -189,7 +189,7 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
     if (obj) {
       return obj.ipca;
     }
-    if ((date > ipcaRepo.lastHistoricalDate) && (date.getUTCDate() === 15)) {
+    if ((date > ipcaRepo.lastHistoricalDate) && (date.getUTCDate() === 1)) {
       return defaultValues.ipca;
     }
     return null;
