@@ -58,4 +58,31 @@ describe('tesouro component', () => {
       dueDate: new Date('2024-08-15'),
     });
   });
+
+  it('should call callback on investment button click with tesouro Prefixado', () => {
+    const mockCallback = jest.fn();
+
+    const values = {
+      initialValue: 846.338,
+      startDate: new Date('2020-01-02'),
+      endDate: new Date('2020-06-01'),
+      selicValue: newRate(0.04, 'year252'),
+    };
+
+    const { getByText } = render(<Tesouro
+      type="prefix"
+      values={values}
+      onInvestmentAdd={mockCallback}
+    />);
+
+    const tesouroButton = getByText('(T)esouro Prefixado 2023');
+    tesouroButton.click();
+
+    expect(mockCallback.mock.calls).toHaveLength(1);
+    expect(mockCallback.mock.calls[0][0]).toMatchObject({
+      title: 'Tesouro Direto Prefixado',
+      endDate: new Date('2020-06-01'),
+      dueDate: new Date('2023-01-01'),
+    });
+  });
 });

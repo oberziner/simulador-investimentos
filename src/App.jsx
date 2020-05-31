@@ -81,6 +81,11 @@ class App extends Component {
             values={values}
             onInvestmentAdd={this.addInvestment}
           />
+          <Tesouro
+            type="prefix"
+            values={values}
+            onInvestmentAdd={this.addInvestment}
+          />
         </div>
 
         <div>

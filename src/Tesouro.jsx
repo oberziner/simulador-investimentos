@@ -1,13 +1,33 @@
 import React, { Component } from 'react';
 import { newTesouro } from './simulation/tesouro';
 import { newTesouroIPCA } from './simulation/tesouroipca';
+import { newTesouroPrefixado } from './simulation/tesouroprefixado';
 
 export class Tesouro extends Component {
-  static tesouroFactory({ startDate, initialValue, endDate, selicValue }, type) {
-    if (type === 'selic') {
-      return newTesouro(startDate, initialValue, selicValue, new Date('2025-03-01'), endDate);
+  static tesouroFactory({ startDate, initialValue, endDate, selicValue }, tesouroType) {
+    switch (tesouroType) {
+      case 'selic':
+        return newTesouro(startDate, initialValue, selicValue, new Date('2025-03-01'), endDate);
+      case 'ipca':
+        return newTesouroIPCA(startDate, initialValue, selicValue, new Date('2024-08-15'), endDate, 2.28, 2.28);
+      case 'prefix':
+        return newTesouroPrefixado(startDate, initialValue, selicValue, new Date('2023-01-01'), endDate, 4.28, 4.28);
+      default:
+        throw new Error(`Invalid tesouroType: ${tesouroType}`);
     }
-    return newTesouroIPCA(startDate, initialValue, selicValue, new Date('2024-08-15'), endDate, 2.28, 2.28);
+  }
+
+  static getButtonText(tesouroType) {
+    switch (tesouroType) {
+      case 'selic':
+        return '(T)esouro SELIC 2025';
+      case 'ipca':
+        return '(T)esouro IPCA 2024';
+      case 'prefix':
+        return '(T)esouro Prefixado 2023';
+      default:
+        throw new Error(`Invalid tesouroType: ${tesouroType}`);
+    }
   }
 
   constructor(props) {
@@ -29,10 +49,9 @@ export class Tesouro extends Component {
 
   render() {
     const { values, type } = this.props;
-    const buttonTitle = type === 'selic' ? '(T)esouro SELIC 2025' : '(T)esouro IPCA 2024';
     return (
       <div className="input-list">
-        <button type="button" accessKey="t" onClick={this.addTesouro.bind(this, values)}>{buttonTitle}</button>
+        <button type="button" accessKey="t" onClick={this.addTesouro.bind(this, values)}>{Tesouro.getButtonText(type)}</button>
       </div>
     );
   }

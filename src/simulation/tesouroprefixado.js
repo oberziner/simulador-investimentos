@@ -74,7 +74,7 @@ export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sell
   const netValue = grossValue - totalTaxes - totalCustodyFee;
 
   return {
-    title: `Tesouro Direto ${rate.toString()}`,
+    title: 'Tesouro Direto Prefixado',
     startDate,
     endDate: sellingDate,
     dueDate: endDate,
