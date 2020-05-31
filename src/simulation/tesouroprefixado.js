@@ -50,8 +50,8 @@ export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sell
     },
   };
 
-  const nominalValue = nominalValueFromBuyPrice(startDate, endDate, initialValue,
-    repof.getTesouroPrefixadoTaxes(startDate).buyTax / 100);
+  const buyTax = repof.getTesouroPrefixadoTaxes(startDate).buyTax / 100;
+  const nominalValue = nominalValueFromBuyPrice(startDate, endDate, initialValue, buyTax);
 
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
@@ -79,6 +79,7 @@ export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sell
     endDate: sellingDate,
     dueDate: endDate,
     initialValue,
+    buyTax,
     totalTaxes,
     grossValue,
     nominalValue,

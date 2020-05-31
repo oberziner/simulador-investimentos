@@ -1,6 +1,8 @@
 import React from 'react';
 import f from './format';
 
+const stepDetails = (step) => (step.sellTax ? `Taxa de venda: ${step.sellTax}` : '');
+
 const Investment = ({ investment, onRemoveClick }) => (
   <div className="investment">
     <h2 className="investment-title">
@@ -17,6 +19,10 @@ const Investment = ({ investment, onRemoveClick }) => (
     <div className="investment-line">
       <p>Valor inicial: </p>
       <p>{`${f.formatMoney(investment.initialValue)}`}</p>
+    </div>
+    <div className="investment-line">
+      <p>Taxa de compra: </p>
+      <p>{`${(investment.buyTax || 0) * 100}%`}</p>
     </div>
     <div className="investment-line">
       <p>Valor Bruto: </p>
@@ -45,7 +51,7 @@ const Investment = ({ investment, onRemoveClick }) => (
             <td>
               {`${f.formatDate(obj.date)}`}
             </td>
-            <td>
+            <td title={stepDetails(obj)}>
               {f.formatMoney(obj.value)}
             </td>
           </tr>

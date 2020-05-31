@@ -78,10 +78,11 @@ export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDa
     },
   };
 
+  const buyTax = repof.getTesouroIPCATaxes(startDate).buyTax / 100;
   const nominalValue = nominalValueFromBuyPrice(startDate,
     endDate,
     initialValue,
-    repof.getTesouroIPCATaxes(startDate).buyTax / 100,
+    buyTax,
     repof.getProjectedIPCAForDate(startDate));
 
   const seq = newTesouroIPCASeq(
@@ -113,6 +114,7 @@ export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDa
     endDate: sellingDate,
     dueDate: endDate,
     initialValue,
+    buyTax,
     totalTaxes,
     grossValue,
     netValue,

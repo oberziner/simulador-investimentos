@@ -47,6 +47,9 @@ describe('tesouro object', () => {
   it('should have an grossValue', () => {
     expect(tesouro.grossValue).toBeCloseTo(1010.17, 2);
   });
+  it('should have an buyTax', () => {
+    expect(tesouro.buyTax).toBeCloseTo(0.0002, 2);
+  });
   it('.netValue should return the grossValue minus taxes', () => {
     expect(tesouro.netValue).toBeCloseTo(1007.47, 2);
   });

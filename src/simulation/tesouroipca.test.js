@@ -16,6 +16,7 @@ describe('tesouro sold before due date', () => {
     // expect(tesouro.totalCustodyFee).toBeCloseTo(4.33, 2);
     // expect(tesouro.grossValue).toBeCloseTo(10095.55, 2);
     // expect(tesouro.netValue).toBeCloseTo(10075.45, 2);
+    expect(tesouro.buyTax).toBeCloseTo(0.0228, 6);
     expect(tesouro.totalDays).toBe(150);
     expect(tesouro.nominalValue).toBeCloseTo(3257.583827, 6);
 

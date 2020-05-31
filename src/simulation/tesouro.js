@@ -66,9 +66,10 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
     },
   };
 
+  const buyTax = 0.0002;
   const yearlyRate = repof.getSelicForPreviousBusinessDay(startDate).yearlyRate();
   const nominalValue = nominalValueFromBuyPrice(startDate,
-    endDate, initialValue, 0.0002, yearlyRate);
+    endDate, initialValue, buyTax, yearlyRate);
 
   const seq = newTesouroSeq(
     newDateGenerator(startDate),
@@ -98,6 +99,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
     endDate: sellingDate,
     dueDate: endDate,
     initialValue,
+    buyTax,
     totalTaxes,
     grossValue,
     netValue,
