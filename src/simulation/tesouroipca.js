@@ -107,7 +107,7 @@ export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDa
   const netValue = grossValue - totalTaxes - totalCustodyFee;
 
   return {
-    title: `Tesouro Direto IPCA${rate.toString()}`,
+    title: `Tesouro Direto IPCA ${rate.toString()}`,
     startDate,
     nominalValue,
     endDate: sellingDate,

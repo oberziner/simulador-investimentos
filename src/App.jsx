@@ -72,6 +72,12 @@ class App extends Component {
           />
 
           <Tesouro
+            type="selic"
+            values={values}
+            onInvestmentAdd={this.addInvestment}
+          />
+          <Tesouro
+            type="ipca"
             values={values}
             onInvestmentAdd={this.addInvestment}
           />
