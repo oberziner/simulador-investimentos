@@ -43,7 +43,8 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium, 
   return projectedNominalValue / (metaSelicDiaria.dailyRate() + 1);
 };
 
-export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) => {
+export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate,
+  buyTax, sellRate) => {
   const repof = newRepositoryWithProjectedValues({
     selic: {
       dailyRate: () => rate.dailyRate() + 1,
@@ -57,16 +58,14 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate) 
 
     getDailyRate: (date) => repof.getSelicForDate(date).dailyRate(),
     getAdjustmentRate: (date) => {
-      let actualRate = 0.0003;
       const obj = findDate(date);
       if (obj && obj.sellSelicTax) {
-        actualRate = obj.sellSelicTax;
+        return obj.sellSelicTax;
       }
-      return actualRate;
+      return sellRate;
     },
   };
 
-  const buyTax = 0.0002;
   const yearlyRate = repof.getSelicForPreviousBusinessDay(startDate).yearlyRate();
   const nominalValue = nominalValueFromBuyPrice(startDate,
     endDate, initialValue, buyTax, yearlyRate);

@@ -7,7 +7,7 @@ export class Tesouro extends Component {
   static tesouroFactory({ startDate, initialValue, endDate, selicValue }, tesouroType) {
     switch (tesouroType) {
       case 'selic':
-        return newTesouro(startDate, initialValue, selicValue, new Date('2025-03-01'), endDate);
+        return newTesouro(startDate, initialValue, selicValue, new Date('2025-03-01'), endDate, 0.0002, 0.0003);
       case 'ipca':
         return newTesouroIPCA(startDate, initialValue, selicValue, new Date('2024-08-15'), endDate, 2.28, 2.28);
       case 'prefix':
