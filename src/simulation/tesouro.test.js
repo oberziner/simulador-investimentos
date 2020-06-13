@@ -199,3 +199,15 @@ describe('tesouro sold before due date', () => {
     expect(tesouro.steps[64].totalCustodyFee).toBeCloseTo(4.33, 2);
   });
 });
+
+describe('tesouro in the future', () => {
+  it('should be calculated correctly, with a 1 year period', () => {
+    const tesouro = newTesouro(new Date('2025-01-02'), 10000, newRate(0.05, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'));
+    // There's also an implicit 0.0002 premium hardcoded
+
+    expect(tesouro.steps).toHaveLength(365);
+
+    expect(tesouro.steps[363].date).toStrictEqual(new Date('2025-12-31'));
+    expect(tesouro.steps[363].value).toBeCloseTo(10502.1, 2);
+  });
+});
