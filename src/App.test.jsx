@@ -76,11 +76,13 @@ describe('app', () => {
   }));
 
   it('should have a button to add a new Tesouro investment', () => new Promise((done) => {
-    const { getByRole, getByText, getByLabelText } = render(<App />);
+    const { getByRole, getByText, getByLabelText, getAllByLabelText } = render(<App />);
     fireEvent.change(getByLabelText('Valor:'), { target: { value: '10524.89' } });
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2020-02-21' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2020-10-26' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4.15' } });
+    fireEvent.change(getAllByLabelText('Taxa Compra:')[0], { target: { value: '0.0002' } });
+    fireEvent.change(getAllByLabelText('Taxa Venda:')[0], { target: { value: '0.0003' } });
     const tesouroButton = getByText((text, element) => (text === '(T)esouro SELIC 2025')
       && (element.tagName === 'BUTTON'));
 
