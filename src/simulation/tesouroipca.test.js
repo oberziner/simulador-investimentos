@@ -73,6 +73,6 @@ describe('tesouro in the future', () => {
     expect(tesouro.steps).toHaveLength(4517);
 
     expect(tesouro.steps[4516].date).toStrictEqual(new Date('2035-05-15'));
-    expect(tesouro.steps[4516].value).toBeCloseTo(27158.71, 2); // Calculadora tesouro says 27108.86
+    expect(tesouro.steps[4516].value).toBeCloseTo(27158.71, 2); // Calculadora tesouro says 27100.16
   });
 });
