@@ -65,14 +65,23 @@ describe('tesouro sold before due date', () => {
 });
 
 describe('tesouro in the future', () => {
-  it('should be calculated correctly, using projected values', () => {
-    const tesouro = newTesouroPrefixado(new Date('2023-01-01'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 4.28, 4.28);
+  it('should be calculated correctly, with a 1 year period', () => {
+    const tesouro = newTesouroPrefixado(new Date('2025-01-02'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 5, 5);
 
-    // expect(JSON.stringify(tesouro.steps.splice(1095, 2), null, 2)).toBeNull();
+    expect(tesouro.steps).toHaveLength(365);
 
-    expect(tesouro.steps).toHaveLength(1097);
+    expect(tesouro.steps[363].date).toStrictEqual(new Date('2025-12-31'));
+    expect(tesouro.steps[363].value).toBeCloseTo(10500.01, 2);
+  });
 
-    expect(tesouro.steps[1096].date).toStrictEqual(new Date('2026-01-01'));
-    expect(tesouro.steps[1096].value).toBeCloseTo(11339.73, 2); // Calculadora tesouro says 11339.79
+  it('should be calculated correctly, using a 3 year period', () => {
+    const tesouro = newTesouroPrefixado(new Date('2023-01-02'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 4.28, 4.28);
+
+    // expect(JSON.stringify(tesouro, null, 2)).toBeNull();
+
+    expect(tesouro.steps).toHaveLength(1096);
+
+    expect(tesouro.steps[1094].date).toStrictEqual(new Date('2025-12-31'));
+    expect(tesouro.steps[1094].value).toBeCloseTo(11337.85, 2); // Calculadora tesouro says 11337.86
   });
 });
