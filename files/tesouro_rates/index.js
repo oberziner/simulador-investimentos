@@ -14,8 +14,19 @@ const parseDate = (dateStr) => {
 };
 
 const data = {
-  ipca: [],
-  prefixado: [],
+  'Tesouro IPCA+': {
+    '2024-08-15': [],
+    '2026-08-15': [],
+    '2035-05-15': [],
+    '2045-05-15': [],
+  },
+  'Tesouro Prefixado': {
+    '2023-01-01': [],
+    '2026-01-01': [],
+  },
+  'Tesouro Selic': {
+    '2025-03-01': [],
+  },
 };
 
 rl.on('line', (input) => {
@@ -23,30 +34,27 @@ rl.on('line', (input) => {
   const tipo = values[0];
   const vencimento = parseDate(values[1]);
   const date = parseDate(values[2]);
-  if ((tipo === 'Tesouro IPCA+') && (vencimento === '2024-08-15') && (date > '2019')) {
-    const buyTax = values[3].replace(',', '.');
-    const sellTax = values[4].replace(',', '.');
-    const object = {
-      date,
-      buyTax,
-      sellTax,
-    };
-    data.ipca.push(object);
-  }
-  if ((tipo === 'Tesouro Prefixado') && (vencimento === '2023-01-01') && (date > '2019')) {
-    const buyTax = values[3].replace(',', '.');
-    const sellTax = values[4].replace(',', '.');
-    const object = {
-      date,
-      buyTax,
-      sellTax,
-    };
-    data.prefixado.push(object);
+  const ttipo = data[tipo];
+  if (ttipo) {
+    const array = ttipo[vencimento];
+    if (array) {
+      const buyTax = values[3].replace(',', '.');
+      const sellTax = values[4].replace(',', '.');
+      const object = {
+        date,
+        buyTax,
+        sellTax,
+      };
+      array.push(object);
+    }
   }
 });
 
 rl.on('close', () => {
-  data.ipca.sort((a, b) => (a.date > b.date ? 1 : -1));
-  data.prefixado.sort((a, b) => (a.date > b.date ? 1 : -1));
+  Object.keys(data).forEach((tipo) => {
+    Object.keys(data[tipo]).forEach((titulo) => {
+      data[tipo][titulo].sort((a, b) => (a.date > b.date ? 1 : -1));
+    });
+  });
   fs.writeFileSync('output.json', JSON.stringify(data, null, 2));
 });
