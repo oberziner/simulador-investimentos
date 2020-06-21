@@ -40,7 +40,7 @@ const projectedIpcaRepo = {
 };
 
 const tesouroIPCARatesRepo = {
-  data: tesouroIPCARatesJSON.ipca.map((i) => {
+  data: tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15'].map((i) => {
     const date = new Date(i.date);
     return {
       date,
@@ -49,12 +49,12 @@ const tesouroIPCARatesRepo = {
     };
   }),
   lastHistoricalDate: new Date(
-    tesouroIPCARatesJSON.ipca[tesouroIPCARatesJSON.ipca.length - 1].date,
+    tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15'][tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15'].length - 1].date,
   ),
 };
 
 const tesouroPrefixadoRatesRepo = {
-  data: tesouroIPCARatesJSON.prefixado.map((i) => {
+  data: tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01'].map((i) => {
     const date = new Date(i.date);
     return {
       date,
@@ -63,7 +63,7 @@ const tesouroPrefixadoRatesRepo = {
     };
   }),
   lastHistoricalDate: new Date(
-    tesouroIPCARatesJSON.prefixado[tesouroIPCARatesJSON.prefixado.length - 1].date,
+    tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01'][tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01'].length - 1].date,
   ),
 };
 
