@@ -50,6 +50,10 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate,
       dailyRate: () => rate.dailyRate() + 1,
       yearlyRate: () => rate.yearly252Rate() * 100,
     },
+    slic2025: {
+      buyTax: buyTax * 100,
+      sellTax: sellRate * 100
+    }
   });
 
   const repo = {
@@ -58,11 +62,8 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate,
 
     getDailyRate: (date) => repof.getSelicForDate(date).dailyRate(),
     getAdjustmentRate: (date) => {
-      const obj = findDate(date);
-      if (obj && obj.sellSelicTax) {
-        return obj.sellSelicTax();
-      }
-      return sellRate;
+      const obj = repof.getTesouroTaxes('slic2025', date);
+      return obj.sellTax / 100;
     },
   };
 

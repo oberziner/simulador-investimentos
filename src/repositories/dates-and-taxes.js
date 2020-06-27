@@ -8,8 +8,6 @@ import {
   isBusinessDay,
 } from '../simulation/dates';
 
-const breakDateForSelicTax = new Date('2020-02-29');
-
 const ipcaRepo = {
   data: ipcaJSON.map((i) => {
     const date = new Date(i.date);
@@ -51,50 +49,17 @@ const parseTesouroRates = (tesouroValues) => {
 const tesouroRatesRepo = {};
 tesouroRatesRepo['ipca2024'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15']);
 tesouroRatesRepo['pfix2023'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01']);
-
-const tesouroSelicRatesRepo = {
-  data: tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01'].map((i) => {
-    const date = new Date(i.date);
-    return {
-      date,
-      buyTax: +i.buyTax,
-      sellTax: +i.sellTax,
-    };
-  }),
-  lastHistoricalDate: new Date(
-    tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01'][tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01'].length - 1].date,
-  ),
-};
-
-const date24Dec2019 = new Date('2019-12-24');
-const date23Dec2019 = new Date('2019-12-23');
-const date31Dec2019 = new Date('2019-12-31');
-const date30Dec2019 = new Date('2019-12-30');
-
-const getTesouroSelicSellTax = (date) => () => {
-  let hackDate = date;
-  if (date.getTime() === date24Dec2019.getTime()) {
-    hackDate = date23Dec2019;
-  }
-  if (date.getTime() === date31Dec2019.getTime()) {
-    hackDate = date30Dec2019;
-  }
-
-  const obj = findDate(hackDate, tesouroSelicRatesRepo);
-  return obj.sellTax / 100;
-};
+tesouroRatesRepo['slic2025'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01']);
 
 const initializeRepository = (sourceJson) => {
   const dates = sourceJson.map((i) => {
     const date = new Date(i.date);
-    const sellSelicTax = getTesouroSelicSellTax(date);
     return {
       date,
       selic: {
         dailyRate: () => +i.dailySelic,
         yearlyRate: () => +i.yearlySelic,
       },
-      sellSelicTax,
     };
   });
 

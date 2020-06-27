@@ -82,7 +82,6 @@ describe('findDate', () => {
   it('should return the object with the taxes for a given date', () => {
     const obj = findDate(new Date('2020-02-26'));
     expect(obj.date).toStrictEqual(new Date('2020-02-26'));
-    expect(obj.sellSelicTax()).toStrictEqual(0.0003);
     expect(obj.selic.dailyRate()).toStrictEqual(1.00016137);
     expect(obj.selic.yearlyRate()).toStrictEqual(4.15);
   });
@@ -95,21 +94,12 @@ describe('findDate', () => {
     expect(findDate(new Date('2020-02-23'))).toBeNull();
     expect(findDate(new Date('2019-03-04'))).toBeNull();
   });
-  it('should return sellSelicTax as 0.0003 before 2020-02-29', () => {
-    expect(findDate(new Date('2020-02-03')).sellSelicTax()).toBe(0.0003);
-    expect(findDate(new Date('2020-02-26')).sellSelicTax()).toBe(0.0003);
-  });
-  it('should return sellSelicTax as 0.0004 after 2020-02-29', () => {
-    expect(findDate(new Date('2020-03-09')).sellSelicTax()).toBe(0.0004);
-    expect(findDate(new Date('2020-03-23')).sellSelicTax()).toBe(0.0004);
-  });
 });
 
 describe('findDateOrPreviousDate', () => {
   it('should return the object with the taxes for a given date', () => {
     const obj = findDateOrPreviousDate(new Date('2020-02-26'));
     expect(obj.date).toStrictEqual(new Date('2020-02-26'));
-    expect(obj.sellSelicTax()).toStrictEqual(0.0003);
     expect(obj.selic.dailyRate()).toStrictEqual(1.00016137);
     expect(obj.selic.yearlyRate()).toStrictEqual(4.15);
   });
@@ -145,7 +135,6 @@ describe('getPreviousBusinessDayRates', () => {
   it('should return the object with the taxes from the business day before the parameter', () => {
     const obj = getPreviousBusinessDayRates(new Date('2020-02-26'));
     expect(obj.date).toStrictEqual(new Date('2020-02-21'));
-    expect(obj.sellSelicTax()).toStrictEqual(0.0003);
     expect(obj.selic.dailyRate()).toStrictEqual(1.00016137);
     expect(obj.selic.yearlyRate()).toStrictEqual(4.15);
   });
@@ -360,12 +349,20 @@ describe('repositoryWithFuture', () => {
       expect(repo.getTesouroTaxes('pfix2023', new Date('2020-01-03')).sellTax).toBe(5.96);
       expect(repo.getTesouroTaxes('pfix2023', new Date('2020-05-21')).buyTax).toBe(4.62);
       expect(repo.getTesouroTaxes('pfix2023', new Date('2020-05-21')).sellTax).toBe(4.74);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2019-02-02')).buyTax).toBe(0.02);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2019-02-02')).sellTax).toBe(0.06);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2020-02-21')).sellTax).toBe(0.03);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2020-02-26')).sellTax).toBe(0.03);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2020-02-03')).sellTax).toBe(0.03);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2020-03-09')).sellTax).toBe(0.04);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2020-03-23')).sellTax).toBe(0.04);
     });
 
     it('should return the tax for the previous business day for weekends and holidays inside the period with historical dates', () => {
       const repo = newRepositoryWithProjectedValues();
       expect(repo.getTesouroTaxes('ipca2024', new Date('2020-02-23')).buyTax).toBe(2.16);
       expect(repo.getTesouroTaxes('pfix2023', new Date('2020-02-23')).buyTax).toBe(5.25);
+      expect(repo.getTesouroTaxes('slic2025', new Date('2020-02-25')).buyTax).toBe(0.02);
     });
 
     it('should return the default rate for dates after the last date with historical data', () => {
