@@ -39,18 +39,20 @@ const nominalValueFromBuyPrice = (startDate, endDate, initialValue, buyPremium) 
 export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sellingDate,
   buyRate, sellRate) => {
   const repof = newRepositoryWithProjectedValues({
-    buyTax: buyRate,
-    sellTax: sellRate,
+    pfix2023: {
+      buyTax: buyRate,
+      sellTax: sellRate,
+    }
   });
 
   const repo = {
     getAdjustmentRate: (date) => {
-      const obj = repof.getTesouroPrefixadoTaxes(date);
+      const obj = repof.getTesouroTaxes('pfix2023', date);
       return obj.sellTax / 100;
     },
   };
 
-  const buyTax = repof.getTesouroPrefixadoTaxes(startDate).buyTax / 100;
+  const buyTax = repof.getTesouroTaxes('pfix2023', startDate).buyTax / 100;
   const nominalValue = nominalValueFromBuyPrice(startDate, endDate, initialValue, buyTax);
 
   const seq = newTesouroSeq(

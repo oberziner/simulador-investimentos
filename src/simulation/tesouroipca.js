@@ -59,8 +59,10 @@ export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDa
       dailyRate: () => rate.dailyRate() + 1,
       yearlyRate: () => rate.yearly252Rate() * 100,
     },
-    buyTax: buyRate,
-    sellTax: sellRate,
+    ipca2024: {
+      buyTax: buyRate,
+      sellTax: sellRate,
+    },
     ipca: rate.monthlyRate(),
     projectedIpca: rate.monthlyRate(),
   });
@@ -73,12 +75,12 @@ export const newTesouroIPCA = (startDate, initialValue, rate, endDate, sellingDa
 
     getDailyRate: (date) => repof.getSelicForDate(date).dailyRate(),
     getAdjustmentRate: (date) => {
-      const obj = repof.getTesouroIPCATaxes(date);
+      const obj = repof.getTesouroTaxes('ipca2024', date);
       return obj.sellTax / 100;
     },
   };
 
-  const buyTax = repof.getTesouroIPCATaxes(startDate).buyTax / 100;
+  const buyTax = repof.getTesouroTaxes('ipca2024', startDate).buyTax / 100;
   const nominalValue = nominalValueFromBuyPrice(startDate,
     endDate,
     initialValue,

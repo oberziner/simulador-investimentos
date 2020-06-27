@@ -32,34 +32,6 @@ const projectedIpcaRepo = {
   lastHistoricalDate: new Date(projectedIpcaJSON[projectedIpcaJSON.length - 1].date),
 };
 
-const tesouroIPCARatesRepo = {
-  data: tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15'].map((i) => {
-    const date = new Date(i.date);
-    return {
-      date,
-      buyTax: +i.buyTax,
-      sellTax: +i.sellTax,
-    };
-  }),
-  lastHistoricalDate: new Date(
-    tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15'][tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15'].length - 1].date,
-  ),
-};
-
-const tesouroPrefixadoRatesRepo = {
-  data: tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01'].map((i) => {
-    const date = new Date(i.date);
-    return {
-      date,
-      buyTax: +i.buyTax,
-      sellTax: +i.sellTax,
-    };
-  }),
-  lastHistoricalDate: new Date(
-    tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01'][tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01'].length - 1].date,
-  ),
-};
-
 const parseTesouroRates = (tesouroValues) => {
   return {
     data: tesouroValues.map((i) => {
@@ -247,34 +219,6 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
     }
     if (date > projectedIpcaRepo.lastHistoricalDate && isBusinessDay(date)) {
       return defaultValues.projectedIpca;
-    }
-    return null;
-  },
-
-  getTesouroIPCATaxes: (date) => {
-    if (date > tesouroIPCARatesRepo.lastHistoricalDate) {
-      return defaultValues;
-    }
-    const obj = findDateOrPreviousDate(date, tesouroIPCARatesRepo);
-    if (obj) {
-      return {
-        buyTax: obj.buyTax,
-        sellTax: obj.sellTax,
-      };
-    }
-    return null;
-  },
-
-  getTesouroPrefixadoTaxes: (date) => {
-    if (date > tesouroPrefixadoRatesRepo.lastHistoricalDate) {
-      return defaultValues;
-    }
-    const obj = findDateOrPreviousDate(date, tesouroPrefixadoRatesRepo);
-    if (obj) {
-      return {
-        buyTax: obj.buyTax,
-        sellTax: obj.sellTax,
-      };
     }
     return null;
   },
