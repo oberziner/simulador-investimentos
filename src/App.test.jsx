@@ -81,8 +81,8 @@ describe('app', () => {
     fireEvent.change(getByLabelText('Data Inicial:'), { target: { value: '2020-02-21' } });
     fireEvent.change(getByLabelText('Data Final:'), { target: { value: '2020-10-26' } });
     fireEvent.change(getByLabelText('SELIC:'), { target: { value: '4.15' } });
-    fireEvent.change(getAllByLabelText('Taxa Compra:')[0], { target: { value: '0.0002' } });
-    fireEvent.change(getAllByLabelText('Taxa Venda:')[0], { target: { value: '0.0003' } });
+    fireEvent.change(getAllByLabelText('Taxa Compra:')[0], { target: { value: '0.02' } });
+    fireEvent.change(getAllByLabelText('Taxa Venda:')[0], { target: { value: '0.03' } });
     const tesouroButton = getByText((text, element) => (text === '(T)esouro SELIC 2025')
       && (element.tagName === 'BUTTON'));
 

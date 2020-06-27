@@ -8,11 +8,11 @@ export class Tesouro extends Component {
     tesouroType) {
     switch (tesouroType) {
       case 'selic':
-        return newTesouro(startDate, initialValue, selicValue, new Date('2025-03-01'), endDate, +buyTax, +sellTax);
+        return newTesouro(startDate, initialValue, selicValue, new Date('2025-03-01'), endDate, +buyTax / 100, +sellTax / 100);
       case 'ipca':
-        return newTesouroIPCA(startDate, initialValue, selicValue, new Date('2024-08-15'), endDate, +buyTax, +sellTax);
+        return newTesouroIPCA(startDate, initialValue, selicValue, new Date('2024-08-15'), endDate, +buyTax / 100, +sellTax / 100);
       case 'prefix':
-        return newTesouroPrefixado(startDate, initialValue, selicValue, new Date('2023-01-01'), endDate, +buyTax, +sellTax);
+        return newTesouroPrefixado(startDate, initialValue, selicValue, new Date('2023-01-01'), endDate, +buyTax / 100, +sellTax / 100);
       default:
         throw new Error(`Invalid tesouroType: ${tesouroType}`);
     }

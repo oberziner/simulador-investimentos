@@ -35,8 +35,8 @@ const parseTesouroRates = (tesouroValues) => ({
     const date = new Date(i.date);
     return {
       date,
-      buyTax: +i.buyTax,
-      sellTax: +i.sellTax,
+      buyTax: +i.buyTax / 100,
+      sellTax: +i.sellTax / 100,
     };
   }),
   lastHistoricalDate: new Date(tesouroValues[tesouroValues.length - 1].date),

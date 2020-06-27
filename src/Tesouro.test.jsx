@@ -21,8 +21,8 @@ describe('tesouro component', () => {
       onInvestmentAdd={mockCallback}
     />);
 
-    fireEvent.change(getByLabelText('Taxa Compra:'), { target: { value: '0.0005' } });
-    fireEvent.change(getByLabelText('Taxa Venda:'), { target: { value: '0.0007' } });
+    fireEvent.change(getByLabelText('Taxa Compra:'), { target: { value: '0.05' } });
+    fireEvent.change(getByLabelText('Taxa Venda:'), { target: { value: '0.07' } });
     const tesouroButton = getByText('(T)esouro SELIC 2025');
     tesouroButton.click();
 

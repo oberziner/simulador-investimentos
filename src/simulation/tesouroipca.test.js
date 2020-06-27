@@ -66,7 +66,7 @@ describe('tesouro sold before due date', () => {
 
 describe('tesouro in the future', () => {
   it('should be calculated correctly, using projected values', () => {
-    const tesouro = newTesouroIPCA(new Date('2023-01-02'), 10000, newRate(0.04, 'year252'), new Date('2035-05-15'), new Date('2035-05-15'), 4.26, 4.26);
+    const tesouro = newTesouroIPCA(new Date('2023-01-02'), 10000, newRate(0.04, 'year252'), new Date('2035-05-15'), new Date('2035-05-15'), 0.0426, 0.0426);
 
     // expect(JSON.stringify(tesouro.steps.splice(4516, 2), null, 2)).toBeNull();
 

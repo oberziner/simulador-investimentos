@@ -3,7 +3,7 @@ import { newRate } from './interest-rates';
 
 describe('tesouro sold before due date', () => {
   it('wawa should be calculated correctly', () => {
-    const tesouro = newTesouroPrefixado(new Date('2020-01-02'), 846.338, newRate(0.0415, 'year252'), new Date('2023-01-01'), new Date('2020-06-01'), 4.28, 4.28);
+    const tesouro = newTesouroPrefixado(new Date('2020-01-02'), 846.338, newRate(0.0415, 'year252'), new Date('2023-01-01'), new Date('2020-06-01'), 0.0428, 0.0428);
 
     // expect(JSON.stringify(tesouro.steps.splice(0, 2), null, 2)).toBeNull();
 
@@ -66,7 +66,7 @@ describe('tesouro sold before due date', () => {
 
 describe('tesouro in the future', () => {
   it('should be calculated correctly, with a 1 year period', () => {
-    const tesouro = newTesouroPrefixado(new Date('2025-01-02'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 5, 5);
+    const tesouro = newTesouroPrefixado(new Date('2025-01-02'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 0.05, 0.05);
 
     expect(tesouro.steps).toHaveLength(365);
 
@@ -75,7 +75,7 @@ describe('tesouro in the future', () => {
   });
 
   it('should be calculated correctly, using a 3 year period', () => {
-    const tesouro = newTesouroPrefixado(new Date('2023-01-02'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 4.28, 4.28);
+    const tesouro = newTesouroPrefixado(new Date('2023-01-02'), 10000, newRate(9999, 'year252'), new Date('2026-01-01'), new Date('2026-01-01'), 0.0428, 0.0428);
 
     // expect(JSON.stringify(tesouro, null, 2)).toBeNull();
 
