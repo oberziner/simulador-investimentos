@@ -60,9 +60,9 @@ class App extends Component {
             onChange={this.handleOnChange}
             values={{
               initialValue: 10000,
-              startDate: '2020-01-01',
-              endDate: '2021-01-01',
-              selicValue: '5',
+              startDate: '2020-07-01',
+              endDate: '2021-07-01',
+              selicValue: '2.15',
             }}
           />
           <CdbAndCdi
