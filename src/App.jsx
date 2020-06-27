@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { v4 as randomUUID } from 'uuid';
 import Investment from './Investment';
+import Chart from './Chart';
 import { InputList } from './InputList';
 import { CdbAndCdi } from './CdbAndCdi';
 import { Tesouro } from './Tesouro';
@@ -87,6 +88,7 @@ class App extends Component {
             onInvestmentAdd={this.addInvestment}
           />
         </div>
+        <Chart/>
 
         <div>
           {investments.map((i) => (

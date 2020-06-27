@@ -41,23 +41,6 @@ const Investment = ({ investment, onRemoveClick }) => (
       <p>{`${f.formatMoney(investment.netValue)}`}</p>
     </div>
     <button className="remove-button" type="button" onClick={onRemoveClick.bind(null, investment)}>Remover</button>
-    <table>
-      <tbody>
-        {investment.steps.slice().reverse().map((obj, i) => (
-          <tr key={obj.date}>
-            <td>
-              {`${i + 1} - `}
-            </td>
-            <td>
-              {`${f.formatDate(obj.date)}`}
-            </td>
-            <td title={stepDetails(obj)}>
-              {f.formatMoney(obj.value)}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
   </div>
 );
 
