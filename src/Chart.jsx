@@ -1,5 +1,6 @@
 import React from 'react';
 import { Line  } from 'react-chartjs-2';
+import * as zoom from 'chartjs-plugin-zoom'
 
 const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -38,6 +39,18 @@ const options = {
     mode: 'index',
     intersect: false,
   },
+  plugins: {
+    zoom: {
+      pan: {
+        enabled: true,
+        mode: 'x'
+      },
+      zoom: {
+        enabled: true,
+        mode: 'x',
+      }
+    }
+  }
 };
 
 const Chart = ({ investments, }) => (
