@@ -60,6 +60,26 @@ const tesouroPrefixadoRatesRepo = {
   ),
 };
 
+const parseTesouroRates = (tesouroValues) => {
+  return {
+    data: tesouroValues.map((i) => {
+      const date = new Date(i.date);
+      return {
+        date,
+        buyTax: +i.buyTax,
+        sellTax: +i.sellTax,
+      };
+    }),
+    lastHistoricalDate: new Date(
+      tesouroValues[tesouroValues.length - 1].date,
+    ),
+  }
+}
+
+const tesouroRatesRepo = {};
+tesouroRatesRepo['ipca2024'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15']);
+tesouroRatesRepo['pfix2023'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01']);
+
 const tesouroSelicRatesRepo = {
   data: tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01'].map((i) => {
     const date = new Date(i.date);
@@ -250,6 +270,26 @@ export const newRepositoryWithProjectedValues = (defaultValues) => ({
       return defaultValues;
     }
     const obj = findDateOrPreviousDate(date, tesouroPrefixadoRatesRepo);
+    if (obj) {
+      return {
+        buyTax: obj.buyTax,
+        sellTax: obj.sellTax,
+      };
+    }
+    return null;
+  },
+
+  getTesouroTaxes: (tesouroId, date) => {
+    if (!tesouroRatesRepo[tesouroId]) {
+      throw new Error(`Invalid tesouro id "${tesouroId}"`);
+    }
+    if (date > tesouroRatesRepo[tesouroId].lastHistoricalDate) {
+      if (!defaultValues[tesouroId]) {
+        throw new Error(`tesouro id "${tesouroId}" not present on default values`);
+      }
+      return defaultValues[tesouroId];
+    }
+    const obj = findDateOrPreviousDate(date, tesouroRatesRepo[tesouroId]);
     if (obj) {
       return {
         buyTax: obj.buyTax,

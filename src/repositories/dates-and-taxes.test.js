@@ -424,4 +424,86 @@ describe('repositoryWithFuture', () => {
       expect(repo.getTesouroPrefixadoTaxes(new Date('2055-03-06')).sellTax).toBe(5.42);
     });
   });
+
+  describe('getTesouroTaxes', () => {
+    it('should return the historical rate for dates inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-01-02')).buyTax).toBe(2.28);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-01-02')).sellTax).toBe(2.40);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-01-03')).sellTax).toBe(2.48);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-05-21')).buyTax).toBe(2.53);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-05-21')).sellTax).toBe(2.65);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-01-02')).buyTax).toBe(5.75);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-01-02')).sellTax).toBe(5.87);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-01-03')).sellTax).toBe(5.96);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-05-21')).buyTax).toBe(4.62);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-05-21')).sellTax).toBe(4.74);
+    });
+
+    it('should return the tax for the previous business day for weekends and holidays inside the period with historical dates', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-02-23')).buyTax).toBe(2.16);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-02-23')).buyTax).toBe(5.25);
+    });
+
+    it('should return the default rate for dates after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        ipca2024: {
+          buyTax: 4.42,
+          sellTax: 5.42,
+        },
+        pfix2023: {
+          buyTax: 7.42,
+          sellTax: 8.42,
+        },
+      });
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-05-22')).buyTax).toBe(4.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-05-22')).sellTax).toBe(5.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-06-15')).buyTax).toBe(4.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-06-15')).sellTax).toBe(5.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2055-03-15')).buyTax).toBe(4.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2055-03-15')).sellTax).toBe(5.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-05-22')).buyTax).toBe(7.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-05-22')).sellTax).toBe(8.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-06-15')).buyTax).toBe(7.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-06-15')).sellTax).toBe(8.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2055-03-15')).buyTax).toBe(7.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2055-03-15')).sellTax).toBe(8.42);
+    });
+    it('should return the default rate for weekends and holidays after the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues({
+        ipca2024: {
+          buyTax: 4.42,
+          sellTax: 5.42,
+        },
+        pfix2023: {
+          buyTax: 7.42,
+          sellTax: 8.42,
+        },
+      });
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-06-10')).buyTax).toBe(4.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2020-06-10')).sellTax).toBe(5.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2055-03-06')).buyTax).toBe(4.42);
+      expect(repo.getTesouroTaxes('ipca2024', new Date('2055-03-06')).sellTax).toBe(5.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-06-10')).buyTax).toBe(7.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2020-06-10')).sellTax).toBe(8.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2055-03-06')).buyTax).toBe(7.42);
+      expect(repo.getTesouroTaxes('pfix2023', new Date('2055-03-06')).sellTax).toBe(8.42);
+    });
+
+    it('should throw an exception for an invalid tesouro id before the last date with historical data', () => {
+      const repo = newRepositoryWithProjectedValues();
+      expect(() => repo.getTesouroTaxes('ipca2021', new Date('2020-01-02'))).toThrow('Invalid tesouro id "ipca2021"');
+    });
+    it('should throw an exception after the last date with historical data if the tesouro id is not present in the default values', () => {
+      const repo = newRepositoryWithProjectedValues({
+        ipca2024: {
+          buyTax: 4.42,
+          sellTax: 5.42,
+        },
+      });
+      expect(() => repo.getTesouroTaxes('pfix2023', new Date('2055-01-02'))).toThrow('tesouro id "pfix2023" not present on default values');
+    });
+  });
+
 });
