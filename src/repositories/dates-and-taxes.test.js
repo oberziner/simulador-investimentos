@@ -424,5 +424,4 @@ describe('repositoryWithFuture', () => {
       expect(() => repo.getTesouroTaxes('pfix2023', new Date('2055-01-02'))).toThrow('tesouro id "pfix2023" not present on default values');
     });
   });
-
 });

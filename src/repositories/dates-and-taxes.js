@@ -30,26 +30,23 @@ const projectedIpcaRepo = {
   lastHistoricalDate: new Date(projectedIpcaJSON[projectedIpcaJSON.length - 1].date),
 };
 
-const parseTesouroRates = (tesouroValues) => {
-  return {
-    data: tesouroValues.map((i) => {
-      const date = new Date(i.date);
-      return {
-        date,
-        buyTax: +i.buyTax,
-        sellTax: +i.sellTax,
-      };
-    }),
-    lastHistoricalDate: new Date(
-      tesouroValues[tesouroValues.length - 1].date,
-    ),
-  }
-}
+const parseTesouroRates = (tesouroValues) => ({
+  data: tesouroValues.map((i) => {
+    const date = new Date(i.date);
+    return {
+      date,
+      buyTax: +i.buyTax,
+      sellTax: +i.sellTax,
+    };
+  }),
+  lastHistoricalDate: new Date(tesouroValues[tesouroValues.length - 1].date),
+});
 
-const tesouroRatesRepo = {};
-tesouroRatesRepo['ipca2024'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15']);
-tesouroRatesRepo['pfix2023'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01']);
-tesouroRatesRepo['slic2025'] = parseTesouroRates(tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01']);
+const tesouroRatesRepo = {
+  ipca2024: parseTesouroRates(tesouroIPCARatesJSON['Tesouro IPCA+']['2024-08-15']),
+  pfix2023: parseTesouroRates(tesouroIPCARatesJSON['Tesouro Prefixado']['2023-01-01']),
+  slic2025: parseTesouroRates(tesouroIPCARatesJSON['Tesouro Selic']['2025-03-01']),
+};
 
 const initializeRepository = (sourceJson) => {
   const dates = sourceJson.map((i) => {

@@ -9,7 +9,7 @@ import {
   newValueAdjuster,
 } from './investment-rules';
 import { differenceDays } from './dates';
-import { findDate, newRepositoryWithProjectedValues } from '../repositories/dates-and-taxes';
+import { newRepositoryWithProjectedValues } from '../repositories/dates-and-taxes';
 import { calculateIncomeTax } from './taxes';
 import { newRate } from './interest-rates';
 
@@ -52,8 +52,8 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate,
     },
     slic2025: {
       buyTax: buyTax * 100,
-      sellTax: sellRate * 100
-    }
+      sellTax: sellRate * 100,
+    },
   });
 
   const repo = {

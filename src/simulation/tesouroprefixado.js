@@ -42,7 +42,7 @@ export const newTesouroPrefixado = (startDate, initialValue, rate, endDate, sell
     pfix2023: {
       buyTax: buyRate,
       sellTax: sellRate,
-    }
+    },
   });
 
   const repo = {
