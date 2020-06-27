@@ -60,7 +60,7 @@ export const newTesouro = (startDate, initialValue, rate, endDate, sellingDate,
     getAdjustmentRate: (date) => {
       const obj = findDate(date);
       if (obj && obj.sellSelicTax) {
-        return obj.sellSelicTax;
+        return obj.sellSelicTax();
       }
       return sellRate;
     },
