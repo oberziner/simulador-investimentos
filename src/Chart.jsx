@@ -1,39 +1,46 @@
 import React from 'react';
 import { Line  } from 'react-chartjs-2';
 import * as zoom from 'chartjs-plugin-zoom'
+import f from './format';
+import { isBusinessDay } from './simulation/dates';
 
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'My First dataset',
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'rgba(75,192,192)',
-      borderColor: 'rgba(75,192,192,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40]
-    }
-  ]
+const data = ({investments}) => {
+  const datasets = investments.map(i => ({
+    label: i.id,
+    fill: false,
+    data: i.steps
+    .filter((step) => isBusinessDay(step.date))
+    .map(step => ({
+      x: step.date,
+      y: step.value,
+    })),
+  }))
+
+  return {
+    datasets: datasets
+  }
 };
 
 const options = {
   maintainAspectRatio: false,
+  animation: {
+                duration: 0 // general animation time
+            
+  },
+  hover: {
+                animationDuration: 0 // duration of animations when hovering an item
+            
+  },
+          responsiveAnimationDuration: 0, // animation duration after a resize
   tooltips: {
     mode: 'index',
     intersect: false,
+    callbacks: {
+      title: function(tooltipItem, data) {
+        var xValue = data.datasets[tooltipItem[0].datasetIndex].data[tooltipItem[0].index].x;
+        return f.formatDate(xValue);
+      }
+    }
   },
   hover: {
     mode: 'index',
@@ -50,17 +57,40 @@ const options = {
         mode: 'x',
       }
     }
-  }
+  },
+  scales: {
+    xAxes: [{
+      type: 'time',
+      distribution: 'series',
+      offset: true,
+      ticks: {
+        source: 'data',
+        autoSkip: true,
+        autoSkipPadding: 75,
+        maxRotation: 0,
+        sampleSize: 100
+      },
+    }],
+    yAxes: [{
+      gridLines: {
+        drawBorder: false
+      },
+      scaleLabel: {
+        display: true,
+        labelString: 'Valor'
+      }
+    }]
+  },
 };
 
-const Chart = ({ investments, }) => (
-  <div style={{margin: "10px", width: "1500px"}}> 
+const Chart = ( investments ) => (
+  <div style={{margin: "10px", width: "95%"}}> 
     <div style={{backgroundColor: "rgba(255, 255, 255, 0.6)"}}>
       <Line
         width={100}
-        height={250}
+        height={400}
         options={options}
-        data={data} 
+        data={data(investments)} 
       />
     </div>
   </div>

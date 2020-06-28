@@ -88,7 +88,7 @@ class App extends Component {
             onInvestmentAdd={this.addInvestment}
           />
         </div>
-        <Chart/>
+        <Chart investments={investments}/>
 
         <div>
           {investments.map((i) => (
