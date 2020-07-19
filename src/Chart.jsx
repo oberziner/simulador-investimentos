@@ -4,11 +4,24 @@ import * as zoom from 'chartjs-plugin-zoom'
 import f from './format';
 import { isBusinessDay } from './simulation/dates';
 
+const chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)'
+};
+const colorNames = Object.keys(chartColors);
+
 const data = ({investments}) => {
-  const datasets = investments.map(i => ({
-    label: i.id,
+  const datasets = investments.map((investment, index) => ({
+    label: investment.id,
     fill: false,
-    data: i.steps
+    backgroundColor: chartColors[colorNames[index % colorNames.length]],
+    borderColor: chartColors[colorNames[index % colorNames.length]],
+    data: investment.steps
     .filter((step) => isBusinessDay(step.date))
     .map(step => ({
       x: step.date,
@@ -27,11 +40,7 @@ const options = {
                 duration: 0 // general animation time
             
   },
-  hover: {
-                animationDuration: 0 // duration of animations when hovering an item
-            
-  },
-          responsiveAnimationDuration: 0, // animation duration after a resize
+  responsiveAnimationDuration: 0, // animation duration after a resize
   tooltips: {
     mode: 'index',
     intersect: false,
@@ -45,6 +54,7 @@ const options = {
   hover: {
     mode: 'index',
     intersect: false,
+    animationDuration: 0 // duration of animations when hovering an item
   },
   plugins: {
     zoom: {
@@ -83,6 +93,29 @@ const options = {
   },
 };
 
+let render = true;
+let lastRender = Date.now()
+
+const plugins = [{
+  beforeRender : (args) => {
+    const now = Date.now();
+    if ((now - lastRender) > 100) {
+      lastRender = now;
+      return true;
+    }
+    return false;
+
+  },
+  beforeEvent: (args, e) => {
+    if (e.type === 'click') {
+      render = !render;
+
+    }
+    return render;
+  }
+  
+}];
+
 const Chart = ( investments ) => (
   <div style={{margin: "10px", width: "95%"}}> 
     <div style={{backgroundColor: "rgba(255, 255, 255, 0.6)"}}>
@@ -90,6 +123,7 @@ const Chart = ( investments ) => (
         width={100}
         height={400}
         options={options}
+        plugins={plugins}
         data={data(investments)} 
       />
     </div>
